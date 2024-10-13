@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="28.136784mm"
+   height="606.2533mm"
+   viewBox="0 0 28.136784 606.2533"
+   version="1.1"
+   id="svg1"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   sodipodi:docname="breakbeat-main-gameplay-design-2x.svg"
+   inkscape:export-filename="breakbeat-main-gameplay-design-2x.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xml:space="preserve"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     inkscape:zoom="0.090532932"
+     inkscape:cx="1932.9983"
+     inkscape:cy="2015.841"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1"
+     inkscape:export-bgcolor="#ffffff00"
+     inkscape:clip-to-page="true" /><defs
+     id="defs1"><linearGradient
+       id="swatch23"
+       inkscape:swatch="solid"><stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop23" /></linearGradient></defs><path
+     id="path38"
+     style="font-variation-settings:'wdth' 75, 'wght' 600;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#3f3f3f;stroke-width:7.6;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+     d="m 3.800038,3.8000069 v 7.8866101 h 0.089 c -0.026,0.25092 -0.089,0.49232 -0.089,0.74907 v 578.334563 3.0468 8.6362 h 10.2684 10.2684 v -8.6362 -3.0468 -578.334563 c 0,-4.7842101 -4.5797,-8.6356801 -10.2684,-8.6356801 z" /></svg>
