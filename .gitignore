@@ -1,0 +1,20 @@
+# Compiled Static libraries
+*.lib
+
+# Executables
+*.exe
+
+# VScode
+.vscode
+
+# CMake build
+build
+
+# CMake testing
+Testing
+
+# CMake .cmake folder
+.cmake
+
+# .ini files
+*.ini

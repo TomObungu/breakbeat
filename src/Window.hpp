@@ -1,5 +1,14 @@
+/*  Window.hpp
+
+The header file for Window.cpp which is used for initalising a window
+and creating an OpenGL Context witithin the Window using SDL2
+
+*/
+
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
+
+// Include 
 
 #include "glad/glad.h"
 #include "SDL.h"
