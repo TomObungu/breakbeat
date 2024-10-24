@@ -1,13 +1,25 @@
+/*  Window.hpp
+
+The source file for Window.cpp for initalising a window
+and the OpenGL context. 
+
+*/
+
+// Include libararies
+
 #include "Window.hpp"
 
+// Window constructor function to initalise window and its properties
 Window::Window(int windowWidth, int windowHeight)
 	: mWindowWidth{ windowWidth }
 	, mWindowHeight{ windowHeight }
 {
+
+	// Initialsing SDL
 	if (SDL_Init(SDL_INIT_VIDEO < 0))
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL!%s\n", SDL_GetError());
-
 	SDL_Init(SDL_INIT_EVERYTHING);
+
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -21,9 +33,10 @@ Window::Window(int windowWidth, int windowHeight)
 	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); 
 
-	getWindow() = SDL_CreateWindow("LearnOpenGL", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, getWindowWidth(), getWindowHeight(), SDL_WINDOW_OPENGL);
+	mWindow = SDL_CreateWindow("LearnOpenGL", SDL_WINDOWPOS_UNDEFINED, 
+		SDL_WINDOWPOS_UNDEFINED, mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL);
 
-	if (getWindow() == nullptr)
+	if (mWindow == nullptr)
 	{
 		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window!%s\n", SDL_GetError());
 		SDL_Quit();
@@ -40,10 +53,11 @@ Window::Window(int windowWidth, int windowHeight)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	getOpenGLContext() = SDL_GL_CreateContext(getWindow());
+	mOpenGLContext = SDL_GL_CreateContext(mWindow);
 
 	if (getOpenGLContext() == nullptr)
-		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "OpenGLContext not found! SDL_GL_Error!%s\n", SDL_GetError());
+		SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, 
+			"OpenGLContext not found! SDL_GL_Error!%s\n", SDL_GetError());
 
 	if (!gladLoadGLLoader(SDL_GL_GetProcAddress))
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "glad was not initialized!%s\n", glGetError());
@@ -93,8 +107,8 @@ void Window::setWindowHeight(int height)
 
 Window::~Window()
 {
-	SDL_GL_DeleteContext(getOpenGLContext());
-	SDL_DestroyWindow(getWindow());
+	SDL_GL_DeleteContext(mOpenGLContext);
+	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 }
 

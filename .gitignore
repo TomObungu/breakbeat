@@ -18,3 +18,21 @@ Testing
 
 # .ini files
 *.ini
+
+# glad library
+libglad.a
+
+# CMake Cache
+CMakeCache.txt
+
+# CMake CMakeFiles folder
+CMakeFiles
+
+# Hidden docx files
+~$ntentof NEA Programing Project (Component 03).docx
+
+# CMake_install
+cmake_install.cmake
+
+#Makefile
+Makefile

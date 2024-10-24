@@ -6,29 +6,31 @@ add_library(glad ${PROJECT_SOURCE_DIR}/src/glad.c)
 target_include_directories(glad PUBLIC C:/Users/deeza/OneDrive/breakbeat/include)
 
 add_library(SDL2main STATIC IMPORTED)
-set_target_properties(SDL2main PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/SDL2main.lib)
+set_target_properties(SDL2main PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/lib/x64/SDL2main.lib)
+target_include_directories(SDL2main INTERFACE ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/include)
 
 add_library(SDL2 STATIC IMPORTED)
-set_target_properties(SDL PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/SDL2.lib)
-
-target_include_directories(SDL2main SDL2 INTERFACE ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/include)
+set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/lib/x64/SDL2.lib)
+target_include_directories(SDL2 INTERFACE ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/include)
 
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE src
-    "${SOURCE_DIR}/*.c"
-    "${SOURCE_DIR}/*.h"
-    "${SOURCE_DIR}/*.hpp"
-    "${SOURCE_DIR}/*.cpp"
+    "${SOURCE_DIR}/src/*.c"
+    "${SOURCE_DIR}/src/*.h"
+    "${SOURCE_DIR}/src/*.hpp"
+    "${SOURCE_DIR}/src/*.cpp"
     "include/*.hpp"
     "include/*.cpp"
     "include/*.h"
     "include/*.c"
 )
 
-add_executable(breakbeat ${PROJECT_SOURCE_DIR}
-set_target_properties(breakbeat PROPERTIES CXX_STANDARD 23 CXX_STANDARD_REQUIRED YES))
+add_executable(breakbeat ${src})
+set_target_properties(breakbeat PROPERTIES CXX_STANDARD 23 CXX_STANDARD_REQUIRED YES)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
-set_target_properties(LearnOpenGL PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
-target_include_directories(breakbeat PRIVATE ${PROJECT_SOURCE_DIR}include\glm-1.0.1)
-target_include_directories(breakbeat PRIVATE ${PROJECT_SOURCE_DIR}/include)
+set_target_properties(breakbeat PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR})
+
+target_include_directories(breakbeat PRIVATE ${PROJECT_SOURCE_DIR}/include/glm)
+
+target_link_libraries(breakbeat PRIVATE SDL2main SDL2 glad)

@@ -8,21 +8,19 @@ and creating an OpenGL Context witithin the Window using SDL2
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-// Include 
+// Include libaries for window initialisation
 
 #include "glad/glad.h"
 #include "SDL.h"
 
-#include <memory>
-#include <iostream>
 
-using std::cerr;
-using std::cout;
+// Window class, will be used as association witihin the main breakbeat.cpp file
 
 class Window
 {
 public:
 
+	//  Getters and setters
 	SDL_Window*& getWindow();
 	SDL_GLContext& getOpenGLContext();
 	SDL_Event& getWindowEvent();
@@ -33,15 +31,23 @@ public:
 	bool& getWindowClosed();
 	void setWindowClosed(bool);
 
+	// Window constructor containing the width and the height of the window as parameters
+
 	Window(int, int);
 	~Window();
 
 private:
+
+	// Window class memembers for window properties
 	int mWindowWidth;
 	int mWindowHeight;
 	SDL_Window* mWindow;
 	SDL_Event mWindowEvent;
+
+	// OpenGL context 
 	SDL_GLContext mOpenGLContext;
+
+	// Boolean value to check if window is closed
 	bool mWindowClosed;
 };
 
