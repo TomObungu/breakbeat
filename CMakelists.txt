@@ -16,14 +16,10 @@ target_include_directories(SDL2 INTERFACE ${PROJECT_SOURCE_DIR}/include/SDL2-2.3
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE src
-    "${SOURCE_DIR}/src/*.c"
-    "${SOURCE_DIR}/src/*.h"
-    "${SOURCE_DIR}/src/*.hpp"
-    "${SOURCE_DIR}/src/*.cpp"
-    "include/*.hpp"
-    "include/*.cpp"
-    "include/*.h"
-    "include/*.c"
+    "src/*.c"
+    "src/*.h"
+    "src/*.hpp"
+    "src/*.cpp"
 )
 
 add_executable(breakbeat ${src})

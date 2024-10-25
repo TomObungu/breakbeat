@@ -33,7 +33,7 @@ Window::Window(int windowWidth, int windowHeight)
 	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); 
 
-	mWindow = SDL_CreateWindow("LearnOpenGL", SDL_WINDOWPOS_UNDEFINED, 
+	mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_UNDEFINED, 
 		SDL_WINDOWPOS_UNDEFINED, mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL);
 
 	if (mWindow == nullptr)
@@ -42,7 +42,7 @@ Window::Window(int windowWidth, int windowHeight)
 		SDL_Quit();
 	}
 
-	setWindowClosed(false);
+	mWindowClosed = false;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
@@ -81,12 +81,12 @@ int& Window::getWindowHeight()
 	return this->mWindowHeight;
 }
 
-void Window::setWindowClosed(bool boolean)
+void Window::setWindowClosedBoolean(bool boolean)
 {
 	this->mWindowClosed = boolean;
 }
 
-bool& Window::getWindowClosed()
+bool& Window::getWindowClosedBoolean()
 {
 	return this->mWindowClosed;
 }

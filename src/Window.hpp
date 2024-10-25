@@ -13,7 +13,6 @@ and creating an OpenGL Context witithin the Window using SDL2
 #include "glad/glad.h"
 #include "SDL.h"
 
-
 // Window class, will be used as association witihin the main breakbeat.cpp file
 
 class Window
@@ -28,8 +27,8 @@ public:
 	void setWindowWidth(int);
 	int& getWindowHeight();
 	void setWindowHeight(int);
-	bool& getWindowClosed();
-	void setWindowClosed(bool);
+	bool& getWindowClosedBoolean();
+	void setWindowClosedBoolean(bool);
 
 	// Window constructor containing the width and the height of the window as parameters
 
