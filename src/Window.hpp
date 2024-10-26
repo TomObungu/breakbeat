@@ -20,15 +20,20 @@ class Window
 public:
 
 	//  Getters and setters
-	SDL_Window*& getWindow();
-	SDL_GLContext& getOpenGLContext();
-	SDL_Event& getWindowEvent();
-	int& getWindowWidth();
-	void setWindowWidth(int);
-	int& getWindowHeight();
-	void setWindowHeight(int);
-	bool& getWindowClosedBoolean();
-	void setWindowClosedBoolean(bool);
+	SDL_Window*& GetWindow();
+	SDL_GLContext& GetOpenGLContext();
+	SDL_Event& GetWindowEvent();
+	int& GetWindowWidth();
+	void SetWindowWidth(int);
+	int& GetWindowHeight();
+	void SetWindowHeight(int);
+	void SetLastWindowedWidth(int);
+	int& GetLastWindowedWidth();
+	void SetLastWindowedHeight(int);
+	int& GetLastWindowedHeight();
+	bool& GetWindowClosedBoolean();
+	void SetWindowClosedBoolean(bool);
+	void UpdateViewport(int width, int height);
 
 	// Window constructor containing the width and the height of the window as parameters
 
@@ -40,6 +45,8 @@ private:
 	// Window class memembers for window properties
 	int mWindowWidth;
 	int mWindowHeight;
+	int mLastWindowedWidth;
+	int mLastWindowedHeight;
 	SDL_Window* mWindow;
 	SDL_Event mWindowEvent;
 
