@@ -35,6 +35,8 @@ Window::Window(int windowWidth, int windowHeight)
 
 	mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_UNDEFINED, 
 		SDL_WINDOWPOS_UNDEFINED, mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL);
+	
+	SDL_SetWindowFullscreen(mWindow,SDL_WINDOW_FULLSCREEN);
 
 	if (mWindow == nullptr)
 	{
