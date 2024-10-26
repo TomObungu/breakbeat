@@ -46,20 +46,20 @@ void Game::HandleWindowEvent(const SDL_Event& event)
 
 void Game::ToggleFullscreen()
 {
+    // Toggle fullscreen and resize mode in one step
+    mResizeMode   = mIsFullscreen;
     mIsFullscreen = !mIsFullscreen;
-    mResizeMode = !mResizeMode;
+    
+    // Set window mode based on the fullscreen flag
+    SDL_SetWindowFullscreen(mWindow.GetWindow(), mIsFullscreen ? SDL_WINDOW_FULLSCREEN : 0);
 
-    if (mIsFullscreen)
-    {
-        SDL_SetWindowFullscreen(mWindow.GetWindow(), SDL_WINDOW_FULLSCREEN);
-    }
-    else
-    {
-        SDL_SetWindowFullscreen(mWindow.GetWindow(), 0);
-        auto [width, height] = mWindow.GetLastWindowedSize();
+    // Update the viewport only if returning to windowed mode
+    if (!mIsFullscreen) {
+        const auto [width, height] = mWindow.GetLastWindowedSize();
         mWindow.UpdateViewport(width, height);
     }
 }
+
 
 void Game::Run()
 {
