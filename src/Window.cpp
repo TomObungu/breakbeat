@@ -121,24 +121,15 @@ void Window::SetWindowHeight(int height)
 	this->mWindowHeight = height;
 }
 
-void Window::SetLastWindowedWidth(int width)
+void Window::SetLastWindowedSize(int width, int height)
 {
-	this->mLastWindowedWidth = width;
+    this->mLastWindowedWidth = width;
+    this->mLastWindowedHeight = height;
 }
 
-int& Window::GetLastWindowedWidth()
+pair<int, int> Window::GetLastWindowedSize() const
 {
-	return this->mLastWindowedWidth;
-}
-
-void Window::SetLastWindowedHeight(int height)
-{
-	this->mLastWindowedHeight = height;
-}
-
-int& Window::GetLastWindowedHeight()
-{
-	return this->mLastWindowedHeight;
+    return { mLastWindowedWidth, mLastWindowedHeight };
 }
 
 Window::~Window()

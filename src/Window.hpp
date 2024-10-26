@@ -8,10 +8,15 @@ and creating an OpenGL Context witithin the Window using SDL2
 #ifndef WINDOW_HPP
 #define WINDOW_HPP
 
-// Include libaries for window initialisation
+// Include external libaries for window initialisation
 
 #include "glad/glad.h"
 #include "SDL.h"
+
+// Standard libary functions
+#include <utility>
+
+using std::pair;
 
 // Window class, will be used as association witihin the main breakbeat.cpp file
 
@@ -27,11 +32,9 @@ public:
 	void SetWindowWidth(int);
 	int& GetWindowHeight();
 	void SetWindowHeight(int);
-	void SetLastWindowedWidth(int);
-	int& GetLastWindowedWidth();
-	void SetLastWindowedHeight(int);
-	int& GetLastWindowedHeight();
-	bool& GetWindowClosedBoolean();
+	void SetLastWindowedSize(int, int);
+	pair<int, int> GetLastWindowedSize() const;
+ 	bool& GetWindowClosedBoolean();
 	void SetWindowClosedBoolean(bool);
 	void UpdateViewport(int width, int height);
 

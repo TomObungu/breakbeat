@@ -9,26 +9,38 @@ Game::Game() :
 
 void Game::ProcessEvents()
 {
-    SDL_Event& event { mWindow.GetWindowEvent() };
+    SDL_Event& event = mWindow.GetWindowEvent();
     while (SDL_PollEvent(&event))
     {
-        if (event.type == SDL_QUIT)
-            mWindow.SetWindowClosedBoolean(true);
-
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_RESIZED 
-            && mResizeMode)
+        switch (event.type)
         {
-            int newWidth = event.window.data1;
-            int newHeight = event.window.data2;
-            mWindow.SetLastWindowedWidth(newWidth);
-            mWindow.SetLastWindowedHeight(newHeight);
-            mWindow.UpdateViewport(newWidth, newHeight); 
-        }
+            case SDL_QUIT:
+                mWindow.SetWindowClosedBoolean(true);
+                break;
 
-        if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_F11)
-        {
-            ToggleFullscreen();
+            case SDL_WINDOWEVENT:
+                HandleWindowEvent(event);
+                break;
+
+            case SDL_KEYDOWN:
+                if (event.key.keysym.sym == SDLK_F11) 
+                    ToggleFullscreen();
+                break;
+
+            default:
+                break;
         }
+    }
+}
+
+void Game::HandleWindowEvent(const SDL_Event& event)
+{
+    if (event.window.event == SDL_WINDOWEVENT_RESIZED && mResizeMode)
+    {
+        int newWidth = event.window.data1;
+        int newHeight = event.window.data2;
+        mWindow.SetLastWindowedSize(newWidth, newHeight);
+        mWindow.UpdateViewport(newWidth, newHeight); 
     }
 }
 
@@ -36,14 +48,15 @@ void Game::ToggleFullscreen()
 {
     mIsFullscreen = !mIsFullscreen;
     mResizeMode = !mResizeMode;
-    if (mIsFullscreen && !mResizeMode)
+
+    if (mIsFullscreen)
     {
         SDL_SetWindowFullscreen(mWindow.GetWindow(), SDL_WINDOW_FULLSCREEN);
     }
     else
     {
         SDL_SetWindowFullscreen(mWindow.GetWindow(), 0);
-        int width = mWindow.GetLastWindowedWidth(), height = mWindow.GetLastWindowedHeight();
+        auto [width, height] = mWindow.GetLastWindowedSize();
         mWindow.UpdateViewport(width, height);
     }
 }

@@ -15,6 +15,7 @@ public:
     void ToggleFullscreen();
     void Run();
     void ProcessEvents();
+    void HandleWindowEvent(const SDL_Event&);
     Game();
 private:
     // Declare mWindow as a member variable
