@@ -18,6 +18,14 @@ and creating an OpenGL Context witithin the Window using SDL2
 
 using std::pair;
 
+
+// Constants to define the smallest possible window resolution
+namespace
+{
+    inline constexpr int MinWindowWidth  { 640 };
+    inline constexpr int MinWindowHeight { 480 };
+}
+
 // Window class, will be used as association witihin the main breakbeat.cpp file
 
 class Window
@@ -40,7 +48,7 @@ public:
 
 	// Window constructor containing the width and the height of the window as parameters
 
-	Window(int, int);
+	Window();
 	~Window();
 
 private:
@@ -50,6 +58,7 @@ private:
 	int mWindowHeight;
 	int mLastWindowedWidth;
 	int mLastWindowedHeight;
+	bool mFirstTimeWindowed;
 	SDL_Window* mWindow;
 	SDL_Event mWindowEvent;
 

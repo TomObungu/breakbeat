@@ -1,9 +1,10 @@
 #include "Game.hpp"
 
 Game::Game() : 
-    mWindow(Window(WindowWidth, WindowHeight)),
+    mWindow(Window()),
     mIsFullscreen { true },
-    mResizeMode { false }
+    mResizeMode { false },
+    mFirstTimeWindowed { true }
 {
 }
 
@@ -43,7 +44,6 @@ void Game::HandleWindowEvent(const SDL_Event& event)
         int newWidth = event.window.data1;
         int newHeight = event.window.data2;
 
-
         // Clamp the width and height to the maximum values
         if (newWidth < ::MinWindowWidth || newHeight < ::MinWindowHeight)
         {
@@ -60,23 +60,34 @@ void Game::HandleWindowEvent(const SDL_Event& event)
     }
 }
 
-
 void Game::ToggleFullscreen()
 {
-    // Toggle fullscreen and resize mode in one step
-    mResizeMode = mIsFullscreen;
     mIsFullscreen = !mIsFullscreen;
-    
-    // Set window mode based on the fullscreen flag
-    SDL_SetWindowFullscreen(mWindow.GetWindow(), mIsFullscreen ? SDL_WINDOW_FULLSCREEN : 0);
-    glViewport(0,0,mWindow.GetWindowWidth(),mWindow.GetWindowHeight());
+    mResizeMode = !mResizeMode;
 
-    // Update the viewport only if returning to windowed mode
-    if (!mIsFullscreen) {
-        const auto [width, height] = mWindow.GetLastWindowedSize();
+    if (mIsFullscreen)
+    {
+        // Enter fullscreen mode
+        SDL_SetWindowFullscreen(mWindow.GetWindow(), SDL_WINDOW_FULLSCREEN);
+    }
+    else
+    {
+        // Exit fullscreen mode, set windowed mode
+        SDL_SetWindowFullscreen(mWindow.GetWindow(), 0);
+        
+        // Adjust viewport to the last windowed size
+        auto [width, height] = mWindow.GetLastWindowedSize();
         mWindow.UpdateViewport(width, height);
+
+        // Center the window only the first time it enters windowed mode
+        if (mFirstTimeWindowed)
+        {
+            SDL_SetWindowPosition(mWindow.GetWindow(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+            mFirstTimeWindowed = false; // Set to false after the first-time centering
+        }
     }
 }
+
 
 void Game::Run()
 {

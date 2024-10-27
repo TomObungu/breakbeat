@@ -9,10 +9,9 @@ and the OpenGL context.
 #include "Window.hpp"
 
 // Window constructor function to initialize window and its properties
-// Window constructor function to initialize window and its properties
-Window::Window(int windowWidth, int windowHeight)
-    : mWindowWidth{ windowWidth },
-	 mWindowHeight{ windowHeight }
+Window::Window() : 
+    mLastWindowedHeight { ::MinWindowHeight },
+    mLastWindowedWidth { ::MinWindowWidth }
 {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -20,8 +19,10 @@ Window::Window(int windowWidth, int windowHeight)
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL! %s\n", SDL_GetError());
     }
 
-    // Query the display's width and height for fullscreen resolution
+    // Query the display's usable display bounds
     SDL_DisplayMode displayMode;
+    SDL_Rect usableBounds;
+
     if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0) 
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Could not get display mode: %s", SDL_GetError());
@@ -33,10 +34,8 @@ Window::Window(int windowWidth, int windowHeight)
     }
 
     // Create the window in fullscreen mode
-    mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+    mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
         mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_RESIZABLE);
-
-	SDL_SetWindowFullscreen(mWindow,SDL_WINDOW_FULLSCREEN);
 
     if (mWindow == nullptr)
     {
@@ -63,13 +62,7 @@ Window::Window(int windowWidth, int windowHeight)
     {
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize glad! %s\n", glGetError());
     }
-
-	mLastWindowedWidth = windowHeight;
-	mLastWindowedHeight = windowHeight;
-	
-    glViewport(0, 0, mWindowWidth, mWindowHeight);
 }
-
 
 // Function to handle viewport adjustment on window resize
 void Window::UpdateViewport(int width, int height) {
@@ -138,5 +131,3 @@ Window::~Window()
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 }
-
-

@@ -7,14 +7,6 @@
 
 using std::max;
 
-namespace
-{
-    inline constexpr int WindowWidth { 800 };
-    inline constexpr int WindowHeight { 600 };
-    inline constexpr int MinWindowWidth  { 800 };
-    inline constexpr int MinWindowHeight { 600 };
-}
-
 class Game
 {
 public:
@@ -28,7 +20,7 @@ private:
     Window mWindow;
     bool mIsFullscreen;
     bool mResizeMode;
-
+    bool mFirstTimeWindowed;
 };
 
 #endif
