@@ -58,7 +58,6 @@ private:
 	int mWindowHeight;
 	int mLastWindowedWidth;
 	int mLastWindowedHeight;
-	bool mFirstTimeWindowed;
 	SDL_Window* mWindow;
 	SDL_Event mWindowEvent;
 
