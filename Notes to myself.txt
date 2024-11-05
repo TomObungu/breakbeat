@@ -1,0 +1,9 @@
+1. Add pseudocode for chart selection algorithm to flow charts
+2. Add pseudocode for mouse collision algorithm
+	- Do this once in development
+		- Evaluate the use of classes, namespaces or code blocks for handling input
+3. Add pseudocode for note rendering algorithm
+4. Add pseudocode for note comparison algorithm
+5. Design judgment indicators
+6. Change background design to a match a more 90s dance game style
+7. Change colour scheme of design to a more vibrant colour

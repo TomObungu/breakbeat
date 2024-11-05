@@ -91,7 +91,7 @@ void Game::ToggleFullscreen()
 
 void Game::Run()
 {
-    // Main loop for the game
+    // Main loop for the game   
     while (!mWindow.GetWindowClosedBoolean())
     {
          // Handle input and window events
