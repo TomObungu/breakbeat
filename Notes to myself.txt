@@ -7,3 +7,7 @@
 5. Design judgment indicators
 6. Change background design to a match a more 90s dance game style
 7. Change colour scheme of design to a more vibrant colour
+8. Justify note judgment windows and cite source
+9. Add how you will test the design data for each section
+10. Add the use of hash tables (song searching), arrays (for comparing note times)
+11. Add the use of varaibles
