@@ -1,7 +1,9 @@
-/*  Window.hpp
+/*  
 
-The source file for Window.cpp for initalising a window
-and the OpenGL context. 
+Window.cpp
+
+The source file for Window.cpp for initalising a window,
+OpenGL states and the OpenGL context for rendering
 
 */
 
@@ -9,46 +11,49 @@ and the OpenGL context.
 #include "Window.hpp"
 
 // Window constructor function to initialize window and its properties
-Window::Window() : 
-    mLastWindowedHeight { ::MinWindowHeight },
-    mLastWindowedWidth { ::MinWindowWidth }
+Window::Window() :
+ mWindowWidth { ::WindowWidth },
+ mWindowHeight { ::WindowHeight }
 {
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    // Check if the initialization function was sucessful
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
     {
+        // Log a console error to show that initialization was unsucessfull 
+        // Append the actual error that is provided by SDL2 onto the string of the console error
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize SDL! %s\n", SDL_GetError());
     }
-
-    // Query the display's usable display bounds
-    SDL_DisplayMode displayMode;
-    SDL_Rect usableBounds;
-
-    if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0) 
-    {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Could not get display mode: %s", SDL_GetError());
-    }
-    else 
-    {
-        mWindowWidth = displayMode.w;
-        mWindowHeight = displayMode.h;
-    }
-
-    // Create the window in fullscreen mode
+    
+    // Create the window and define its position, width and height properties and the type of window it is
     mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_RESIZABLE);
+        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL);
 
+    // If the value return to the mWindow vairable is null then the window failed to be initiazlaied
     if (mWindow == nullptr)
     {
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to create window! %s\n", SDL_GetError());
         SDL_Quit();
     }
 
-    // Set up OpenGL attributes
+    // Set OpenGL version to 4.6
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+    // Set up OpenGL attributes for anti-aliasing
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);    
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+			
+	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
     // Create the OpenGL context
     mOpenGLContext = SDL_GL_CreateContext(mWindow);
@@ -64,13 +69,6 @@ Window::Window() :
     }
 }
 
-// Function to handle viewport adjustment on window resize
-void Window::UpdateViewport(int width, int height) {
-    mWindowWidth = width;
-    mWindowHeight = height;
-	SDL_SetWindowSize(mWindow,width,height);
-    glViewport(0, 0, width, height);
-}
 
 SDL_Window*& Window::GetWindow()
 {
@@ -90,16 +88,6 @@ int& Window::GetWindowHeight()
 	return this->mWindowHeight;
 }
 
-void Window::SetWindowClosedBoolean(bool boolean)
-{
-	this->mWindowClosed = boolean;
-}
-
-bool& Window::GetWindowClosedBoolean()
-{
-	return this->mWindowClosed;
-}
-
 SDL_Event& Window::GetWindowEvent()
 {
 	return this->mWindowEvent;
@@ -114,15 +102,14 @@ void Window::SetWindowHeight(int height)
 	this->mWindowHeight = height;
 }
 
-void Window::SetLastWindowedSize(int width, int height)
+void Window::SetWindowClosedBoolean(bool boolean)
 {
-    this->mLastWindowedWidth = width;
-    this->mLastWindowedHeight = height;
+	this->mWindowClosedBoolean = boolean;
 }
 
-pair<int, int> Window::GetLastWindowedSize() const
+bool& Window::GetWindowClosedBoolean()
 {
-    return { mLastWindowedWidth, mLastWindowedHeight };
+	return this->mWindowClosedBoolean;
 }
 
 Window::~Window()
