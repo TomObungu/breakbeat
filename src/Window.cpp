@@ -40,21 +40,6 @@ Window::Window() :
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-    // Set up OpenGL attributes for anti-aliasing
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);    
-
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-			
-	SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" );
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-
     // Create the OpenGL context
     mOpenGLContext = SDL_GL_CreateContext(mWindow);
     if (mOpenGLContext == nullptr)
@@ -68,7 +53,6 @@ Window::Window() :
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize glad! %s\n", glGetError());
     }
 }
-
 
 SDL_Window*& Window::GetWindow()
 {
