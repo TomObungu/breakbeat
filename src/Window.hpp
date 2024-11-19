@@ -14,12 +14,18 @@ and creating an OpenGL Context within the window using SDL2 and glad
 
 #include "glad/glad.h"
 #include "SDL.h"
+#include <utility>
+#include <algorithm>
 
+// Constants to define the smallest possible window resolution
 namespace
 {
-	inline constexpr int WindowWidth { 800 } ;
-	inline constexpr int WindowHeight { 600 };
+    inline constexpr int MinWindowWidth  { 640 };
+    inline constexpr int MinWindowHeight { 480 };
 }
+
+using std::pair;
+using std::max;
 
 class Window
 {
@@ -30,11 +36,17 @@ public:
 	SDL_GLContext& GetOpenGLContext();
 	SDL_Event& GetWindowEvent();
 	int& GetWindowWidth();
+	void SetLastWindowedSize(int, int);
+	pair<int, int> GetLastWindowedSize() const;
 	bool& GetWindowClosedBoolean();
 	void SetWindowClosedBoolean(bool);
 	void SetWindowWidth(int);
 	int& GetWindowHeight();
 	void SetWindowHeight(int);
+	void HandleWindowResize(SDL_Event&);
+	void UpdateViewport(int width, int height);
+	void ToggleFullscreen();
+
 	// Window constructor containing the width and the height of the window as parameters
 
 	Window();
@@ -45,9 +57,17 @@ private:
 	// Window class memembers for window properties
 	int mWindowWidth;
 	int mWindowHeight;
+	int mLastWindowedWidth;
+	int mLastWindowedHeight;
 	SDL_Window* mWindow;
 	SDL_Event mWindowEvent;
 	bool mWindowClosedBoolean;
+
+	// Boolean value to check if window is closed
+	bool mWindowClosed;
+	bool mIsFullscreen;
+    bool mResizeMode;
+    bool mFirstTimeWindowed;
 
 	// OpenGL context 
 	SDL_GLContext mOpenGLContext;
