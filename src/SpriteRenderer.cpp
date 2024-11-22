@@ -1,17 +1,17 @@
-#include "GUIRenderer.hpp"
+#include "SpriteRenderer.hpp"
 
-GUIRenderer::GUIRenderer(Shader& shader)
+SpriteRenderer::SpriteRenderer(Shader& shader)
 {
     this->mShader = shader;
     this->Initialize();
 }
 
-GUIRenderer::~GUIRenderer()
+SpriteRenderer::~SpriteRenderer()
 {
     glDeleteVertexArrays(1, &this->mVertexArrayObject);
 }
 
-void GUIRenderer::Initialize()
+void SpriteRenderer::Initialize()
 {
     unsigned int vertexBufferObject;
     float vertices[] = {
@@ -43,29 +43,28 @@ void GUIRenderer::Initialize()
     glBindVertexArray(0);
 }
 
-void GUIRenderer::Draw(Texture &texture, vec2 position, vec2 size, float rotate, vec3 color)
-{
-    this->mShader.Use();
-
+// Draw method in SpriteRenderer (could be overridden in derived classes)
+void SpriteRenderer::Draw(Texture &texture, vec2 position, vec2 size, float rotate, vec3 color) {
     mat4 model = mat4(1.0f);
     model = translate(model, vec3(position, 0.0f));
     model = translate(model, vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
-    model = glm::rotate(model, radians(rotate), vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, glm::radians(rotate), vec3(0.0f, 0.0f, 1.0f));
     model = translate(model, vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
     model = scale(model, vec3(size, 1.0f));
 
+    this->mShader.Use();
     this->mShader.SetMatrix4("model", model);
     this->mShader.SetVector3f("color", color);
 
     glActiveTexture(GL_TEXTURE0);
     texture.Bind();
 
-    glBindVertexArray(this-> mVertexArrayObject);
+    glBindVertexArray(this->mVertexArrayObject);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
     glBindVertexArray(0);
 }
 
-void GUIRenderer::UseShader(Shader&)
+void SpriteRenderer::UseShader(Shader&)
 {
     this->mShader = mShader;
 }

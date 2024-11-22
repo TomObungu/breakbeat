@@ -5,9 +5,6 @@ Game::Game() :
 {
 }
 
-GUIRenderer* Renderer;
-GUIRenderer* AnimRenderer;
-
 void Game::ProcessEvents()
 {
     SDL_Event& event = mWindow.GetWindowEvent();
@@ -35,7 +32,7 @@ void Game::ProcessEvents()
 }
 
 void Game::Initialize()
- {
+{
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Set up orthgraphic projection matrix
@@ -45,19 +42,84 @@ void Game::Initialize()
     ResourceManager::LoadShader("\\shaders\\DefaultVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "default");
     ResourceManager::GetShader("default").Use().SetMatrix4("projection", projection);
     ResourceManager::GetShader("default").Use().SetInteger("image", 0);
-    Renderer = new GUIRenderer(ResourceManager::GetShader("default"));
     // configure shaders
     ResourceManager::LoadShader("\\shaders\\BackgroundVertexShader.glsl","\\shaders\\DefaultFragmentShader.glsl", "background");
     ResourceManager::GetShader("background").Use().SetMatrix4("projection", projection);
     ResourceManager::GetShader("background").Use().SetInteger("image", 0);
-    AnimRenderer = new GUIRenderer(ResourceManager::GetShader("background"));
     // load textures
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-arrows-squares-edit-cropped.png",true,"background");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-logo-2x-new.png", true, "game-logo");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-start-button.png", true, "start-button");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-exit-button.png", true, "exit-button");
-    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua");
+    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua"); 
+
+    currentState = GameState::START_MENU;
+
+    // Load Sprites
+   // Clear previous sprites
+    spriteGroups.clear();
+
+    // Initialize sprites for the START_MENU state
+
+    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+        ResourceManager::GetTexture("background"),
+        vec2(0, 0),
+        glm::vec2(1960.178, 1033.901),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("background")
+    ));
+
+
+    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+        ResourceManager::GetTexture("background-dots"), 
+        vec2(0, 0), 
+        vec2(1920, 994.167), 
+        0.0f, 
+        vec3(1.0f), 
+        ResourceManager::GetShader("default")
+    ));
+
+
+    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+        ResourceManager::GetTexture("game-logo"), 
+        vec2(372.256, 193.333), 
+        vec2(1162.667, 573.998), 
+        0.0f, 
+        vec3(1.0f), 
+        ResourceManager::GetShader("default")
+    ));
+
+    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+        ResourceManager::GetTexture("start-button"), 
+        vec2(862.230f, 720.000f), 
+        vec2(195.541f, 73.988f), 
+        0.0f, 
+        vec3(1.0f), 
+        ResourceManager::GetShader("default")
+    ));
+
+    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+        ResourceManager::GetTexture("exit-button"), 
+        vec2(889.921f, 824.483f), 
+        vec2(143.693f, 78.957f), 
+        0.0f, 
+        vec3(1.0f), 
+        ResourceManager::GetShader("default")
+    ));
+
+    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+        ResourceManager::GetTexture("start-menu-ua"),
+        vec2(0, 988.918),
+        vec2(1920, 91.082),
+        0.0f, 
+        vec3(1.0f), 
+        ResourceManager::GetShader("default")
+    ));
+
+
+
 }
 
 void Game::Render()
@@ -67,49 +129,11 @@ void Game::Render()
 
     float timeValue = (SDL_GetTicks() / 1000.0f);
 
-    // Draw Background
-    AnimRenderer->Draw(
-        ResourceManager::GetTexture("background"),
-        vec2(0, 0),
-        glm::vec2(1960.178, 1033.901)
-    );
-
-    Renderer->Draw(ResourceManager::GetTexture("background-dots"),
-        vec2(0,0),
-        vec2(1920, 994.167)
-    );
-
-    // Draw Logo
-    Renderer->Draw(
-        ResourceManager::GetTexture("game-logo"),
-        vec2(372.256 - 2 * sin(timeValue * 10), 193.333 - 2 * sin(timeValue * 10)),
-        vec2(1162.667 + 4 * sin(timeValue * 10), 573.998 + 4 * sin(timeValue * 10))
-    );
-
-    // Draw Start Button
-    Renderer->Draw(
-        ResourceManager::GetTexture("start-button"),
-        vec2(862.230f, 720.000f), 
-        vec2(195.541f, 73.988f),
-        0,
-        vec3(1, 1, -abs(sin(timeValue * 0.75))+1)
-    );
-
-    // Draw Exit Button
-    Renderer->Draw(
-        ResourceManager::GetTexture("exit-button"),
-        vec2(889.921f, 824.483f), 
-        vec2(143.693f, 78.957f)
-    );
-
-    // Draw User Navigation Assist
-    Renderer->Draw(
-        ResourceManager::GetTexture("start-menu-ua"),
-        vec2(0, 988.918), // Adjust Y position if needed
-        vec2(1920, 91.082)
-    );
-
-    ResourceManager::GetShader("background").SetFloat("time",-timeValue,true);
+    if (spriteGroups.find(currentState) != spriteGroups.end()) {
+        for (auto& sprite : spriteGroups[currentState]) {
+            sprite->Draw();
+        }
+    }
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)
