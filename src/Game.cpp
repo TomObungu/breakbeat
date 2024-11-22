@@ -52,7 +52,7 @@ void Game::Initialize()
     ResourceManager::GetShader("background").Use().SetInteger("image", 0);
     AnimRenderer = new GUIRenderer(ResourceManager::GetShader("background"));
     // load textures
-    ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots.png",true,"background-dots");
+    ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-arrows-squares-edit-cropped.png",true,"background");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-logo-2x-new.png", true, "game-logo");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-start-button.png", true, "start-button");
@@ -82,15 +82,17 @@ void Game::Render()
     // Draw Logo
     Renderer->Draw(
         ResourceManager::GetTexture("game-logo"),
-        vec2(372.256, 193.333),
-        vec2(1162.667, 573.998)
+        vec2(372.256 - 2 * sin(timeValue * 10), 193.333 - 2 * sin(timeValue * 10)),
+        vec2(1162.667 + 4 * sin(timeValue * 10), 573.998 + 4 * sin(timeValue * 10))
     );
 
     // Draw Start Button
     Renderer->Draw(
         ResourceManager::GetTexture("start-button"),
         vec2(862.230f, 720.000f), 
-        vec2(195.541f, 73.988f)
+        vec2(195.541f, 73.988f),
+        0,
+        vec3(1, 1, -abs(sin(timeValue * 0.75))+1)
     );
 
     // Draw Exit Button

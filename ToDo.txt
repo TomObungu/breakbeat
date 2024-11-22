@@ -15,7 +15,7 @@
 						-> If pressed enter then change game state accordingly and perform transition animation if needed 
 		- Create unbind texture subroutine (probably the easier option) or figure out bindless textures
 			-> Unbind and "switch" textures (more expensive) bind slots with other textures that are currently being used
-			-> 
+
 
     // glEnable(GL_BLEND);
     // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	
