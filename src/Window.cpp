@@ -18,6 +18,10 @@ Window::Window() :
     mResizeMode { false },
     mFirstTimeWindowed { true }
 {
+}
+
+void Window::Initialize()
+{
     // Initialize SDL
     // Check if the initialization function was sucessful
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -69,6 +73,7 @@ Window::Window() :
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize glad! %s\n", glGetError());
     }
 }
+
 
 SDL_Window*& Window::GetWindow()
 {

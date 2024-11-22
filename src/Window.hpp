@@ -32,6 +32,7 @@ class Window
 public:
 
 	//  Getters and setters
+	void Initialize();
 	SDL_Window*& GetWindow();
 	SDL_GLContext& GetOpenGLContext();
 	SDL_Event& GetWindowEvent();

@@ -11,6 +11,8 @@ integrated in
 
 // Include the Window.hpp file to allow creation of a Window object
 #include "Window.hpp"
+#include "ResourceManager.hpp"
+#include "GUIRenderer.hpp"
 
 class Game
 {
