@@ -5,6 +5,8 @@ Game::Game() :
 {
 }
 
+float timeValue;
+
 void Game::ProcessEvents()
 {
     SDL_Event& event = mWindow.GetWindowEvent();
@@ -57,12 +59,12 @@ void Game::Initialize()
     currentState = GameState::START_MENU;
 
     // Load Sprites
-   // Clear previous sprites
+    // Clear previous sprites
     spriteGroups.clear();
 
     // Initialize sprites for the START_MENU state
 
-    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+    spriteGroups[GameState::START_MENU]["background"] = (std::make_unique<Sprite>(
         ResourceManager::GetTexture("background"),
         vec2(0, 0),
         glm::vec2(1960.178, 1033.901),
@@ -72,7 +74,7 @@ void Game::Initialize()
     ));
 
 
-    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+    spriteGroups[GameState::START_MENU]["background-dots"] = (std::make_unique<Sprite>(
         ResourceManager::GetTexture("background-dots"), 
         vec2(0, 0), 
         vec2(1920, 994.167), 
@@ -82,7 +84,7 @@ void Game::Initialize()
     ));
 
 
-    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+    spriteGroups[GameState::START_MENU]["game-logo"] = (std::make_unique<Sprite>(
         ResourceManager::GetTexture("game-logo"), 
         vec2(372.256, 193.333), 
         vec2(1162.667, 573.998), 
@@ -91,7 +93,7 @@ void Game::Initialize()
         ResourceManager::GetShader("default")
     ));
 
-    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+    spriteGroups[GameState::START_MENU]["start-button"] = (std::make_unique<Sprite>(
         ResourceManager::GetTexture("start-button"), 
         vec2(862.230f, 720.000f), 
         vec2(195.541f, 73.988f), 
@@ -100,7 +102,7 @@ void Game::Initialize()
         ResourceManager::GetShader("default")
     ));
 
-    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+    spriteGroups[GameState::START_MENU]["exit-button"] = (std::make_unique<Sprite>(
         ResourceManager::GetTexture("exit-button"), 
         vec2(889.921f, 824.483f), 
         vec2(143.693f, 78.957f), 
@@ -109,7 +111,7 @@ void Game::Initialize()
         ResourceManager::GetShader("default")
     ));
 
-    spriteGroups[GameState::START_MENU].push_back(std::make_unique<Sprite>(
+    spriteGroups[GameState::START_MENU]["start-menu-ua"] = (std::make_unique<Sprite>(
         ResourceManager::GetTexture("start-menu-ua"),
         vec2(0, 988.918),
         vec2(1920, 91.082),
@@ -117,9 +119,30 @@ void Game::Initialize()
         vec3(1.0f), 
         ResourceManager::GetShader("default")
     ));
+}
 
-
-
+void Game::Update()
+{
+    const Uint8* state = SDL_GetKeyboardState(NULL);
+    if (currentState == GameState::START_MENU)
+    {
+        if(state[SDL_SCANCODE_DOWN])
+        {
+            spriteGroups[currentState]["background"]->Move(vec2(0,1));
+        }
+        if(state[SDL_SCANCODE_UP])
+        {
+            spriteGroups[currentState]["background"]->Move(vec2(0,-1));
+        }
+        if(state[SDL_SCANCODE_LEFT])
+        {
+            spriteGroups[currentState]["background"]->Move(vec2(-1,0));
+        }
+        if(state[SDL_SCANCODE_RIGHT])
+        {
+            spriteGroups[currentState]["background"]->Move(vec2(1,0));
+        }
+    }
 }
 
 void Game::Render()
@@ -127,13 +150,17 @@ void Game::Render()
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Ensure alpha is set to 1.0f for solid background
     glClear(GL_COLOR_BUFFER_BIT);
 
-    float timeValue = (SDL_GetTicks() / 1000.0f);
+    timeValue = (SDL_GetTicks() / 1000.0f);
 
-    if (spriteGroups.find(currentState) != spriteGroups.end()) {
-        for (auto& sprite : spriteGroups[currentState]) {
+    if (spriteGroups.find(currentState) != spriteGroups.end()) 
+    {
+        for (auto& [key, sprite]: spriteGroups[currentState]) 
+        {  
             sprite->Draw();
         }
     }
+
+    ResourceManager::GetShader("background").SetFloat("time",-timeValue,true);
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)
@@ -156,6 +183,7 @@ void Game::Run()
     {
          // Handle input and window events
         ProcessEvents(); 
+        Update();
         Render();
 
         // Update the window with OpenGL

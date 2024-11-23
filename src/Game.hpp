@@ -42,7 +42,8 @@ private:
     // Declare mWindow as a member variable
     GameState currentState;
     Window mWindow;
-    std::unordered_map<GameState, std::vector<std::unique_ptr<Sprite>>> spriteGroups;
+    std::unordered_map<GameState, std::map<string, std::unique_ptr<Sprite>>> spriteGroups;
+    
 };
 
 #endif

@@ -70,4 +70,3 @@ void Sprite::Rotate(float x, float y, float z, float angle, bool perspective) {
 
     this->mShader.SetMatrix4("model", model);
 }
-
