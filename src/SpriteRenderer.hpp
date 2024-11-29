@@ -34,6 +34,7 @@ public:
 
     // Hash table to store the sprites currently in use in the render loop
     unordered_map<GameState, map<string, Sprite*>> mCurrentlyRenderedSprites;
+    unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
 
 private:
     // Vertex array object that will be used across all sprites
@@ -41,8 +42,6 @@ private:
     // Hash table to store the defualt positions of the sprites
     // This will be used to restore sprites to their defualt states 
     // This will be when loading different games states
-    unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
-
 };
 
 #endif // SPRITERENDERER_HPP

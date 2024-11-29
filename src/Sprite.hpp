@@ -36,11 +36,14 @@ public:
     void SetTextureScale(float scale);
     
     // Animation functions
-    void Flash(vec3 color, float time);
-    void SetFlash(bool state, vec3 color, float time);
+    void SetDarken(float time);
+    void Darken();
 
     void MoveTo(vec2 coordinate, float time);
     void SetMoveTo(bool state, vec2 coordinate, float time);
+
+    void SetInvert(float time);
+    void Invert();
 
     // Getters
     vec2 GetPosition() const;
@@ -52,7 +55,7 @@ public:
     void Update(float deltaTime);
 
     bool IsAnimationComplete();
-    void SetAnimationComplete(bool state);
+    
 
 
     // Additional member functions specific to Sprite...
@@ -78,6 +81,18 @@ private:
     int mDistanceBetween;
     vec2 mIncrement;
     bool mIsMovingTo;
+
+    bool mDarkening;
+    float mDarkenTime;        // Time over which the sprite darkens
+    float mDarkenStartTime;   // Time at which darkening starts
+    vec3 mOriginalColor;  
+    
+    bool mInverting = false;         // Track if the sprite is lightening
+    float mInvertTime = 0.0f;        // Duration of the lightening effect
+    float mInvertStartTime = 0.0f;   // Start time of lightening
+    vec3 mDarkenedColor;             // Store the darkest color to lighten from
+           // Store the original color to darken from
+
 };
 
 #endif // SPRITE_HPP

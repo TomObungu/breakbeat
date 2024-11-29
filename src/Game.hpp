@@ -30,13 +30,21 @@ public:
     void Update();
     void Render();
     void HandleWindowEvent(SDL_Event&);
+
 	float mDeltaTime;
 	float mLastFrame;
     bool mFirstFrame;
+
     void CalculateDeltaTime();
+
     void InitMenu();
+
     Sprite* GetSprite(GameState, string);
     void UpdateSprites(GameState);
+    void LoadDefaultSprites(GameState gameState);
+
+    void Transition(GameState newGameState);
+
     Game();
 private:
     // Declare mWindow as a member variable

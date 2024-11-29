@@ -18,7 +18,7 @@ void Game::InitMenu()
 
 void Game::ProcessEvents()
 {
- SDL_Event& event = mWindow.GetWindowEvent();
+    SDL_Event& event = mWindow.GetWindowEvent();
     while (SDL_PollEvent(&event))
     {
         if (event.type == SDL_QUIT)
@@ -35,34 +35,51 @@ void Game::ProcessEvents()
             {
                 mWindow.ToggleFullscreen();
             }
-            
+
             if (mCurrentGameState == GameState::START_MENU)
             {
-                const Uint8* state = SDL_GetKeyboardState(NULL);
                 Uint32 currentTime = SDL_GetTicks();
 
                 if (currentTime - mLastSelectionTime >= mSelectionDelay)
                 {
                     if (event.key.keysym.sym == SDLK_LEFT)
                     {
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1));
-                        mMenuChoice = (mMenuChoice - 1 + mMenuChoices.size()) % mMenuChoices.size();
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f));
+                        // Update menu choice index with wrap-around
+                        mMenuChoice = (mMenuChoice - 1 +  mMenuChoices.size()) % mMenuChoices.size();
+                        // Highlight the new menu choice
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f, 1.0f, 0.0f));
                         mLastSelectionTime = currentTime;
                     }
 
                     if (event.key.keysym.sym == SDLK_RIGHT)
                     {
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1));  // Stop flash on the previous choice
-                        mMenuChoice = (mMenuChoice + 1) % mMenuChoices.size();
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
+                         mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f));
+                        // Update menu choice index with wrap-around
+                        mMenuChoice = (mMenuChoice + 1 + mMenuChoices.size()) % mMenuChoices.size();
+                        // Highlight the new menu choice
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f, 1.0f, 0.0f));
                         mLastSelectionTime = currentTime;
+                    }
+
+                    if (event.key.keysym.sym == SDLK_RETURN)
+                    {
+                        std::cout << "Menu option selected!" << std::endl;
+                        if (mMenuChoices[mMenuChoice] == GetSprite(mCurrentGameState, "start-button"))
+                        {
+                            Transition(GameState::MAIN_MENU);
+                        }
+                        else if (mMenuChoices[mMenuChoice] == GetSprite(mCurrentGameState, "exit-button"))
+                        {
+                            mWindow.SetWindowClosedBoolean(true);  // Exit game
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 static Uint32 lastChoiceTime = 0;  // Track the last choice time for delay handling
 
@@ -194,6 +211,7 @@ void Game::CalculateDeltaTime()
 
 void Game::Update()
 {
+
     GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1f * mDeltaTime));
 
     if(mCurrentGameState == GameState::START_MENU)
@@ -207,7 +225,6 @@ void Game::Update()
 
     UpdateSprites(mCurrentGameState);
 }
-
 
 void Game::Render()
 {
@@ -261,3 +278,54 @@ Sprite* Game::GetSprite(GameState gameState, string name)
     return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
 }
 
+void Game::LoadDefaultSprites(GameState gameState)
+{
+    // Clear currently rendered sprites for the new game state
+    mSpriteRenderer.mCurrentlyRenderedSprites[gameState].clear();
+
+    // Load default sprites for the given game state
+    for (const auto& [key, sprite] : mSpriteRenderer.mDefaultSprites[gameState])
+    {
+        // Clone or reference the default sprite into the currently rendered sprites
+        mSpriteRenderer.mCurrentlyRenderedSprites[gameState][key] = sprite;
+    }
+}
+
+void Game::Transition(GameState newGameState)
+{
+    // Darken all currently rendered sprites for the current game state
+    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
+    {
+        sprite->SetDarken(1.0f);  // Darken over 1 second
+    }
+
+    // Check if all sprites are fully darkened
+    bool allDark = true;
+    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
+    {
+        if (sprite->GetColor() != vec3(0.0f))
+        {
+            allDark = false;
+            break;
+        }
+    }
+
+    // If all sprites are darkened, change the game state and fade in new sprites
+    if (allDark)
+    {
+        mCurrentGameState = newGameState;
+        LoadDefaultSprites(newGameState);
+
+        // Initialize new sprites to be fully dark
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[newGameState])
+        {
+            sprite->SetColor(vec3(0.0f));  // Start dark
+        }
+
+        // Lighten the new sprites from dark to their original colors
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[newGameState])
+        {
+            sprite->SetInvert(1.0f);  // Lighten over 1 second
+        }
+    }
+}
