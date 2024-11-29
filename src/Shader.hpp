@@ -28,10 +28,11 @@ public:
     void Compile(const char *vertexSource, const char *fragmentSource);
     // utility functions for uniform varibles
     void SetFloat(const char *name, float value, bool useShader = false);
-    void SetInteger (const char *name, int value, bool useShader = false);
-    void SetVector3f (const char *name, float x, float y, float z, bool useShader = false);
-    void SetVector3f (const char *name, const vec3 &value, bool useShader = false);
-    void SetMatrix4 (const char *name, const mat4 &matrix, bool useShader = false);
+    void SetInteger(const char *name, int value, bool useShader = false);
+    void SetVector3f(const char *name, float x, float y, float z, bool useShader = false);
+    void SetVector3f(const char *name, const vec3 &value, bool useShader = false);
+    void SetVector2f(const char* name, const vec2& value, bool useShader = false);
+    void SetMatrix4(const char *name, const mat4 &matrix, bool useShader = false);
 private:
     // checks if compilation or linking failed and if so, print the error logs
     void checkCompileErrors(unsigned int object, std::string type); 

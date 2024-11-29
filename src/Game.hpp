@@ -9,41 +9,45 @@ integrated in
 #ifndef GAME_HPP
 #define GAME_HPP
 
-enum class GameState {
-    START_MENU,
-    GAMEPLAY,
-    PAUSE_MENU,
-    OPTIONS_MENU,
-    // Add more states as needed
-};
-
 // Include the Window.hpp file to allow creation of a Window object
 #include "Window.hpp"
-#include <unordered_map>
-#include <vector>
-#include <memory>
 #include "ResourceManager.hpp"
-#include "Sprite.hpp"
+#include "SpriteRenderer.hpp"
 
+#include <unordered_map>
+#include <map>
 #include <vector>
-#include <memory> // For smart pointers
+
+using std::unordered_map;
+using std::vector;
 
 class Game
 {
 public:
     void Initialize();
     void Run();
-    void Update();
     void ProcessEvents();
+    void Update();
     void Render();
     void HandleWindowEvent(SDL_Event&);
+	float mDeltaTime;
+	float mLastFrame;
+    bool mFirstFrame;
+    void CalculateDeltaTime();
+    void InitMenu();
+    Sprite* GetSprite(GameState, string);
+    void UpdateSprites(GameState);
     Game();
 private:
     // Declare mWindow as a member variable
-    GameState currentState;
+    GameState mCurrentGameState;
     Window mWindow;
-    std::unordered_map<GameState, std::map<string, std::unique_ptr<Sprite>>> spriteGroups;
-    
-};
+    SpriteRenderer mSpriteRenderer;
 
+    int mMenuChoice;                 // Persistent menu choice index
+    vector<Sprite*> mMenuChoices;    // Store menu sprite choices
+    float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
+    Uint32 mLastSelectionTime = 0; 
+};
+    
 #endif

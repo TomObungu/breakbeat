@@ -1,53 +1,97 @@
 #include "Game.hpp"
 
 Game::Game() : 
-    mWindow(Window())
+    mWindow(Window()),
+    mSpriteRenderer(SpriteRenderer())
 {
 }
 
-float timeValue;
+void Game::InitMenu()
+{
+    mMenuChoices = {
+        GetSprite(mCurrentGameState, "start-button"),
+        GetSprite(mCurrentGameState, "exit-button")
+    };
+
+    mMenuChoice = 0;  // Start with the first menu option
+}
 
 void Game::ProcessEvents()
 {
-    SDL_Event& event = mWindow.GetWindowEvent();
+ SDL_Event& event = mWindow.GetWindowEvent();
     while (SDL_PollEvent(&event))
     {
-        switch (event.type)
+        if (event.type == SDL_QUIT)
         {
-            case SDL_QUIT:
-                mWindow.SetWindowClosedBoolean(true);
-                break;
+            mWindow.SetWindowClosedBoolean(true);
+        }
+        else if (event.type == SDL_WINDOWEVENT)
+        {
+            HandleWindowEvent(event);
+        }
+        else if (event.type == SDL_KEYDOWN)
+        {
+            if (event.key.keysym.sym == SDLK_F11)
+            {
+                mWindow.ToggleFullscreen();
+            }
+            
+            if (mCurrentGameState == GameState::START_MENU)
+            {
+                const Uint8* state = SDL_GetKeyboardState(NULL);
+                Uint32 currentTime = SDL_GetTicks();
 
-            case SDL_WINDOWEVENT:
-                HandleWindowEvent(event);
-                break;
+                if (currentTime - mLastSelectionTime >= mSelectionDelay)
+                {
+                    if (event.key.keysym.sym == SDLK_LEFT)
+                    {
+                        mMenuChoices[mMenuChoice]->SetFlash(false,vec3(1,1,1),0); // Stop flash on the previous choice
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1));
+                        mMenuChoice = (mMenuChoice - 1 + mMenuChoices.size()) % mMenuChoices.size();
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
+                        mLastSelectionTime = currentTime;
 
-            case SDL_KEYDOWN:
-                if (event.key.keysym.sym == SDLK_F11) 
-                    mWindow.ToggleFullscreen();
-                break;
+                    }
 
-            default:
-                break;
+                    if (event.key.keysym.sym == SDLK_RIGHT)
+                    {
+                        mMenuChoices[mMenuChoice]->SetFlash(false,vec3(1,1,1),0);
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1));  // Stop flash on the previous choice
+                        mMenuChoice = (mMenuChoice + 1) % mMenuChoices.size();
+                        mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
+                        mLastSelectionTime = currentTime;
+                    }
+                }
+            }
         }
     }
 }
+
+static Uint32 lastChoiceTime = 0;  // Track the last choice time for delay handling
+
+// Timing constants
+const Uint32 selectionDelay = 200; 
+
 
 void Game::Initialize()
 {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Set up orthgraphic projection matrix
-    mat4 projection = glm::ortho(0.0f, static_cast<float>(mWindow.GetWindowWidth()),
+    mat4 orthographicProjection = glm::ortho(0.0f, static_cast<float>(mWindow.GetWindowWidth()),
         static_cast<float>(mWindow.GetWindowHeight()), 0.0f, -1.0f, 1.0f);
+    // Set up perspective projection matrix
+    mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), static_cast<float>(mWindow.GetWindowWidth())
+        / static_cast<float>(mWindow.GetWindowHeight()), 0.1f, 100.0f);
+        
     // load shaders
     ResourceManager::LoadShader("\\shaders\\DefaultVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "default");
-    ResourceManager::GetShader("default").Use().SetMatrix4("projection", projection);
+    ResourceManager::GetShader("default").Use().SetMatrix4("projection", orthographicProjection);
     ResourceManager::GetShader("default").Use().SetInteger("image", 0);
-    // configure shaders
-    ResourceManager::LoadShader("\\shaders\\BackgroundVertexShader.glsl","\\shaders\\DefaultFragmentShader.glsl", "background");
-    ResourceManager::GetShader("background").Use().SetMatrix4("projection", projection);
-    ResourceManager::GetShader("background").Use().SetInteger("image", 0);
+    // configure perspective projection 
+    ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\DefaultFragmentShader.glsl", "default-3D");
+    ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
+    ResourceManager::GetShader("default-3D").Use().SetInteger("image", 0);
     // load textures
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-arrows-squares-edit-cropped.png",true,"background");
@@ -56,111 +100,127 @@ void Game::Initialize()
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-exit-button.png", true, "exit-button");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua"); 
 
-    currentState = GameState::START_MENU;
+    // Set initial game state to start menu
+    mCurrentGameState = GameState::START_MENU;
 
-    // Load Sprites
-    // Clear previous sprites
-    spriteGroups.clear();
+    mSpriteRenderer.Initialize();
 
     // Initialize sprites for the START_MENU state
 
-    spriteGroups[GameState::START_MENU]["background"] = (std::make_unique<Sprite>(
+    mSpriteRenderer.CreateSprite(
+        GameState::START_MENU,
+        "background",
         ResourceManager::GetTexture("background"),
         vec2(0, 0),
         glm::vec2(1960.178, 1033.901),
         0.0f,
         vec3(1.0f),
-        ResourceManager::GetShader("background")
-    ));
+        ResourceManager::GetShader("default"),
+        false,
+        vec2(0,0),
+        2
+    );
 
-
-    spriteGroups[GameState::START_MENU]["background-dots"] = (std::make_unique<Sprite>(
+    mSpriteRenderer.CreateSprite(
+        GameState::START_MENU,
+        "background-dots",
         ResourceManager::GetTexture("background-dots"), 
         vec2(0, 0), 
         vec2(1920, 994.167), 
         0.0f, 
         vec3(1.0f), 
-        ResourceManager::GetShader("default")
-    ));
+        ResourceManager::GetShader("default"),
+        false
+    );
 
-
-    spriteGroups[GameState::START_MENU]["game-logo"] = (std::make_unique<Sprite>(
+    mSpriteRenderer.CreateSprite(
+        GameState::START_MENU,
+        "game-logo",
         ResourceManager::GetTexture("game-logo"), 
         vec2(372.256, 193.333), 
         vec2(1162.667, 573.998), 
         0.0f, 
         vec3(1.0f), 
-        ResourceManager::GetShader("default")
-    ));
+        ResourceManager::GetShader("default"),
+        false
+    );
 
-    spriteGroups[GameState::START_MENU]["start-button"] = (std::make_unique<Sprite>(
+    mSpriteRenderer.CreateSprite(
+        GameState::START_MENU,
+        "start-button",
         ResourceManager::GetTexture("start-button"), 
         vec2(862.230f, 720.000f), 
         vec2(195.541f, 73.988f), 
         0.0f, 
         vec3(1.0f), 
-        ResourceManager::GetShader("default")
-    ));
+        ResourceManager::GetShader("default"),
+        false
+    );
 
-    spriteGroups[GameState::START_MENU]["exit-button"] = (std::make_unique<Sprite>(
+    mSpriteRenderer.CreateSprite(
+        GameState::START_MENU,
+        "exit-button",
         ResourceManager::GetTexture("exit-button"), 
         vec2(889.921f, 824.483f), 
         vec2(143.693f, 78.957f), 
         0.0f, 
         vec3(1.0f), 
-        ResourceManager::GetShader("default")
-    ));
+        ResourceManager::GetShader("default"),
+        false
+    );
 
-    spriteGroups[GameState::START_MENU]["start-menu-ua"] = (std::make_unique<Sprite>(
+    mSpriteRenderer.CreateSprite(
+        GameState::START_MENU,
+        "start-menu-ua",
         ResourceManager::GetTexture("start-menu-ua"),
         vec2(0, 988.918),
         vec2(1920, 91.082),
         0.0f, 
         vec3(1.0f), 
-        ResourceManager::GetShader("default")
-    ));
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
+
+    InitMenu();
+
+    mFirstFrame = true;
+}
+
+void Game::CalculateDeltaTime()
+{
+    Uint32 currentTime = SDL_GetTicks();
+    mDeltaTime = (currentTime - mLastFrame) / 1000.0f;
+    mLastFrame = currentTime;
 }
 
 void Game::Update()
 {
-    const Uint8* state = SDL_GetKeyboardState(NULL);
-    if (currentState == GameState::START_MENU)
+    GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1f * mDeltaTime));
+
+    if(mCurrentGameState == GameState::START_MENU)
     {
-        if(state[SDL_SCANCODE_DOWN])
+        if(mFirstFrame)
         {
-            spriteGroups[currentState]["background"]->Move(vec2(0,1));
-        }
-        if(state[SDL_SCANCODE_UP])
-        {
-            spriteGroups[currentState]["background"]->Move(vec2(0,-1));
-        }
-        if(state[SDL_SCANCODE_LEFT])
-        {
-            spriteGroups[currentState]["background"]->Move(vec2(-1,0));
-        }
-        if(state[SDL_SCANCODE_RIGHT])
-        {
-            spriteGroups[currentState]["background"]->Move(vec2(1,0));
+            mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
+            mFirstFrame = false;
         }
     }
+
+    UpdateSprites(mCurrentGameState);
 }
+
 
 void Game::Render()
 {
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f); // Ensure alpha is set to 1.0f for solid background
+    // Clear the screen with a solid background color
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    timeValue = (SDL_GetTicks() / 1000.0f);
+    // Render all sprites for the current game state
+    mSpriteRenderer.DrawSprites(mCurrentGameState);
 
-    if (spriteGroups.find(currentState) != spriteGroups.end()) 
-    {
-        for (auto& [key, sprite]: spriteGroups[currentState]) 
-        {  
-            sprite->Draw();
-        }
-    }
-
-    ResourceManager::GetShader("background").SetFloat("time",-timeValue,true);
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)
@@ -178,15 +238,29 @@ void Game::Run()
 {
     mWindow.Initialize();
     Initialize();
-    // Main loop for the game   
+    // Main loop for the game  
+    
     while (!mWindow.GetWindowClosedBoolean())
     {
+        CalculateDeltaTime();
          // Handle input and window events
-        ProcessEvents(); 
+        ProcessEvents();
         Update();
         Render();
-
         // Update the window with OpenGL
         SDL_GL_SwapWindow(mWindow.GetWindow());  
     }
 }
+
+void Game::UpdateSprites(GameState gameState)
+{
+    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState]) 
+    {
+        sprite->Update(mDeltaTime);
+    }
+}
+Sprite* Game::GetSprite(GameState gameState, string name)
+{
+    return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
+}
+

@@ -1,9 +1,7 @@
 #include "SpriteRenderer.hpp"
 
-SpriteRenderer::SpriteRenderer(Shader& shader)
+SpriteRenderer::SpriteRenderer()
 {
-    this->mShader = shader;
-    this->Initialize();
 }
 
 SpriteRenderer::~SpriteRenderer()
@@ -13,7 +11,7 @@ SpriteRenderer::~SpriteRenderer()
 
 void SpriteRenderer::Initialize()
 {
-    unsigned int vertexBufferObject;
+    GLuint vertexBufferObject;
     float vertices[] = {
         // Position       // Tex Coords
         0.0f, 1.0f,      0.0f, 1.0f,
@@ -43,28 +41,34 @@ void SpriteRenderer::Initialize()
     glBindVertexArray(0);
 }
 
-// Draw method in SpriteRenderer (could be overridden in derived classes)
-void SpriteRenderer::Draw(Texture &texture, vec2 position, vec2 size, float rotate, vec3 color) {
-    mat4 model = mat4(1.0f);
-    model = translate(model, vec3(position, 0.0f));
-    model = translate(model, vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
-    model = glm::rotate(model, glm::radians(rotate), vec3(0.0f, 0.0f, 1.0f));
-    model = translate(model, vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
-    model = scale(model, vec3(size, 1.0f));
-
-    this->mShader.Use();
-    this->mShader.SetMatrix4("model", model);
-    this->mShader.SetVector3f("color", color);
-
-    glActiveTexture(GL_TEXTURE0);
-    texture.Bind();
-
-    glBindVertexArray(this->mVertexArrayObject);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
-    glBindVertexArray(0);
-}
-
-void SpriteRenderer::UseShader(Shader&)
+Sprite* SpriteRenderer::CreateSprite(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePositon, float textureScale)
 {
-    this->mShader = mShader;
+    // Create a pointer to a new Sprite instance
+    auto sprite = new Sprite(texture, position, size, rotate, color, shader, perspective, texturePositon, textureScale);
+
+    // Store the pointer in the default sprite hash table
+    GLuint& VAO = this->mVertexArrayObject;
+    sprite->mVertexArrayObject = VAO;
+    mDefaultSprites[gameState][name] = sprite;
+
+    // Return the raw pointer for convenience if needed
+    return mDefaultSprites[gameState][name];
 }
+
+void SpriteRenderer::DrawSprites(GameState gameState)
+{
+    for (auto& [key, sprite] : mCurrentlyRenderedSprites[gameState])
+    {
+        sprite->Draw(); // Use sprite directly; no need to dereference a raw pointer
+    }
+}
+
+void SpriteRenderer::LoadDefaultSprites(GameState gameState)
+{
+    for (auto& [key, sprite] : mDefaultSprites[gameState])
+    {
+        // Use the copy constructor to create a copy of the sprite
+        mCurrentlyRenderedSprites[gameState][key] = sprite;
+    }
+}
+

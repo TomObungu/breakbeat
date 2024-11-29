@@ -57,12 +57,21 @@ void Shader::SetVector3f(const char *name, float x, float y, float z, bool useSh
         this->Use();
     glUniform3f(glGetUniformLocation(this->ID, name), x, y, z);
 }
+
 void Shader::SetVector3f(const char *name, const vec3 &value, bool useShader)
 {
     if (useShader)
         this->Use();
     glUniform3f(glGetUniformLocation(this->ID, name), value.x, value.y, value.z);
 }
+
+void Shader::SetVector2f(const char* name, const vec2& value, bool useShader)
+{
+    if (useShader)
+        this->Use();
+    glUniform2f(glGetUniformLocation(this->ID, name), value.x, value.y);
+}
+
 void Shader::SetMatrix4(const char *name, const mat4 &matrix, bool useShader)
 {
     if (useShader)

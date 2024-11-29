@@ -7,5 +7,5 @@ uniform vec3 color;
 
 void main()
 {
-    fragmentColor = texture(image, textureCoordinate) * vec4(color, 1.0);
+    fragmentColor = texture(image, (textureCoordinate)) * vec4(color, 1.0);
 }

@@ -1,17 +1,29 @@
 #include "Sprite.hpp"
 
 // Constructor that initializes sprite properties
-Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader)
-    : SpriteRenderer(shader),  // Call the base class constructor with the shader
-      mTexture(texture),
+Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective,  vec2 texturePositon, float textureScale)
+    : mTexture(texture),
+      mTexturePosition(texturePositon),
+      mTextureScale(textureScale),
       mPosition(position),
       mSize(size),
       mRotation(rotate),
-      mColor(color) 
+      mColor(color),
+      mShader(shader),
+      mPerspective(perspective)
 {
+    mHasUpdated = true;
+    mFlashing = false;
+    mFlashColor = vec3(1,1,0);
+    mFlashTime = 0;
+    mStartCoordinate = vec3(0);
+    mEndCoordinate = vec3(0);
+    mDistanceBetween = 0;
+    mIncrement = vec2(0);
+    mIsMovingTo = false;
 }
 
-// Overridden Draw method for Sprite
+// Draw method for Sprite
 void Sprite::Draw() 
 {
     mat4 model = mat4(1.0f);
@@ -28,45 +40,144 @@ void Sprite::Draw()
     glActiveTexture(GL_TEXTURE0);
     mTexture.Bind();
 
+    this->mShader.SetVector2f("texturePosition", mTexturePosition);
+    this->mShader.SetFloat("textureScale",mTextureScale);
+
     glBindVertexArray(this->mVertexArrayObject);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
     glBindVertexArray(0);
 }
  
-// Utility Functions
-void Sprite::Move(vec2 pixels) {
+void Sprite::Move(vec2 pixels)
+{
     mPosition += pixels;
 }
 
-void Sprite::MoveTo(vec2 coordinate, float time) {
-    // Here you would implement time-based movement (interpolation)
-    vec2 increment = (coordinate - mPosition) / time;
-    mPosition += increment;  // Simplified for one update
-}
-
-void Sprite::Rotate(float angle) {
-    mRotation += angle;
-}
-
-// More complex rotation function that might involve switching shaders
-void Sprite::Rotate(float x, float y, float z, float angle, bool perspective) {
+// More complex rotation function that considers perspective rotation
+void Sprite::Rotate(vec3 orientation, float angle) {
     mat4 model = mat4(1.0f);
 
-    if (perspective) {
+    if (mPerspective) 
+    {
         // Switch to perspective shader
         // This part assumes you have a mechanism to change shaders in the SpriteRenderer
-        this->mShader = ResourceManager::GetShader("PerspectiveShader");
-        mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
         mat4 view = lookAt(vec3(0.0f, 0.0f, 3.0f), vec3(0.0f), vec3(0.0f, 1.0f, 0.0f));
-
-        model = rotate(model, glm::radians(angle), vec3(x, y, z));
-
+        model = rotate(model, glm::radians(angle), orientation);
         this->mShader.SetMatrix4("view", view);
-        this->mShader.SetMatrix4("projection", projection);
-    } else {
+    } else 
+    {
         // Use orthographic shader for normal 2D rotation
-        model = rotate(model, glm::radians(angle), vec3(x, y, z));
+        model = rotate(model, radians(angle), orientation);
     }
 
+    // Set model matrix within shader to result of the transformation
     this->mShader.SetMatrix4("model", model);
 }
+
+void Sprite::MoveTextureCoordinate(vec2 offset)
+{
+    // Get the current texture position if stored, or initialize to zero
+   this->mTexturePosition += offset;
+}
+
+void Sprite::SetTextureScale(float scale)
+{
+    // Get the current texture position if stored, or initialize to zero
+   this->mTextureScale = scale;
+}
+
+void Sprite::Scale(float scale)
+{
+    this->mSize *= scale;
+}
+
+ // Setters
+void Sprite::SetPosition(const vec2& position) {
+    mPosition = position;
+}
+
+void Sprite::SetSize(const vec2& size) {
+    mSize = size;
+}
+
+void Sprite::SetRotation(float rotate) {
+    this->mRotation = rotate;
+}
+
+void Sprite::SetColor(const vec3& color) {
+    this->mColor = color;
+}
+
+void Sprite::SetShader(Shader& shader) {
+    this->mShader = shader;
+}
+
+// Getters
+vec2 Sprite::GetPosition() const {
+    return mPosition;
+}
+
+vec2 Sprite::GetSize() const {
+    return mSize;
+}
+
+float Sprite::GetRotation() const {
+    return mRotation;
+}
+
+vec3 Sprite::GetColor() const {
+    return mColor;
+}
+
+Shader& Sprite::GetShader() const {
+    return this->mShader;
+}
+
+void Sprite::SetFlash(bool state, vec3 color, float time) 
+{
+    mFlashing = state;
+    mFlashColor = color;
+    mFlashTime = time;
+}
+
+void Sprite::Flash(vec3 color, float time) 
+{
+    float pulse = SDL_GetTicks() / (1000 * time);
+    mColor = vec3
+    (
+        abs(sin(pulse) - color.x) + color.x,
+        abs(sin(pulse) - color.y) + color.y,
+        abs(sin(pulse) - color.z) + color.z
+    );
+} 
+
+void Sprite::MoveTo(vec2 coordinate, float time) 
+{
+    if (mHasUpdated) {
+        mStartCoordinate = mPosition;
+        mEndCoordinate = coordinate;
+        mTotalTime = time;
+        mCurrentTime = 0.0f;
+        mIsMovingTo = true;
+        mHasUpdated = false;  // Mark animation as in-progress
+    }
+}
+
+void Sprite::SetMoveTo(bool state, vec2 coordinate, float time) 
+{
+    mIsMovingTo = state;
+    if (state) MoveTo(coordinate, time);
+}
+
+void Sprite::Update(float deltaTime) {
+    if (mFlashing) {
+        Flash(mFlashColor, mFlashTime);
+    }
+}
+
+bool Sprite::IsAnimationComplete()
+{ 
+    return mHasUpdated; 
+}
+
+

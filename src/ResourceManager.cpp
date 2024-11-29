@@ -17,7 +17,6 @@ std::map<std::string, Shader>       ResourceManager::Shaders;
 
 Shader& ResourceManager::LoadShader(const char *vertexShaderPath, const char *fragmentShaderPath, string name)
 {
-    std::cout << (fs::current_path().string() + vertexShaderPath).c_str();
     Shaders[name] = loadShaderFromFile((fs::current_path().string() + vertexShaderPath).c_str(),
         (fs::current_path().string() + fragmentShaderPath).c_str());
     return Shaders[name];
@@ -75,7 +74,6 @@ Shader ResourceManager::loadShaderFromFile(const char* vertexShaderPath, const c
         std::cout << "ERROR::SHADER: Failed to read shader files" << std::endl;
     }
     const char *vertexShaderCode = vertexCode.c_str();
-    std::cout<<vertexShaderCode;
     const char *fragmentShaderCode = fragmentCode.c_str();
     // 2. now create shader object from source code
     Shader shader;
