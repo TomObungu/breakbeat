@@ -12,10 +12,7 @@ Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 co
       mShader(shader),
       mPerspective(perspective)
 {
-    mHasUpdated = true;
-    mFlashing = false;
-    mFlashColor = vec3(1,1,0);
-    mFlashTime = 0;
+    mHasUpdated = true;;
     mStartCoordinate = vec3(0);
     mEndCoordinate = vec3(0);
     mDistanceBetween = 0;
@@ -121,38 +118,22 @@ vec2 Sprite::GetSize() const {
     return mSize;
 }
 
-float Sprite::GetRotation() const {
+float Sprite::GetRotation() const 
+{
     return mRotation;
 }
 
-vec3 Sprite::GetColor() const {
+vec3 Sprite::GetColor() const 
+{
     return mColor;
 }
 
-Shader& Sprite::GetShader() const {
+Shader& Sprite::GetShader() const 
+{
     return this->mShader;
 }
 
-void Sprite::SetFlash(bool state, vec3 color, float time) 
-{
-    mFlashing = state;
-    mFlashColor = color;
-    mFlashTime = time;
-}
-
-void Sprite::Flash(vec3 color, float time) 
-{
-    float pulse = SDL_GetTicks() / (1000 * time);
-    mColor = vec3
-    (
-        abs(sin(pulse) - color.x) + color.x,
-        abs(sin(pulse) - color.y) + color.y,
-        abs(sin(pulse) - color.z) + color.z
-    );
-} 
-
-void Sprite::MoveTo(vec2 coordinate, float time) 
-{
+void Sprite::MoveTo(vec2 coordinate, float time) {
     if (mHasUpdated) {
         mStartCoordinate = mPosition;
         mEndCoordinate = coordinate;
@@ -170,8 +151,21 @@ void Sprite::SetMoveTo(bool state, vec2 coordinate, float time)
 }
 
 void Sprite::Update(float deltaTime) {
-    if (mFlashing) {
-        Flash(mFlashColor, mFlashTime);
+  if (mIsMovingTo)
+    {
+        mCurrentTime += deltaTime;
+
+        float curveProgress = 3 * pow(mCurrentTime, 3) - 3 * mCurrentTime;
+        
+        // Interpolate using curved progress between start and end
+        mPosition = mStartCoordinate + curveProgress * (mEndCoordinate - mStartCoordinate);
+
+        // Once done, ensure it snaps and ends properly
+        if (mCurrentTime >= mTotalTime)
+        {
+            mIsMovingTo = false;
+            mHasUpdated = true;
+        }
     }
 }
 
@@ -179,5 +173,3 @@ bool Sprite::IsAnimationComplete()
 { 
     return mHasUpdated; 
 }
-
-

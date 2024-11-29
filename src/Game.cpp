@@ -45,17 +45,14 @@ void Game::ProcessEvents()
                 {
                     if (event.key.keysym.sym == SDLK_LEFT)
                     {
-                        mMenuChoices[mMenuChoice]->SetFlash(false,vec3(1,1,1),0); // Stop flash on the previous choice
                         mMenuChoices[mMenuChoice]->SetColor(vec3(1));
                         mMenuChoice = (mMenuChoice - 1 + mMenuChoices.size()) % mMenuChoices.size();
                         mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
                         mLastSelectionTime = currentTime;
-
                     }
 
                     if (event.key.keysym.sym == SDLK_RIGHT)
                     {
-                        mMenuChoices[mMenuChoice]->SetFlash(false,vec3(1,1,1),0);
                         mMenuChoices[mMenuChoice]->SetColor(vec3(1));  // Stop flash on the previous choice
                         mMenuChoice = (mMenuChoice + 1) % mMenuChoices.size();
                         mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));

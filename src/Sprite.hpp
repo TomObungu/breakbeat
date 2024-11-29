@@ -72,13 +72,7 @@ private:
     float mCurrentTime;
     float mTotalTime;
 
-    // Animation state vairables
-    bool mFlashing;
-    bool mFirstFlash;
-    vec3 mFlashColor;
-    float mFlashTime;
-    float mFirstFlashStartTime;
-
+    // Animation state varibles
     vec2 mStartCoordinate;
     vec2 mEndCoordinate;
     int mDistanceBetween;
