@@ -31,9 +31,8 @@ public:
     void Render();
     void HandleWindowEvent(SDL_Event&);
 
-	float mDeltaTime;
-	float mLastFrame;
-    bool mFirstFrame;
+	double mDeltaTime;
+	double mLastFrame;
 
     void CalculateDeltaTime();
 
@@ -43,12 +42,16 @@ public:
     void UpdateSprites(GameState);
     void LoadDefaultSprites(GameState gameState);
 
+    void CheckForTransitionState();
+    void TransitionToGameState(GameState newGameState);
+
     void Transition(GameState newGameState);
+
 
     Game();
 private:
     // Declare mWindow as a member variable
-    GameState mCurrentGameState;
+    GameState mCurrentGameState = GameState::START_MENU;
     Window mWindow;
     SpriteRenderer mSpriteRenderer;
 
@@ -56,6 +59,15 @@ private:
     vector<Sprite*> mMenuChoices;    // Store menu sprite choices
     float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
     Uint32 mLastSelectionTime = 0; 
+
+    bool mTransitioningDark = false;
+    bool mTransitioningLight = false;
+    bool mAllDark = false;
+    bool mAllLight = true;
+    bool mHasTransitioned = true;
+    GameState mTransitioningGameState = GameState::NOT_TRANSITIONING;
+    bool mFirstFrame = true;
+    bool mFirstTransitionFrame = true;
 };
     
 #endif

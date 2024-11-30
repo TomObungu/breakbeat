@@ -67,7 +67,7 @@ void Game::ProcessEvents()
                         std::cout << "Menu option selected!" << std::endl;
                         if (mMenuChoices[mMenuChoice] == GetSprite(mCurrentGameState, "start-button"))
                         {
-                            Transition(GameState::MAIN_MENU);
+                            TransitionToGameState(GameState::MAIN_MENU);
                         }
                         else if (mMenuChoices[mMenuChoice] == GetSprite(mCurrentGameState, "exit-button"))
                         {
@@ -106,7 +106,9 @@ void Game::Initialize()
     ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\DefaultFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
     ResourceManager::GetShader("default-3D").Use().SetInteger("image", 0);
-    // load textures
+    // load textures 
+
+    /* START MENU */
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-arrows-squares-edit-cropped.png",true,"background");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-logo-2x-new.png", true, "game-logo");
@@ -114,10 +116,16 @@ void Game::Initialize()
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-exit-button.png", true, "exit-button");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua"); 
 
-    // Set initial game state to start menu
-    mCurrentGameState = GameState::START_MENU;
+    /* MAIN_MENU */
+    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-user-navigation-assist-new.png",true,"main-menu-ua");
+    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-settings-user-interface.png",true,"main-menu-settings-button");
+    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-editor-user-interface.png",true,"mainn-menu-chart-editor-button");
+    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-selection-user-interface.png",true,"main-menu-chart-selection-button");
+    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-back-button-user-interface.png",true,"main-menu-back-button");
 
     mSpriteRenderer.Initialize();
+
+    mSpriteRenderer.mCurrentlyRenderedSprites.clear();
 
     // Initialize sprites for the START_MENU state
 
@@ -195,24 +203,55 @@ void Game::Initialize()
         false
     );
 
+      /* Initialize Sprites for the MAIN_MENU game state*/
+
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_MENU,
+        "background",
+        ResourceManager::GetTexture("background"),
+        vec2(0, 0),
+        glm::vec2(1960.178, 1033.901),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false,
+        vec2(0,0),
+        2
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_MENU,
+        "start-menu-ua",
+        ResourceManager::GetTexture("main-menu-ua"),
+        vec2(-0.866, 988.918),
+        vec2(1920.866, 91.082),
+        0.0f, 
+        vec3(1.0f), 
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
     InitMenu();
 
     mFirstFrame = true;
+    mTransitioningDark = false;
+    mAllDark = false;
 }
 
 void Game::CalculateDeltaTime()
 {
-    Uint32 currentTime = SDL_GetTicks();
-    mDeltaTime = (currentTime - mLastFrame) / 1000.0f;
+    Uint64 currentTime = SDL_GetPerformanceCounter();;
+    mDeltaTime = (currentTime - mLastFrame) / SDL_GetPerformanceFrequency();
     mLastFrame = currentTime;
 }
 
 void Game::Update()
 {
-
-    GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1f * mDeltaTime));
+    GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 * mDeltaTime));
 
     if(mCurrentGameState == GameState::START_MENU)
     {
@@ -222,6 +261,8 @@ void Game::Update()
             mFirstFrame = false;
         }
     }
+
+    CheckForTransitionState();
 
     UpdateSprites(mCurrentGameState);
 }
@@ -273,6 +314,7 @@ void Game::UpdateSprites(GameState gameState)
         sprite->Update(mDeltaTime);
     }
 }
+
 Sprite* Game::GetSprite(GameState gameState, string name)
 {
     return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
@@ -293,39 +335,85 @@ void Game::LoadDefaultSprites(GameState gameState)
 
 void Game::Transition(GameState newGameState)
 {
-    // Darken all currently rendered sprites for the current game state
-    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
+    if(!mTransitioningDark && mFirstTransitionFrame)
     {
-        sprite->SetDarken(1.0f);  // Darken over 1 second
+        std::cout << "Darkening sprites!\n";
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        {
+            sprite->SetDarken(true);
+        }
+        mTransitioningDark = true;
+        mFirstTransitionFrame = false;
     }
 
-    // Check if all sprites are fully darkened
-    bool allDark = true;
-    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
+    if(mTransitioningDark && !mAllDark)
     {
-        if (sprite->GetColor() != vec3(0.0f))
+        std::cout << "Checking if sprites are darkened!\n";
+        mAllDark = true;
+
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
         {
-            allDark = false;
-            break;
+            if(sprite->GetDarkenState() != true)
+                mAllDark = false;
+            return;
         }
     }
 
-    // If all sprites are darkened, change the game state and fade in new sprites
-    if (allDark)
+    if(mAllDark)
     {
-        mCurrentGameState = newGameState;
+        std::cout << "Loading new sprites!\n";
+        mTransitioningDark = false;
+        mTransitioningLight = true;
+        mAllLight = false;
         LoadDefaultSprites(newGameState);
-
-        // Initialize new sprites to be fully dark
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[newGameState])
+        mCurrentGameState = newGameState;
+        std::cout << "Loading new sprites and setting them to color 0!\n";
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
         {
-            sprite->SetColor(vec3(0.0f));  // Start dark
+            sprite->SetColor(vec3(0));
         }
-
-        // Lighten the new sprites from dark to their original colors
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[newGameState])
+        std::cout << "Brightening new sprites!\n";
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
         {
-            sprite->SetInvert(1.0f);  // Lighten over 1 second
+            sprite->SetBrighten(true);
+        }
+        mAllDark = false;
+    }
+
+    if(mTransitioningLight && !mAllLight)
+    {
+        std::cout << "Checking if new sprites are brightened!\n";
+        mAllLight = true;
+
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        {
+            if(sprite->GetBrightenState() != true)
+                mAllLight = false;
+            return;
         }
     }
+
+    if(mAllLight)
+    {
+        std::cout << "Finished transition!\n";
+        mAllDark = false;
+        mAllLight = false;
+        mTransitioningDark = false;
+        mTransitioningGameState = GameState::NOT_TRANSITIONING;
+        mHasTransitioned = true;
+    }
+}
+
+void Game::CheckForTransitionState()
+{
+    if(!mHasTransitioned && (mTransitioningGameState != GameState::NOT_TRANSITIONING))
+    {
+        Transition(mTransitioningGameState);
+    }
+}
+
+void Game::TransitionToGameState(GameState newGameState)
+{
+    mTransitioningGameState = newGameState;
+    mHasTransitioned = false;
 }

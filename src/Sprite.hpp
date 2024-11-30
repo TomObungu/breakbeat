@@ -35,15 +35,16 @@ public:
     void SetShader(Shader& shader);
     void SetTextureScale(float scale);
     
-    // Animation functions
-    void SetDarken(float time);
-    void Darken();
-
+    /*  Animation functions */
     void MoveTo(vec2 coordinate, float time);
     void SetMoveTo(bool state, vec2 coordinate, float time);
 
-    void SetInvert(float time);
-    void Invert();
+    void SetDarken(bool enable, float darkenTime = 1.0f);  // New method to start/stop darkening
+    void Darken();  // Existing method to handle darkening process
+    
+    // Inversion (lightening)
+    void SetBrighten(bool enable, float invertTime = 1.0f);  // New method to start/stop inverting
+    void Brighten();  // Existing method to handle inversion (lightening
 
     // Getters
     vec2 GetPosition() const;
@@ -51,12 +52,12 @@ public:
     float GetRotation() const;
     vec3 GetColor() const;
     Shader& GetShader() const;
+    bool GetBrightenState();
+    bool GetDarkenState();
 
     void Update(float deltaTime);
 
     bool IsAnimationComplete();
-    
-
 
     // Additional member functions specific to Sprite...
 private:
@@ -72,6 +73,7 @@ private:
 
     // Universal update vairable to handle sprite state updates
     bool mHasUpdated;
+
     float mCurrentTime;
     float mTotalTime;
 
@@ -80,18 +82,24 @@ private:
     vec2 mEndCoordinate;
     int mDistanceBetween;
     vec2 mIncrement;
+
     bool mIsMovingTo;
 
-    bool mDarkening;
-    float mDarkenTime;        // Time over which the sprite darkens
-    float mDarkenStartTime;   // Time at which darkening starts
-    vec3 mOriginalColor;  
+    float mDarkenStartTime = 0.0f;
+    float mBrightenStartTime = 0.0f;
+    float mDarkenTime = 1.0f;
+    float mBrightenTime = 1.0f;
+
+    bool mDarkening = false;
+    bool mBrightening = false;
     
-    bool mInverting = false;         // Track if the sprite is lightening
-    float mInvertTime = 0.0f;        // Duration of the lightening effect
-    float mInvertStartTime = 0.0f;   // Start time of lightening
-    vec3 mDarkenedColor;             // Store the darkest color to lighten from
-           // Store the original color to darken from
+    vec3 mOriginalColor;
+    vec3 mDarkenedColor;
+    // Store the darkest color to lighten from
+    // Store the original color to darken from
+
+    bool mDarkened = false;
+    bool mBrightened = false;
 
 };
 

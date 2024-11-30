@@ -12,7 +12,8 @@ Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 co
       mShader(shader),
       mPerspective(perspective)
 {
-    mHasUpdated = true;;
+    mHasUpdated = true;
+    mOriginalColor = color;
     mStartCoordinate = vec3(0);
     mEndCoordinate = vec3(0);
     mDistanceBetween = 0;
@@ -135,15 +136,9 @@ Shader& Sprite::GetShader() const
 
 void Sprite::MoveTo(vec2 coordinate, float time) {
     if (mHasUpdated) {
-        mStartCoordinate = mPosition;
-        mEndCoordinate = coordinate;
-        mTotalTime = time;
-        mCurrentTime = 0.0f;
-        mIsMovingTo = true;
-        mHasUpdated = false;  // Mark animation as in-progress
+
     }
 }
-
 
 void Sprite::SetMoveTo(bool state, vec2 coordinate, float time) 
 {
@@ -151,86 +146,96 @@ void Sprite::SetMoveTo(bool state, vec2 coordinate, float time)
     if (state) MoveTo(coordinate, time);
 }
 
-void Sprite::SetDarken(float time)
+void Sprite::SetDarken(bool enable, float darkenTime)
 {
-    if (!mDarkening) 
+    if(!mDarkened || mBrightened && !mDarkening)
     {
+        mDarkenTime = darkenTime;
+        mOriginalColor = mColor;
         mDarkening = true;
-        mDarkenTime = time;
-        mDarkenStartTime = SDL_GetTicks() / 1000.0f;  // Start time in seconds
-        mOriginalColor = mColor;  // Store the current color as starting color
+        mDarkenStartTime = SDL_GetTicks();
     }
 }
 
 void Sprite::Darken()
 {
-    if (mDarkening) 
+    float timeElapsed = SDL_GetTicks() - mDarkenStartTime;
+    float progress =  timeElapsed / (mDarkenTime * 1000);
+    mColor = mOriginalColor - progress;
+    if(mColor.x <= 0 && mColor.y <= 0 && mColor.z <= 0 || timeElapsed >= 1000)
     {
-        float currentTime = SDL_GetTicks() / 1000.0f;  // Current time in seconds
-        float elapsedTime = currentTime - mDarkenStartTime;
-        float progress = glm::clamp(elapsedTime / mDarkenTime, 0.0f, 1.0f);
-
-        // Linearly interpolate the color towards black based on progress
-        mColor = glm::mix(mOriginalColor, vec3(0.0f), progress);
-
-        // Stop darkening when progress reaches 1.0
-        if (progress >= 1.0f) 
-        {
-            mDarkening = false;
-        }
+        mColor = vec3(0);
+        mDarkened = true;
+        mDarkening = false;
+        mBrightened = false;
     }
 }
 
-void Sprite::SetInvert(float time)
+// Start or stop the inversion (BrighSetBrightenting) process
+void Sprite::SetBrighten(bool enable, float brightenTime)
 {
-    if (!mInverting) 
+    if(!mBrightened || mDarkened && !mBrightening)
     {
-        mInverting = true;
-        mInvertTime = time;
-        mInvertStartTime = SDL_GetTicks() / 1000.0f;  // Start time in seconds
-        mDarkenedColor = mColor;  // Store the current darkened color
+        mDarkenTime = brightenTime;
+        mDarkenedColor = mColor;
+        mBrightening = true;
+        mBrightenStartTime = SDL_GetTicks();
     }
 }
 
-void Sprite::Invert()
+void Sprite::Brighten()
 {
-    if (mInverting) 
+    float timeElapsed = SDL_GetTicks() - mBrightenStartTime;
+    float progress =  timeElapsed / (mBrightenTime * 1000);
+    mColor = mDarkenedColor + progress;
+    if( 
+     timeElapsed >= 1000
+     )
     {
-        float currentTime = SDL_GetTicks() / 1000.0f;  // Current time in seconds
-        float elapsedTime = currentTime - mInvertStartTime;
-        float progress = glm::clamp(elapsedTime / mInvertTime, 0.0f, 1.0f);
-
-        // Linearly interpolate the color from the darkened state back to the original color
-        mColor = glm::mix(mDarkenedColor, mOriginalColor, progress);
-
-        // Stop inverting when progress reaches 1.0
-        if (progress >= 1.0f) 
-        {
-            mInverting = false;
-        }
+        mColor = mOriginalColor;
+        mBrightened = true;
+        mBrightening = false;
+        mDarkened = false;
     }
 }
 
+// The Update method will call Darken and Brighten as needed
 void Sprite::Update(float deltaTime) 
 {
     if (mIsMovingTo) {
-        mPosition += mIncrement * deltaTime;  // Scale increment by deltaTime
-        mDistanceBetween -= glm::length(mIncrement * deltaTime);
-        if (mDistanceBetween <= 0) {
-            mPosition = mEndCoordinate;  // Snap to end position
-            mIsMovingTo = false;
-            mHasUpdated = true;  // Mark as complete
-        }
+
     }
     
     if (mDarkening)
-    {
         Darken();
+
+    if (mBrightening)
+        Brighten();
+
+    if(mColor == vec3(0))
+        mDarkened = true;
+
+    if(mColor == vec3(1))
+        mBrightened = true;
+
+    if( (mDarkened || mBrightened) &&
+        mIsMovingTo == false)
+    {
+        mHasUpdated == true;
     }
 }
 
+bool Sprite::GetBrightenState()
+{
+    return mBrightened;
+}
+
+bool Sprite::GetDarkenState()
+{
+    return mDarkened;
+}
 
 bool Sprite::IsAnimationComplete()
-{ 
-    return mHasUpdated; 
+{
+    return mHasUpdated;
 }

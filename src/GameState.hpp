@@ -9,6 +9,7 @@ enum class GameState {
     CHART_SELECTION_MENU,
     CHART_EDITOR_SELECTION_MENU,
     CHART_EDITOR,
+    NOT_TRANSITIONING
 };
 
 #endif
