@@ -1,4 +1,5 @@
 #include "Sprite.hpp"
+#include "Window.hpp"
 
 // Constructor that initializes sprite properties
 Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective,  vec2 texturePositon, float textureScale)
@@ -32,17 +33,32 @@ void Sprite::Draw()
 
     if (mPerspective)
     {
-        // Set up the view matrix for 3D rendering with a fixed camera position
+        // Fixed camera position for 3D
         view = glm::translate(mat4(1.0f), glm::vec3(0.0f, 0.0f, -2.0f));
         this->mShader.SetMatrix4("view", view);
+
+        // Compute world position and size
+        vec2 worldPos = ScreenToWorldSpace(vec2(mPosition.x * 2.f, mPosition.y * 2.f), view);
+        vec2 worldSize = 2.0f * ScreenToWorldSpace(mSize, view);
+
+        model = glm::translate(model, vec3(worldPos.x, worldPos.y, 0.0f)); // Move to world position
+        model = glm::translate(model, vec3(worldSize / 2.0f, 0.0f)); // Center sprite
+        model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 0.0f, 1.0f)); // Rotate around center
+        model = glm::translate(model, vec3(-worldSize / 2.0f, 0.0f)); // Translate back
+        model = glm::scale(model, vec3(worldSize, 1.0f)); // Scale to match size
+
+        this->mShader.SetMatrix4("model", model);
+    }
+    else
+    {
+        // Apply transformations: center, rotate, and scale
+        model = translate(model, vec3(mPosition, 0.0f));
+        model = translate(model, vec3(0.5f * mSize.x, 0.5f * mSize.y, 0.0f));
+        model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 1.0f, 0.0f));
+        model = translate(model, vec3(-0.5f * mSize.x, -0.5f * mSize.y, 0.0f));
+        model = scale(model, vec3(mSize, 1.0f));
     }
 
-     // Apply transformations: center, rotate, and scale
-    model = translate(model, vec3(mPosition, 0.0f));
-    model = translate(model, vec3(0.5f * mSize.x, 0.5f * mSize.y, 0.0f));
-    model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 1.0f, 0.0f));
-    model = translate(model, vec3(-0.5f * mSize.x, -0.5f * mSize.y, 0.0f));
-    model = scale(model, vec3(mSize, 1.0f));
 
     // Set the model matrix
     this->mShader.SetMatrix4("model", model);
@@ -249,3 +265,25 @@ bool Sprite::IsAnimationComplete()
 {
     return mHasUpdated;
 }
+
+vec2 Sprite::ScreenToWorldSpace(vec2 screenCoord, mat4 view) 
+{
+    // NORMALIZED DEVICE COORDINATES (NDC)
+    double x = (2.0 * screenCoord.x / 1920) - 1.0;
+    double y = 1.0 - (2.0 * screenCoord.y / 1080); // Flip Y axis for NDC
+
+    // Homogeneous clip space
+    glm::vec4 screenPos = glm::vec4(x, y, 1.0f, 1.0f); // Z = 0 for simplicity in projection
+
+    // Perspective projection matrix
+    float aspectRatio = static_cast<float>(1920) / 1080;
+    mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+
+    // Transform from NDC to world space
+    glm::mat4 viewProjectionInverse = glm::inverse(perspectiveProjection * view);
+    glm::vec4 worldPos = viewProjectionInverse * screenPos;
+
+    // Skip homogeneous divide for this 2D-like mapping to maintain screen size scale
+    return glm::vec2(worldPos.x, worldPos.y);
+}
+

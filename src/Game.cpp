@@ -80,13 +80,6 @@ void Game::ProcessEvents()
     }
 }
 
-
-static Uint32 lastChoiceTime = 0;  // Track the last choice time for delay handling
-
-// Timing constants
-const Uint32 selectionDelay = 200;
-
-
 void Game::Initialize()
 {
     glEnable(GL_BLEND);
@@ -243,9 +236,9 @@ void Game::Initialize()
         GameState::MAIN_MENU,
         "main-menu-settings-button",
         ResourceManager::GetTexture("main-menu-settings-button"),
-        vec2(0, 0),
-        vec2(-0.5, -0.5), // <---- THIS RIGHT HERE
-        0.0f,
+        vec2(448.689, 571.618),
+        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
+        180.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default-3D"),
         true
@@ -255,9 +248,33 @@ void Game::Initialize()
         GameState::MAIN_MENU,
         "main-menu-chart-editor-button",
         ResourceManager::GetTexture("main-menu-chart-editor-button"),
-        vec2(0, 0),
-        vec2(0.5,0.5), // <---- THIS RIGHT HERE
-        0.0f,
+        vec2(1024.394, 208.425),
+        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
+        180.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default-3D"),
+        true
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_MENU,
+        "main-menu-chart-selection-button",
+        ResourceManager::GetTexture("main-menu-chart-selection-button"),
+        vec2(448.394, 208.425),
+        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
+        180.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default-3D"),
+        true
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_MENU,
+        "main-menu-back-button",
+        ResourceManager::GetTexture("main-menu-back-button"),
+        vec2(1024.394, 571.618),
+        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
+        180.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default-3D"),
         true
@@ -295,7 +312,7 @@ void Game::Update()
 
     if(mCurrentGameState == GameState::MAIN_MENU)
     {
-        GetSprite(mCurrentGameState,"main-menu-settings-button")->Rotate(vec3(0,1,0),45.0f);
+
     }
 
     CheckForTransitionState();
@@ -497,3 +514,4 @@ void Game::CheckGLErrors(const string& context)
         std::cerr << std::endl;
     }
 }
+

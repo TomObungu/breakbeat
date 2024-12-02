@@ -24,6 +24,7 @@ public:
     void Move(vec2 pixels);
     void Rotate(vec3 orientation, float angle);
     void MoveTextureCoordinate(vec2 pixels);
+    vec2 ScreenToWorldSpace(vec2 screenCoord, mat4 view);
     void Scale(float scale);
 
     // Setters for the sprite attributes
