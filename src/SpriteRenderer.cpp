@@ -9,10 +9,14 @@ SpriteRenderer::~SpriteRenderer()
     glDeleteVertexArrays(1, &this->mVertexArrayObject);
 }
 
+
 void SpriteRenderer::Initialize()
 {
-    GLuint vertexBufferObject;
-    float vertices[] = {
+    GLuint vertexBufferObject, vertexBufferObject3D;
+
+    // 2D sprite vertex data
+    float vertices2D[] = 
+    {
         // Position       // Tex Coords
         0.0f, 1.0f,      0.0f, 1.0f,
         1.0f, 0.0f,      1.0f, 0.0f,
@@ -23,13 +27,27 @@ void SpriteRenderer::Initialize()
         1.0f, 0.0f,      1.0f, 0.0f
     };
 
+    // 3D sprite vertex data (Position + Tex Coords, no normals)
+    float vertices3D[] = 
+    {
+        // Position         // Tex Coords
+        0.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // Top-left
+        1.0f, 0.0f, 0.0f,   1.0f, 0.0f,  // Bottom-right
+        0.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // Bottom-left
+
+        0.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // Top-left
+        1.0f, 1.0f, 0.0f,   1.0f, 1.0f,  // Top-right
+        1.0f, 0.0f, 0.0f,   1.0f, 0.0f   // Bottom-right
+    };
+
+    // Set up 2D VAO/VBO
     glGenVertexArrays(1, &this->mVertexArrayObject);
     glGenBuffers(1, &vertexBufferObject);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
     glBindVertexArray(this->mVertexArrayObject);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2D), vertices2D, GL_STATIC_DRAW);
+
     // Position attribute
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
@@ -37,38 +55,64 @@ void SpriteRenderer::Initialize()
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // Unbind VAO and VBO
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Set up 3D VAO/VBO
+    glGenVertexArrays(1, &this->mVertexArrayObject3D);
+    glGenBuffers(1, &vertexBufferObject3D);
+
+    glBindVertexArray(this->mVertexArrayObject3D);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject3D);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices3D), vertices3D, GL_STATIC_DRAW);
+
+    // Position attribute (vec3)
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+
+    // Texture coordinate attribute (vec2)
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
+    // Unbind VAO and VBO
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-Sprite* SpriteRenderer::CreateSprite(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePositon, float textureScale)
-{
-    // Create a pointer to a new Sprite instance
-    auto sprite = new Sprite(texture, position, size, rotate, color, shader, perspective, texturePositon, textureScale);
 
-    // Store the pointer in the default sprite hash table
-    GLuint& VAO = this->mVertexArrayObject;
-    sprite->mVertexArrayObject = VAO;
+Sprite* SpriteRenderer::CreateSprite(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePosition, float textureScale)
+{
+    // Create a new Sprite instance
+    auto sprite = new Sprite(texture, position, size, rotate, color, shader, perspective, texturePosition, textureScale);
+
+    // Use the getter to set the VAO
+    sprite->mVertexArrayObject = perspective ? this->mVertexArrayObject3D : this->mVertexArrayObject;
+
+    // Store the sprite in the appropriate hash table
     mDefaultSprites[gameState][name] = sprite;
 
-    // Return the raw pointer for convenience if needed
+    // Return the pointer to the sprite
     return mDefaultSprites[gameState][name];
 }
 
+
+
 void SpriteRenderer::DrawSprites(GameState gameState)
 {
+    // Iterate through each sprite in sprite hash table and call its draw function
     for (auto& [key, sprite] : mCurrentlyRenderedSprites[gameState])
     {
-        sprite->Draw(); // Use sprite directly; no need to dereference a raw pointer
+        sprite->Draw(); // Use sprite directly
     }
 }
 
 void SpriteRenderer::LoadDefaultSprites(GameState gameState)
 {
+    // Iterate through each sprite and copy it to the currently rendered sprites hash table
     for (auto& [key, sprite] : mDefaultSprites[gameState])
     {
         // Use the copy constructor to create a copy of the sprite
         mCurrentlyRenderedSprites[gameState][key] = sprite;
     }
 }
-

@@ -14,20 +14,19 @@ public:
     // Remove the default arguments for previous parameters
     Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePositon = vec2(0,0), float textureScale = 1);
 
-    Sprite(const Sprite& other);
-
     GLuint mVertexArrayObject;
 
     //  Draw method
+    void Draw();
 
     // Utility functions
-    void Draw();
+
     void Move(vec2 pixels);
     void Rotate(vec3 orientation, float angle);
     void MoveTextureCoordinate(vec2 pixels);
     void Scale(float scale);
 
-    // Setters
+    // Setters for the sprite attributes
     void SetPosition(const vec2& position);
     void SetSize(const vec2& size);
     void SetRotation(float rotate);
@@ -36,17 +35,19 @@ public:
     void SetTextureScale(float scale);
     
     /*  Animation functions */
+    // Will be used to perform transformations and changes to sprite over time
     void MoveTo(vec2 coordinate, float time);
     void SetMoveTo(bool state, vec2 coordinate, float time);
 
+    // Procedure to darken the sprites color over time
     void SetDarken(bool enable, float darkenTime = 1.0f);  // New method to start/stop darkening
     void Darken();  // Existing method to handle darkening process
     
-    // Inversion (lightening)
+    // Procedure to brighten the sprutes color from the darkened sate over time
     void SetBrighten(bool enable, float invertTime = 1.0f);  // New method to start/stop inverting
     void Brighten();  // Existing method to handle inversion (lightening
 
-    // Getters
+    // Getters for the sprite attributes
     vec2 GetPosition() const;
     vec2 GetSize() const;
     float GetRotation() const;
@@ -55,6 +56,7 @@ public:
     bool GetBrightenState();
     bool GetDarkenState();
 
+    // Update function
     void Update(float deltaTime);
 
     bool IsAnimationComplete();
@@ -69,6 +71,7 @@ private:
     float mRotation;
     vec3 mColor;
     Shader& mShader;
+    // Used to determine whether the sprite is being rendererd as a 3D object
     bool mPerspective;
 
     // Universal update vairable to handle sprite state updates
@@ -77,27 +80,35 @@ private:
     float mCurrentTime;
     float mTotalTime;
 
-    // Animation state varibles
+    /* Animation state varibles */
+
+    // Start and end coordinates for the MoveTo() function
     vec2 mStartCoordinate;
     vec2 mEndCoordinate;
     int mDistanceBetween;
     vec2 mIncrement;
 
+    // Animation state for MoveTo()
     bool mIsMovingTo;
 
+    // Time varibles for the brighten and darken utility functions();
+    // Used to determine start times to time the time elapsed 
     float mDarkenStartTime = 0.0f;
     float mBrightenStartTime = 0.0f;
     float mDarkenTime = 1.0f;
     float mBrightenTime = 1.0f;
 
+    // State varible to indicate when the sprite is becoming darker
     bool mDarkening = false;
     bool mBrightening = false;
     
-    vec3 mOriginalColor;
-    vec3 mDarkenedColor;
+    // Store the original colors of varibles when they are being darkened/brightened
     // Store the darkest color to lighten from
     // Store the original color to darken from
+    vec3 mOriginalColor;
+    vec3 mDarkenedColor;
 
+    // State varible to determine when the varible is dark or bright
     bool mDarkened = false;
     bool mBrightened = false;
 

@@ -44,7 +44,8 @@ public:
 
     void CheckForTransitionState();
     void TransitionToGameState(GameState newGameState);
-
+    string GetGLErrorString(GLenum error);
+    void CheckGLErrors(const std::string& context = "");
     void Transition(GameState newGameState);
 
 

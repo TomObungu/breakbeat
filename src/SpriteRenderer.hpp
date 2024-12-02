@@ -25,11 +25,11 @@ public:
     SpriteRenderer();
     ~SpriteRenderer();
 
-    // Virtual Draw method for flexibility
     void Initialize();
-    Sprite* CreateSprite(GameState, string, Texture&, vec2, vec2, float, vec3, Shader&,bool, vec2 texturePositon = vec2(0,0), float textureScale = 1);
-    void DrawSprites(GameState);
-    void LoadDefaultSprites(GameState);
+    Sprite* CreateSprite(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective, vec2 texturePositon = vec2(0,0), float textureScale = 1);
+
+    void DrawSprites(GameState gameState);
+    void LoadDefaultSprites(GameState gameState);
 
 
     // Hash table to store the sprites currently in use in the render loop
@@ -37,8 +37,10 @@ public:
     unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
 
 private:
-    // Vertex array object that will be used across all sprites
     GLuint mVertexArrayObject;
+    GLuint mVertexArrayObject3D;
+    // Vertex array object that will be used across all sprites
+
     // Hash table to store the defualt positions of the sprites
     // This will be used to restore sprites to their defualt states 
     // This will be when loading different games states

@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-Game::Game() : 
+Game::Game() :
     mWindow(Window()),
     mSpriteRenderer(SpriteRenderer())
 {
@@ -84,7 +84,7 @@ void Game::ProcessEvents()
 static Uint32 lastChoiceTime = 0;  // Track the last choice time for delay handling
 
 // Timing constants
-const Uint32 selectionDelay = 200; 
+const Uint32 selectionDelay = 200;
 
 
 void Game::Initialize()
@@ -92,21 +92,29 @@ void Game::Initialize()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Set up orthgraphic projection matrix
-    mat4 orthographicProjection = glm::ortho(0.0f, static_cast<float>(mWindow.GetWindowWidth()),
-        static_cast<float>(mWindow.GetWindowHeight()), 0.0f, -1.0f, 1.0f);
+    mat4 orthographicProjection = glm::ortho(
+        0.0f, 
+        static_cast<float>(mWindow.GetWindowWidth()),
+        static_cast<float>(mWindow.GetWindowHeight()), 
+        0.0f, 
+        -1.0f, 
+        1.0f
+    );
+    
     // Set up perspective projection matrix
-    mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), static_cast<float>(mWindow.GetWindowWidth())
-        / static_cast<float>(mWindow.GetWindowHeight()), 0.1f, 100.0f);
-        
+    float aspectRatio = static_cast<float>(mWindow.GetWindowWidth()) / static_cast<float>(mWindow.GetWindowHeight());
+    mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
+    
     // load shaders
     ResourceManager::LoadShader("\\shaders\\DefaultVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "default");
     ResourceManager::GetShader("default").Use().SetMatrix4("projection", orthographicProjection);
     ResourceManager::GetShader("default").Use().SetInteger("image", 0);
-    // configure perspective projection 
+    // configure perspective projection
     ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\DefaultFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
     ResourceManager::GetShader("default-3D").Use().SetInteger("image", 0);
-    // load textures 
+    CheckGLErrors("After setting the projection matrix");
+    // load textures
 
     /* START MENU */
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
@@ -114,12 +122,12 @@ void Game::Initialize()
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-logo-2x-new.png", true, "game-logo");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-start-button.png", true, "start-button");
     ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-exit-button.png", true, "exit-button");
-    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua"); 
+    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua");
 
     /* MAIN_MENU */
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-user-navigation-assist-new.png",true,"main-menu-ua");
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-settings-user-interface.png",true,"main-menu-settings-button");
-    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-editor-user-interface.png",true,"mainn-menu-chart-editor-button");
+    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-editor-user-interface.png",true,"main-menu-chart-editor-button");
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-selection-user-interface.png",true,"main-menu-chart-selection-button");
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-back-button-user-interface.png",true,"main-menu-back-button");
 
@@ -146,11 +154,11 @@ void Game::Initialize()
     mSpriteRenderer.CreateSprite(
         GameState::START_MENU,
         "background-dots",
-        ResourceManager::GetTexture("background-dots"), 
-        vec2(0, 0), 
-        vec2(1920, 994.167), 
-        0.0f, 
-        vec3(1.0f), 
+        ResourceManager::GetTexture("background-dots"),
+        vec2(0, 0),
+        vec2(1920, 994.167),
+        0.0f,
+        vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
@@ -158,11 +166,11 @@ void Game::Initialize()
     mSpriteRenderer.CreateSprite(
         GameState::START_MENU,
         "game-logo",
-        ResourceManager::GetTexture("game-logo"), 
-        vec2(372.256, 193.333), 
-        vec2(1162.667, 573.998), 
-        0.0f, 
-        vec3(1.0f), 
+        ResourceManager::GetTexture("game-logo"),
+        vec2(372.256, 193.333),
+        vec2(1162.667, 573.998),
+        0.0f,
+        vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
@@ -170,11 +178,11 @@ void Game::Initialize()
     mSpriteRenderer.CreateSprite(
         GameState::START_MENU,
         "start-button",
-        ResourceManager::GetTexture("start-button"), 
-        vec2(862.230f, 720.000f), 
-        vec2(195.541f, 73.988f), 
-        0.0f, 
-        vec3(1.0f), 
+        ResourceManager::GetTexture("start-button"),
+        vec2(862.230f, 720.000f),
+        vec2(195.541f, 73.988f),
+        0.0f,
+        vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
@@ -182,11 +190,11 @@ void Game::Initialize()
     mSpriteRenderer.CreateSprite(
         GameState::START_MENU,
         "exit-button",
-        ResourceManager::GetTexture("exit-button"), 
-        vec2(889.921f, 824.483f), 
-        vec2(143.693f, 78.957f), 
-        0.0f, 
-        vec3(1.0f), 
+        ResourceManager::GetTexture("exit-button"),
+        vec2(889.921f, 824.483f),
+        vec2(143.693f, 78.957f),
+        0.0f,
+        vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
@@ -197,14 +205,13 @@ void Game::Initialize()
         ResourceManager::GetTexture("start-menu-ua"),
         vec2(0, 988.918),
         vec2(1920, 91.082),
-        0.0f, 
-        vec3(1.0f), 
+        0.0f,
+        vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
 
       /* Initialize Sprites for the MAIN_MENU game state*/
-
 
     mSpriteRenderer.CreateSprite(
         GameState::MAIN_MENU,
@@ -226,12 +233,35 @@ void Game::Initialize()
         ResourceManager::GetTexture("main-menu-ua"),
         vec2(-0.866, 988.918),
         vec2(1920.866, 91.082),
-        0.0f, 
-        vec3(1.0f), 
+        0.0f,
+        vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
 
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_MENU,
+        "main-menu-settings-button",
+        ResourceManager::GetTexture("main-menu-settings-button"),
+        vec2(0, 0),
+        vec2(-0.5, -0.5), // <---- THIS RIGHT HERE
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default-3D"),
+        true
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_MENU,
+        "main-menu-chart-editor-button",
+        ResourceManager::GetTexture("main-menu-chart-editor-button"),
+        vec2(0, 0),
+        vec2(0.5,0.5), // <---- THIS RIGHT HERE
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default-3D"),
+        true
+    );
 
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
@@ -244,14 +274,15 @@ void Game::Initialize()
 
 void Game::CalculateDeltaTime()
 {
-    Uint64 currentTime = SDL_GetPerformanceCounter();;
-    mDeltaTime = (currentTime - mLastFrame) / SDL_GetPerformanceFrequency();
+    Uint64 currentTime = SDL_GetTicks();
+    mDeltaTime = (currentTime - mLastFrame);
     mLastFrame = currentTime;
 }
 
+
 void Game::Update()
 {
-    GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 * mDeltaTime));
+    GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 / (1000 / mDeltaTime)));
 
     if(mCurrentGameState == GameState::START_MENU)
     {
@@ -260,6 +291,11 @@ void Game::Update()
             mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
             mFirstFrame = false;
         }
+    }
+
+    if(mCurrentGameState == GameState::MAIN_MENU)
+    {
+        GetSprite(mCurrentGameState,"main-menu-settings-button")->Rotate(vec3(0,1,0),45.0f);
     }
 
     CheckForTransitionState();
@@ -272,9 +308,11 @@ void Game::Render()
     // Clear the screen with a solid background color
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+    CheckGLErrors("After clearing the buffer");
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
+    CheckGLErrors("After drawing a sprite");
 
 }
 
@@ -286,15 +324,15 @@ void Game::HandleWindowEvent(SDL_Event& event)
         case(SDL_WINDOWEVENT_RESIZED):
             mWindow.HandleWindowResize(event);
         break;
-    }       
+    }
 }
 
 void Game::Run()
 {
     mWindow.Initialize();
     Initialize();
-    // Main loop for the game  
-    
+    // Main loop for the game
+
     while (!mWindow.GetWindowClosedBoolean())
     {
         CalculateDeltaTime();
@@ -303,20 +341,23 @@ void Game::Run()
         Update();
         Render();
         // Update the window with OpenGL
-        SDL_GL_SwapWindow(mWindow.GetWindow());  
+        SDL_GL_SwapWindow(mWindow.GetWindow());
     }
 }
 
 void Game::UpdateSprites(GameState gameState)
 {
-    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState]) 
+    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
     {
         sprite->Update(mDeltaTime);
+        CheckGLErrors("After updating a sprite");
     }
+    
 }
 
 Sprite* Game::GetSprite(GameState gameState, string name)
 {
+    // Simplify Getting sprite without the need to write out the entire line
     return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
 }
 
@@ -338,7 +379,7 @@ void Game::Transition(GameState newGameState)
     if(!mTransitioningDark && mFirstTransitionFrame)
     {
         std::cout << "Darkening sprites!\n";
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetDarken(true);
         }
@@ -351,7 +392,7 @@ void Game::Transition(GameState newGameState)
         std::cout << "Checking if sprites are darkened!\n";
         mAllDark = true;
 
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             if(sprite->GetDarkenState() != true)
                 mAllDark = false;
@@ -364,16 +405,16 @@ void Game::Transition(GameState newGameState)
         std::cout << "Loading new sprites!\n";
         mTransitioningDark = false;
         mTransitioningLight = true;
-        mAllLight = false;
         LoadDefaultSprites(newGameState);
         mCurrentGameState = newGameState;
         std::cout << "Loading new sprites and setting them to color 0!\n";
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetColor(vec3(0));
         }
+        mAllLight = false;
         std::cout << "Brightening new sprites!\n";
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetBrighten(true);
         }
@@ -385,7 +426,7 @@ void Game::Transition(GameState newGameState)
         std::cout << "Checking if new sprites are brightened!\n";
         mAllLight = true;
 
-        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState]) 
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             if(sprite->GetBrightenState() != true)
                 mAllLight = false;
@@ -397,10 +438,12 @@ void Game::Transition(GameState newGameState)
     {
         std::cout << "Finished transition!\n";
         mAllDark = false;
-        mAllLight = false;
+        mAllLight = true;
         mTransitioningDark = false;
+        mTransitioningLight = false;
         mTransitioningGameState = GameState::NOT_TRANSITIONING;
         mHasTransitioned = true;
+        mFirstTransitionFrame = true;
     }
 }
 
@@ -416,4 +459,41 @@ void Game::TransitionToGameState(GameState newGameState)
 {
     mTransitioningGameState = newGameState;
     mHasTransitioned = false;
+}
+
+// Function to get the string representation of an OpenGL error
+string Game::GetGLErrorString(GLenum error)
+{
+    switch (error)
+    {
+        case GL_NO_ERROR:
+            return "No error";
+        case GL_INVALID_ENUM:
+            return "GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument.";
+        case GL_INVALID_VALUE:
+            return "GL_INVALID_VALUE: A numeric argument is out of range.";
+        case GL_INVALID_OPERATION:
+            return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
+        case GL_OUT_OF_MEMORY:
+            return "GL_OUT_OF_MEMORY: There is not enough memory left to execute the command.";
+        case GL_INVALID_FRAMEBUFFER_OPERATION:
+            return "GL_INVALID_FRAMEBUFFER_OPERATION: The framebuffer object is not complete.";
+        default:
+            return "Unknown error code";
+    }
+}
+
+// Function to check for OpenGL errors and print them
+void Game::CheckGLErrors(const string& context)
+{
+    GLenum error;
+    while ((error = glGetError()) != GL_NO_ERROR)
+    {
+        std::cerr << "[OpenGL Error] (" << error << "): " << GetGLErrorString(error);
+        if (!context.empty())
+        {
+            std::cerr << " | Context: " << context;
+        }
+        std::cerr << std::endl;
+    }
 }
