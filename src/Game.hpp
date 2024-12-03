@@ -13,6 +13,7 @@ integrated in
 #include "Window.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteRenderer.hpp"
+#include "Menu.hpp"
 
 #include <unordered_map>
 #include <map>
@@ -36,18 +37,23 @@ public:
 
     void CalculateDeltaTime();
 
-    void InitMenu();
 
     Sprite* GetSprite(GameState, string);
+    Sprite* GetDefaultSprite(GameState gameState, string name);
     void UpdateSprites(GameState);
     void LoadDefaultSprites(GameState gameState);
 
     void CheckForTransitionState();
     void TransitionToGameState(GameState newGameState);
     string GetGLErrorString(GLenum error);
+    void CreateMenu(GameState, vector<Sprite*>, bool, string);
+    Menu* GetMenu(GameState, string);
     void CheckGLErrors(const std::string& context = "");
     void Transition(GameState newGameState);
 
+    void InitializeSprites();
+
+    void InitializeMenus();
 
     Game();
 private:
@@ -56,8 +62,11 @@ private:
     Window mWindow;
     SpriteRenderer mSpriteRenderer;
 
-    int mMenuChoice;                 // Persistent menu choice index
-    vector<Sprite*> mMenuChoices;    // Store menu sprite choices
+    // Store menu class hash table
+    unordered_map<GameState, unordered_map<string, Menu*>> mCurrentMenus;
+
+
+
     float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
     Uint32 mLastSelectionTime = 0; 
 

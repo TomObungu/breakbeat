@@ -73,7 +73,7 @@ void Sprite::Draw()
 
     // Draw the sprite
     glBindVertexArray(this->mVertexArrayObject);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
     glBindVertexArray(0);
 }
 
@@ -273,7 +273,7 @@ vec2 Sprite::ScreenToWorldSpace(vec2 screenCoord, mat4 view)
     double y = 1.0 - (2.0 * screenCoord.y / 1080); // Flip Y axis for NDC
 
     // Homogeneous clip space
-    glm::vec4 screenPos = glm::vec4(x, y, 1.0f, 1.0f); // Z = 0 for simplicity in projection
+    glm::vec4 screenPos = glm::vec4(x, y, 1.0f, 1.0f); 
 
     // Perspective projection matrix
     float aspectRatio = static_cast<float>(1920) / 1080;
@@ -283,7 +283,6 @@ vec2 Sprite::ScreenToWorldSpace(vec2 screenCoord, mat4 view)
     glm::mat4 viewProjectionInverse = glm::inverse(perspectiveProjection * view);
     glm::vec4 worldPos = viewProjectionInverse * screenPos;
 
-    // Skip homogeneous divide for this 2D-like mapping to maintain screen size scale
     return glm::vec2(worldPos.x, worldPos.y);
 }
 

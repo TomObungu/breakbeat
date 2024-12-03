@@ -6,16 +6,6 @@ Game::Game() :
 {
 }
 
-void Game::InitMenu()
-{
-    mMenuChoices = {
-        GetSprite(mCurrentGameState, "start-button"),
-        GetSprite(mCurrentGameState, "exit-button")
-    };
-
-    mMenuChoice = 0;  // Start with the first menu option
-}
-
 void Game::ProcessEvents()
 {
     SDL_Event& event = mWindow.GetWindowEvent();
@@ -29,6 +19,7 @@ void Game::ProcessEvents()
         {
             HandleWindowEvent(event);
         }
+        // Check for key inputs
         else if (event.type == SDL_KEYDOWN)
         {
             if (event.key.keysym.sym == SDLK_F11)
@@ -36,40 +27,46 @@ void Game::ProcessEvents()
                 mWindow.ToggleFullscreen();
             }
 
+            // If the current game state is start menu then check for input
             if (mCurrentGameState == GameState::START_MENU)
             {
-                Uint32 currentTime = SDL_GetTicks();
+                // Store a pointer to the start menu object
+                Menu* startMenu = GetMenu(mCurrentGameState, "start-menu");
 
-                if (currentTime - mLastSelectionTime >= mSelectionDelay)
+                // Update the value of the current time at this moment
+                startMenu->UpdateCurrentTime();
+
+                // If the time elapsed between the last update is greater than 200ms
+                if (startMenu->CheckSelectionTime())
                 {
+                    // IF the key pressed is the left key
                     if (event.key.keysym.sym == SDLK_LEFT)
                     {
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f));
+                        startMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
                         // Update menu choice index with wrap-around
-                        mMenuChoice = (mMenuChoice - 1 +  mMenuChoices.size()) % mMenuChoices.size();
-                        // Highlight the new menu choice
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f, 1.0f, 0.0f));
-                        mLastSelectionTime = currentTime;
-                    }
-
+                        startMenu->IncrementMenuChoice();
+                        startMenu->PlayHighlightAnimation();
+                        startMenu->UpdateLastSelectedTime();
+                    }   
+                    // If the key pressed is the right key
                     if (event.key.keysym.sym == SDLK_RIGHT)
                     {
-                         mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f));
+                        startMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
                         // Update menu choice index with wrap-around
-                        mMenuChoice = (mMenuChoice + 1 + mMenuChoices.size()) % mMenuChoices.size();
-                        // Highlight the new menu choice
-                        mMenuChoices[mMenuChoice]->SetColor(vec3(1.0f, 1.0f, 0.0f));
-                        mLastSelectionTime = currentTime;
+                        startMenu->DecrementMenuChoice();
+                        startMenu->PlayHighlightAnimation();
+                        startMenu->UpdateLastSelectedTime();
                     }
-
+                    // If they pressed in the return key
                     if (event.key.keysym.sym == SDLK_RETURN)
-                    {
-                        std::cout << "Menu option selected!" << std::endl;
-                        if (mMenuChoices[mMenuChoice] == GetSprite(mCurrentGameState, "start-button"))
+                    {   
+                        // If the currrent menu option is the start button sprite then call the transition animation
+                        if (startMenu->GetCurrentMenuOption() == GetSprite(mCurrentGameState, "start-button"))
                         {
                             TransitionToGameState(GameState::MAIN_MENU);
                         }
-                        else if (mMenuChoices[mMenuChoice] == GetSprite(mCurrentGameState, "exit-button"))
+                        // If the current menu option is the exit button sprite then close the application
+                        else if (startMenu->GetCurrentMenuOption() == GetSprite(mCurrentGameState, "exit-button"))
                         {
                             mWindow.SetWindowClosedBoolean(true);  // Exit game
                         }
@@ -128,162 +125,15 @@ void Game::Initialize()
 
     mSpriteRenderer.mCurrentlyRenderedSprites.clear();
 
-    // Initialize sprites for the START_MENU state
-
-    mSpriteRenderer.CreateSprite(
-        GameState::START_MENU,
-        "background",
-        ResourceManager::GetTexture("background"),
-        vec2(0, 0),
-        glm::vec2(1960.178, 1033.901),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false,
-        vec2(0,0),
-        2
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::START_MENU,
-        "background-dots",
-        ResourceManager::GetTexture("background-dots"),
-        vec2(0, 0),
-        vec2(1920, 994.167),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::START_MENU,
-        "game-logo",
-        ResourceManager::GetTexture("game-logo"),
-        vec2(372.256, 193.333),
-        vec2(1162.667, 573.998),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::START_MENU,
-        "start-button",
-        ResourceManager::GetTexture("start-button"),
-        vec2(862.230f, 720.000f),
-        vec2(195.541f, 73.988f),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::START_MENU,
-        "exit-button",
-        ResourceManager::GetTexture("exit-button"),
-        vec2(889.921f, 824.483f),
-        vec2(143.693f, 78.957f),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::START_MENU,
-        "start-menu-ua",
-        ResourceManager::GetTexture("start-menu-ua"),
-        vec2(0, 988.918),
-        vec2(1920, 91.082),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
-
-      /* Initialize Sprites for the MAIN_MENU game state*/
-
-    mSpriteRenderer.CreateSprite(
-        GameState::MAIN_MENU,
-        "background",
-        ResourceManager::GetTexture("background"),
-        vec2(0, 0),
-        glm::vec2(1960.178, 1033.901),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false,
-        vec2(0,0),
-        2
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::MAIN_MENU,
-        "start-menu-ua",
-        ResourceManager::GetTexture("main-menu-ua"),
-        vec2(-0.866, 988.918),
-        vec2(1920.866, 91.082),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::MAIN_MENU,
-        "main-menu-settings-button",
-        ResourceManager::GetTexture("main-menu-settings-button"),
-        vec2(448.689, 571.618),
-        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
-        180.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default-3D"),
-        true
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::MAIN_MENU,
-        "main-menu-chart-editor-button",
-        ResourceManager::GetTexture("main-menu-chart-editor-button"),
-        vec2(1024.394, 208.425),
-        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
-        180.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default-3D"),
-        true
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::MAIN_MENU,
-        "main-menu-chart-selection-button",
-        ResourceManager::GetTexture("main-menu-chart-selection-button"),
-        vec2(448.394, 208.425),
-        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
-        180.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default-3D"),
-        true
-    );
-
-    mSpriteRenderer.CreateSprite(
-        GameState::MAIN_MENU,
-        "main-menu-back-button",
-        ResourceManager::GetTexture("main-menu-back-button"),
-        vec2(1024.394, 571.618),
-        vec2(447.212, 264.223), // <---- THIS RIGHT HERE
-        180.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default-3D"),
-        true
-    );
+    // Initialize sprites
+    InitializeSprites();
 
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
-    InitMenu();
+    // Initialize menus;
+    InitializeMenus();
 
+ 
     mFirstFrame = true;
     mTransitioningDark = false;
     mAllDark = false;
@@ -296,23 +146,18 @@ void Game::CalculateDeltaTime()
     mLastFrame = currentTime;
 }
 
-
 void Game::Update()
 {
     GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 / (1000 / mDeltaTime)));
+
 
     if(mCurrentGameState == GameState::START_MENU)
     {
         if(mFirstFrame)
         {
-            mMenuChoices[mMenuChoice]->SetColor(vec3(1,1,0));
+            GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetColor(vec3(1,1,0));
             mFirstFrame = false;
         }
-    }
-
-    if(mCurrentGameState == GameState::MAIN_MENU)
-    {
-
     }
 
     CheckForTransitionState();
@@ -325,12 +170,9 @@ void Game::Render()
     // Clear the screen with a solid background color
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-    CheckGLErrors("After clearing the buffer");
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
-    CheckGLErrors("After drawing a sprite");
-
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)
@@ -378,6 +220,12 @@ Sprite* Game::GetSprite(GameState gameState, string name)
     return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
 }
 
+Sprite* Game::GetDefaultSprite(GameState gameState, string name)
+{
+    // Simplify Getting sprite without the need to write out the entire line
+    return mSpriteRenderer.mDefaultSprites[gameState][name];
+}
+
 void Game::LoadDefaultSprites(GameState gameState)
 {
     // Clear currently rendered sprites for the new game state
@@ -393,6 +241,10 @@ void Game::LoadDefaultSprites(GameState gameState)
 
 void Game::Transition(GameState newGameState)
 {
+
+    // If it is the first frame and the sprites are not being darkened 
+    // enable the darken animation for all sprites in current game state 
+
     if(!mTransitioningDark && mFirstTransitionFrame)
     {
         std::cout << "Darkening sprites!\n";
@@ -403,6 +255,9 @@ void Game::Transition(GameState newGameState)
         mTransitioningDark = true;
         mFirstTransitionFrame = false;
     }
+
+    // If the sprites are in their darkening state, check if all the sprites are fully dark.
+    //  If they are not break out of the recursive function using return
 
     if(mTransitioningDark && !mAllDark)
     {
@@ -416,6 +271,9 @@ void Game::Transition(GameState newGameState)
             return;
         }
     }
+
+    // Once all the sprites are dark then load the new sprites 
+    //then set the darkening Boolean to false and set the brightening Boolean to true
 
     if(mAllDark)
     {
@@ -515,3 +373,13 @@ void Game::CheckGLErrors(const string& context)
     }
 }
 
+void Game::CreateMenu(GameState gamestate, vector<Sprite*> sprites,bool wrapAround, string name)
+{
+    Menu* menu = new Menu(sprites,wrapAround);
+    mCurrentMenus[gamestate][name] = menu;
+}
+
+Menu* Game::GetMenu(GameState gamestate,string name)
+{
+    return mCurrentMenus[gamestate][name];
+}

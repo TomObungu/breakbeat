@@ -50,10 +50,10 @@ void SpriteRenderer::Initialize()
 
     // Position attribute
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_TRUE, 4 * sizeof(float), (void*)0);
     // Texture coordinate attribute
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
     // Unbind VAO and VBO
     glBindVertexArray(0);
@@ -69,11 +69,11 @@ void SpriteRenderer::Initialize()
 
     // Position attribute (vec3)
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 5 * sizeof(float), (void*)0);
 
     // Texture coordinate attribute (vec2)
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 
     // Unbind VAO and VBO
     glBindVertexArray(0);
@@ -86,7 +86,7 @@ Sprite* SpriteRenderer::CreateSprite(GameState gameState, string name, Texture& 
     // Create a new Sprite instance
     auto sprite = new Sprite(texture, position, size, rotate, color, shader, perspective, texturePosition, textureScale);
 
-    // Use the getter to set the VAO
+    // Determine whether the VAO is going to used 3D or 2D based on the mPersepctive parameter
     sprite->mVertexArrayObject = perspective ? this->mVertexArrayObject3D : this->mVertexArrayObject;
 
     // Store the sprite in the appropriate hash table
@@ -95,8 +95,6 @@ Sprite* SpriteRenderer::CreateSprite(GameState gameState, string name, Texture& 
     // Return the pointer to the sprite
     return mDefaultSprites[gameState][name];
 }
-
-
 
 void SpriteRenderer::DrawSprites(GameState gameState)
 {
