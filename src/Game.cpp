@@ -26,53 +26,8 @@ void Game::ProcessEvents()
             {
                 mWindow.ToggleFullscreen();
             }
-
-            // If the current game state is start menu then check for input
-            if (mCurrentGameState == GameState::START_MENU)
-            {
-                // Store a pointer to the start menu object
-                Menu* startMenu = GetMenu(mCurrentGameState, "start-menu");
-
-                // Update the value of the current time at this moment
-                startMenu->UpdateCurrentTime();
-
-                // If the time elapsed between the last update is greater than 200ms
-                if (startMenu->CheckSelectionTime())
-                {
-                    // IF the key pressed is the left key
-                    if (event.key.keysym.sym == SDLK_LEFT)
-                    {
-                        startMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
-                        // Update menu choice index with wrap-around
-                        startMenu->IncrementMenuChoice();
-                        startMenu->PlayHighlightAnimation();
-                        startMenu->UpdateLastSelectedTime();
-                    }   
-                    // If the key pressed is the right key
-                    if (event.key.keysym.sym == SDLK_RIGHT)
-                    {
-                        startMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
-                        // Update menu choice index with wrap-around
-                        startMenu->DecrementMenuChoice();
-                        startMenu->PlayHighlightAnimation();
-                        startMenu->UpdateLastSelectedTime();
-                    }
-                    // If they pressed in the return key
-                    if (event.key.keysym.sym == SDLK_RETURN)
-                    {   
-                        // If the currrent menu option is the start button sprite then call the transition animation
-                        if (startMenu->GetCurrentMenuOption() == GetSprite(mCurrentGameState, "start-button"))
-                        {
-                            TransitionToGameState(GameState::MAIN_MENU);
-                        }
-                        // If the current menu option is the exit button sprite then close the application
-                        else if (startMenu->GetCurrentMenuOption() == GetSprite(mCurrentGameState, "exit-button"))
-                        {
-                            mWindow.SetWindowClosedBoolean(true);  // Exit game
-                        }
-                    }
-                }
-            }
+            
+            HandleMenuInput(event);
         }
     }
 }
@@ -100,7 +55,7 @@ void Game::Initialize()
     ResourceManager::GetShader("default").Use().SetMatrix4("projection", orthographicProjection);
     ResourceManager::GetShader("default").Use().SetInteger("image", 0);
     // configure perspective projection
-    ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\DefaultFragmentShader.glsl", "default-3D");
+    ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\PerspectiveProjectionFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
     ResourceManager::GetShader("default-3D").Use().SetInteger("image", 0);
     CheckGLErrors("After setting the projection matrix");
@@ -128,11 +83,10 @@ void Game::Initialize()
     // Initialize sprites
     InitializeSprites();
 
-    mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
-
     // Initialize menus;
     InitializeMenus();
 
+    mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
  
     mFirstFrame = true;
     mTransitioningDark = false;
@@ -150,12 +104,22 @@ void Game::Update()
 {
     GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 / (1000 / mDeltaTime)));
 
-
     if(mCurrentGameState == GameState::START_MENU)
     {
         if(mFirstFrame)
         {
             GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetColor(vec3(1,1,0));
+            GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,1,0),1,360);
+            mFirstFrame = false;
+        }
+    }
+
+    if(mCurrentGameState == GameState::MAIN_MENU)
+    {
+        if(mFirstFrame)
+        {
+            GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.2,10);
+            GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetScale(true,1.05,0.2);
             mFirstFrame = false;
         }
     }
@@ -214,37 +178,12 @@ void Game::UpdateSprites(GameState gameState)
     
 }
 
-Sprite* Game::GetSprite(GameState gameState, string name)
-{
-    // Simplify Getting sprite without the need to write out the entire line
-    return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
-}
-
-Sprite* Game::GetDefaultSprite(GameState gameState, string name)
-{
-    // Simplify Getting sprite without the need to write out the entire line
-    return mSpriteRenderer.mDefaultSprites[gameState][name];
-}
-
-void Game::LoadDefaultSprites(GameState gameState)
-{
-    // Clear currently rendered sprites for the new game state
-    mSpriteRenderer.mCurrentlyRenderedSprites[gameState].clear();
-
-    // Load default sprites for the given game state
-    for (const auto& [key, sprite] : mSpriteRenderer.mDefaultSprites[gameState])
-    {
-        // Clone or reference the default sprite into the currently rendered sprites
-        mSpriteRenderer.mCurrentlyRenderedSprites[gameState][key] = sprite;
-    }
-}
-
 void Game::Transition(GameState newGameState)
 {
 
     // If it is the first frame and the sprites are not being darkened 
     // enable the darken animation for all sprites in current game state 
-
+    
     if(!mTransitioningDark && mFirstTransitionFrame)
     {
         std::cout << "Darkening sprites!\n";
@@ -319,6 +258,7 @@ void Game::Transition(GameState newGameState)
         mTransitioningGameState = GameState::NOT_TRANSITIONING;
         mHasTransitioned = true;
         mFirstTransitionFrame = true;
+        mFirstFrame = true;
     }
 }
 
@@ -371,15 +311,4 @@ void Game::CheckGLErrors(const string& context)
         }
         std::cerr << std::endl;
     }
-}
-
-void Game::CreateMenu(GameState gamestate, vector<Sprite*> sprites,bool wrapAround, string name)
-{
-    Menu* menu = new Menu(sprites,wrapAround);
-    mCurrentMenus[gamestate][name] = menu;
-}
-
-Menu* Game::GetMenu(GameState gamestate,string name)
-{
-    return mCurrentMenus[gamestate][name];
 }

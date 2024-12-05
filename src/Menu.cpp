@@ -6,6 +6,7 @@ Menu::Menu(vector<Sprite*> sprites, bool wrapAround)
       mMenuChoice(0),
       mCurrentlySelectedMenuChoice(mSprites[mMenuChoice])
 {
+    mHorizontalLength = 2;
 }
 
 void Menu::AppendSprite(Sprite* sprite)
@@ -45,20 +46,87 @@ void Menu::DecrementMenuChoice()
     mCurrentlySelectedMenuChoice = mSprites[mMenuChoice];
 }
 
-void Menu::SetHighlightAnimation(Callback callback)
+void Menu::MoveMenuChoiceUp()
 {
-    mSelectionAnimation = callback;
+    int totalItems = mSprites.size(); // Get totalItems 
+ 
+    if (mWrapAround) // If menu wrap around is true
+    {   
+        // Minus the length of the menu and 
+        mMenuChoice = (mMenuChoice - mHorizontalLength + totalItems) % totalItems; 
+    }
+    else
+    {
+        if (mMenuChoice >= mHorizontalLength)
+        {
+            mMenuChoice -= mHorizontalLength;
+        }
+    }
+
+    mCurrentlySelectedMenuChoice = mSprites[mMenuChoice];
 }
 
-void Menu::SetSelectionAnimation(Callback callback)
+void Menu::MoveMenuChoiceDown()
+{
+    int totalItems = mSprites.size();
+
+    if (mWrapAround)
+    {
+        mMenuChoice = (mMenuChoice + mHorizontalLength) % totalItems;
+    }
+    else
+    {
+        if (mMenuChoice + mHorizontalLength < totalItems)
+        {
+            mMenuChoice += mHorizontalLength;
+        }
+    }
+
+    mCurrentlySelectedMenuChoice = mSprites[mMenuChoice];
+}
+
+void Menu::SetHighlightAnimation(Callback callback)
 {
     mHighlightAnimation = callback;
 }
 
+void Menu::SetSelectionAnimation(Callback callback)
+{
+    mSelectionAnimation = callback;
+}
+
+void Menu::SetUnhighlightAnimation(Callback callback)
+{
+    mUnhighlightAnimation = callback;
+}
+
+void Menu::SetUnselectionAnimation(Callback callback)
+{
+    mUnselectionAnimation = callback;
+}
+
 void Menu::PlayHighlightAnimation()
+{
+    if(mHighlightAnimation)
+        mHighlightAnimation();
+}
+
+void Menu::PlaySelectionAnimation()
 {
     if(mSelectionAnimation)
         mSelectionAnimation();
+}
+
+void Menu::PlayUnhighlightAnimation()
+{
+    if(mUnhighlightAnimation)
+        mUnhighlightAnimation();
+}
+
+void Menu::PlayUnselectionAnimation()
+{
+    if(mUnselectionAnimation)
+        mUnselectionAnimation();
 }
 
 void Menu::UpdateCurrentTime()

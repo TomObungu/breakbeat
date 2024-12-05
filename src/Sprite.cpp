@@ -2,9 +2,9 @@
 #include "Window.hpp"
 
 // Constructor that initializes sprite properties
-Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective,  vec2 texturePositon, float textureScale)
+Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective,  vec2 texturePosition, float textureScale)
     : mTexture(texture),
-      mTexturePosition(texturePositon),
+      mTexturePosition(texturePosition),
       mTextureScale(textureScale),
       mPosition(position),
       mSize(size),
@@ -20,12 +20,41 @@ Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 co
     mDistanceBetween = 0;
     mIncrement = vec2(0);
     mIsMovingTo = false;
+    mIsScaling = false;
+    mCurrentScale = 1.0f;
+    mStartScale = 1.0f;
+    mTargetScale = 1.0f;
+    mIsRotating = false;
+}
+
+Sprite::Sprite(const Sprite& other)
+    :   mTexture(other.mTexture),
+        mTexturePosition(other.mTexturePosition),
+        mTextureScale(other.mTextureScale),
+        mPosition(other.mPosition),
+        mSize(other.mSize),
+        mRotation(other.mRotation),
+        mColor(other.mColor),
+        mShader(other.mShader),
+        mPerspective(other.mPerspective)
+{
+    mHasUpdated = true;
+    mOriginalColor = other.mOriginalColor;
+    mStartCoordinate = vec3(0);
+    mEndCoordinate = vec3(0);
+    mDistanceBetween = 0;
+    mIncrement = vec2(0);
+    mIsMovingTo = false;
+    mIsScaling = false;
+    mCurrentScale = 1.0f;
+    mStartScale = 1.0f;
+    mTargetScale = 1.0f;
+    mIsRotating = false;
 }
 
 // Draw method for Sprite
 void Sprite::Draw() 
 {
-
     mat4 model = mat4(1.0f);
     mat4 view = mat4(1.0f);
 
@@ -43,9 +72,46 @@ void Sprite::Draw()
 
         model = glm::translate(model, vec3(worldPos.x, worldPos.y, 0.0f)); // Move to world position
         model = glm::translate(model, vec3(worldSize / 2.0f, 0.0f)); // Center sprite
-        model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 0.0f, 1.0f)); // Rotate around center
+
+        if (mIsRotating)
+        {
+            float timeElapsed = (SDL_GetTicks() - mRotationStartTime) / 1000.0f; // Convert to seconds
+            float progress = timeElapsed / mRotationTime; // Progress as a ratio (0 to 1)
+
+            if (timeElapsed >= mRotationTime && !mIsLoopRotation)
+            {
+                mIsRotating = false; // Stop rotating if done
+                progress = 1.0f; // Clamp to final state
+            }
+
+            // Interpolate between the current angle and target angle
+            mRotation = glm::mix(mStartRotationAngle, mRotationAngle, progress);
+        }
+
+        model = rotate(model, glm::radians(mRotation), mRotationOrientation);
+
         model = glm::translate(model, vec3(-worldSize / 2.0f, 0.0f)); // Translate back
-        model = glm::scale(model, vec3(worldSize, 1.0f)); // Scale to match size
+ 
+
+        if (mIsScaling)
+        {
+            float timeElapsed = (SDL_GetTicks() - mScaleStartTime) / 1000.0f; // Convert to seconds
+            float progress = timeElapsed / mScaleTime; // Progress as a ratio (0 to 1)
+
+            if (timeElapsed >= mScaleTime && !mIsLoopScaling)
+            {
+                mIsScaling = false; // Stop scaling if done
+                progress = 1.0f;    // Clamp to the final value
+            }
+
+            mCurrentScale = glm::mix(mStartScale, mTargetScale, progress); // Interpolate between scales
+        }
+
+        // Correctly position and scale the sprite
+
+        model = glm::translate(model, vec3((-worldSize * mCurrentScale / 2.0f, 0.0f))); // Center sprite
+        model = glm::scale(model, vec3(worldSize * mCurrentScale, 1.0f)); // Scale to match size
+
 
         this->mShader.SetMatrix4("model", model);
     }
@@ -86,7 +152,7 @@ void Sprite::Move(vec2 pixels)
 // More complex rotation function that considers perspective rotation
 void Sprite::Rotate(vec3 orientation, float angle) {
     mat4 model = mat4(1.0f);
-
+    
     model = rotate(model, radians(angle), orientation);
 
     // Set model matrix within shader to result of the transformation
@@ -220,6 +286,35 @@ void Sprite::Brighten()
     }
 }
 
+void Sprite::SetRotation(bool enable, vec3 orientation, float rotationTime, float angle, bool looping)
+{
+    if(!mIsRotating && enable)
+    {
+        mRotationOrientation = orientation;
+        mStartRotationAngle = mRotation;
+        mRotationTime = rotationTime;
+        mRotationAngle = angle;
+        mRotationStartTime = SDL_GetTicks();
+        mIsRotating = true;
+        mIsLoopRotation = looping;
+    }
+
+}
+
+void Sprite::SetScale(bool enable, float targetScale, float scaleTime, bool looping)
+{
+    if (!mIsScaling && enable)
+    {
+        mStartScale = mCurrentScale; // Start from the current scale
+        mTargetScale = targetScale;
+        mScaleTime = scaleTime;
+        mScaleStartTime = SDL_GetTicks();
+        mIsScaling = true;
+        mIsLoopScaling = looping;
+    }
+}
+
+
 // The Update method will call Darken and Brighten as needed
 void Sprite::Update(float deltaTime) 
 {
@@ -245,7 +340,7 @@ void Sprite::Update(float deltaTime)
 
     // If the sprite is not in any update state it has been fully updated
     if( (mDarkened || mBrightened) &&
-        mIsMovingTo == false)
+        mIsMovingTo == false && mIsRotating == false) 
     {
         mHasUpdated == true;
     }
@@ -286,3 +381,13 @@ vec2 Sprite::ScreenToWorldSpace(vec2 screenCoord, mat4 view)
     return glm::vec2(worldPos.x, worldPos.y);
 }
 
+void Sprite::ResetTransformations()
+{
+    mRotation = 0.0f;
+    mIsRotating = false;
+
+    mCurrentScale = 1.0f;
+    mIsScaling = false;
+
+    // Add any other transformations that should be reset
+}

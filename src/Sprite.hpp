@@ -12,7 +12,9 @@ class Sprite
 public:
     // Constructor
     // Remove the default arguments for previous parameters
-    Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePositon = vec2(0,0), float textureScale = 1);
+    Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePosition = vec2(0,0), float textureScale = 1);
+
+    Sprite(const Sprite& other);
 
     GLuint mVertexArrayObject;
 
@@ -48,6 +50,9 @@ public:
     void SetBrighten(bool enable, float invertTime = 1.0f);  // New method to start/stop inverting
     void Brighten();  // Existing method to handle inversion (lightening
 
+    void SetRotation(bool enable, vec3 orientation = vec3(0,0,1), float rotatingTime = 1.0f, float angle = 180, bool looping = false);
+    void SetScale(bool enable, float targetScale, float scaleTime = 1.0f, bool looping = false);
+
     // Getters for the sprite attributes
     vec2 GetPosition() const;
     vec2 GetSize() const;
@@ -56,6 +61,8 @@ public:
     Shader& GetShader() const;
     bool GetBrightenState();
     bool GetDarkenState();
+
+    void ResetTransformations();
 
     // Update function
     void Update(float deltaTime);
@@ -91,6 +98,23 @@ private:
 
     // Animation state for MoveTo()
     bool mIsMovingTo;
+
+    // Animation state for Rotating the sprite
+    bool mIsRotating = false;
+    bool mIsLoopRotation;
+    float mRotationAngle;
+    float mRotationStartTime = 0.0f;
+    float mRotationTime = 0.2f;
+    vec3 mRotationOrientation = vec3(0,0,1);
+    float mStartRotationAngle;
+
+    bool mIsScaling = false;
+    float mCurrentScale = 1.0f;
+    float mStartScale = 1.0f;
+    float mTargetScale = 1.0f;
+    float mScaleTime;
+    float mScaleStartTime;
+    bool mIsLoopScaling;
 
     // Time varibles for the brighten and darken utility functions();
     // Used to determine start times to time the time elapsed 

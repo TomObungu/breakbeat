@@ -14,4 +14,5 @@ void main()
 {
     gl_Position = projection * view * model * vec4(vertexCoordinateAttribute, 1.0f);
     textureCoordinate = (textureScale * textureCoordinateAttribute) + texturePosition;
+    textureCoordinate = vec2(-textureCoordinate.x, -textureCoordinate.y);
 }

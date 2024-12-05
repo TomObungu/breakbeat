@@ -2,6 +2,8 @@
 
 void Game::InitializeSprites()
 {
+        mSpriteRenderer.mDefaultSprites.clear();
+
         mSpriteRenderer.CreateSprite(
         GameState::START_MENU,
         "background",
@@ -94,7 +96,7 @@ void Game::InitializeSprites()
 
     mSpriteRenderer.CreateSprite(
         GameState::MAIN_MENU,
-        "start-menu-ua",
+        "main-menu-ua",
         ResourceManager::GetTexture("main-menu-ua"),
         vec2(-0.866, 988.918),
         vec2(1920.866, 91.082),
@@ -110,7 +112,7 @@ void Game::InitializeSprites()
         ResourceManager::GetTexture("main-menu-settings-button"),
         vec2(448.689, 571.618),
         vec2(447.212, 264.223),
-        180.0f,
+        0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default-3D"),
         true
@@ -122,7 +124,7 @@ void Game::InitializeSprites()
         ResourceManager::GetTexture("main-menu-chart-editor-button"),
         vec2(1024.394, 208.425),
         vec2(447.212, 264.223),
-        180.0f,
+        0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default-3D"),
         true
@@ -134,7 +136,7 @@ void Game::InitializeSprites()
         ResourceManager::GetTexture("main-menu-chart-selection-button"),
         vec2(448.394, 208.425),
         vec2(447.212, 264.223),
-        180.0f,
+        0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default-3D"),
         true
@@ -146,9 +148,35 @@ void Game::InitializeSprites()
         ResourceManager::GetTexture("main-menu-back-button"),
         vec2(1024.394, 571.618),
         vec2(447.212, 264.223),
-        180.0f,
+        0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default-3D"),
         true
     );
 }
+
+Sprite* Game::GetSprite(GameState gameState, string name)
+{
+    // Simplify Getting sprite without the need to write out the entire line
+    return mSpriteRenderer.mCurrentlyRenderedSprites[gameState][name];
+}
+
+Sprite* Game::GetDefaultSprite(GameState gameState, string name)
+{
+    // Simplify Getting sprite without the need to write out the entire line
+    return mSpriteRenderer.mDefaultSprites[gameState][name];
+}
+
+void Game::LoadDefaultSprites(GameState gameState)
+{
+    mSpriteRenderer.mCurrentlyRenderedSprites[gameState].clear();
+
+    for (auto& [key, sprite] : mSpriteRenderer.mDefaultSprites[gameState])
+    {
+        // Copy default sprite and reset its state
+        Sprite* defaultSprite = sprite; 
+        defaultSprite->ResetTransformations(); // Reset scale, rotation, etc.
+        mSpriteRenderer.mCurrentlyRenderedSprites[gameState][key] = defaultSprite;
+    }
+}
+

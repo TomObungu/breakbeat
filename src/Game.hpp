@@ -31,6 +31,7 @@ public:
     void Update();
     void Render();
     void HandleWindowEvent(SDL_Event&);
+    void HandleMenuInput(SDL_Event&);
 
 	double mDeltaTime;
 	double mLastFrame;
@@ -64,9 +65,7 @@ private:
 
     // Store menu class hash table
     unordered_map<GameState, unordered_map<string, Menu*>> mCurrentMenus;
-
-
-
+    
     float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
     Uint32 mLastSelectionTime = 0; 
 
