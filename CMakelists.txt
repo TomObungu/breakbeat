@@ -13,6 +13,10 @@ add_library(SDL2 STATIC IMPORTED)
 set_target_properties(SDL2 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/lib/x64/SDL2.lib)
 target_include_directories(SDL2 INTERFACE ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/include)
 
+add_library(freetype-2.13.3 STATIC IMPORTED)
+set_target_properties(freetype-2.13.3 PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/freetype.lib)
+target_include_directories(freetype-2.13.3 INTERFACE ${PROJECT_SOURCE_DIR}/include/freetype-2.13.3/include)
+
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE src
@@ -29,4 +33,6 @@ set_target_properties(breakbeat PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SO
 
 target_include_directories(breakbeat PRIVATE ${PROJECT_SOURCE_DIR}/include/glm)
 
-target_link_libraries(breakbeat PRIVATE SDL2main SDL2 glad)
+target_link_libraries(breakbeat PRIVATE SDL2main SDL2 glad freetype-2.13.3)
+
+

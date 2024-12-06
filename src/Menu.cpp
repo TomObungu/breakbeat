@@ -52,11 +52,11 @@ void Menu::MoveMenuChoiceUp()
  
     if (mWrapAround) // If menu wrap around is true
     {   
-        // Minus the length of the menu and 
+        // Minus the length of the menu and the length of the menu columns
         mMenuChoice = (mMenuChoice - mHorizontalLength + totalItems) % totalItems; 
     }
     else
-    {
+    {   
         if (mMenuChoice >= mHorizontalLength)
         {
             mMenuChoice -= mHorizontalLength;

@@ -59,6 +59,8 @@ void Game::Initialize()
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
     ResourceManager::GetShader("default-3D").Use().SetInteger("image", 0);
     CheckGLErrors("After setting the projection matrix");
+
+    ResourceManager::LoadShader("\\shaders\\TextRendererVertexShader.glsl", "\\shaders\\TextRendererFragmentShader.glsl", "text");
     // load textures
 
     /* START MENU */
@@ -87,6 +89,9 @@ void Game::Initialize()
     InitializeMenus();
 
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
+
+    Text = new TextRenderer(mWindow.GetWindowHeight(), mWindow.GetWindowWidth());
+    Text->Load("C:/Users/deeza/OneDrive/breakbeat/fonts/OpenSans-ExtraBold.ttf",24);
  
     mFirstFrame = true;
     mTransitioningDark = false;
@@ -110,6 +115,7 @@ void Game::Update()
         {
             GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetColor(vec3(1,1,0));
             GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,1,0),1,360);
+               
             mFirstFrame = false;
         }
     }
@@ -127,6 +133,7 @@ void Game::Update()
     CheckForTransitionState();
 
     UpdateSprites(mCurrentGameState);
+    Text->RenderText("Hello! World.",5.0f,5.0f,1.0f);
 }
 
 void Game::Render()
@@ -137,6 +144,8 @@ void Game::Render()
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
+    
+    Text->RenderText(std::to_string(SDL_GetTicks()),480.0f,540.0f,10.0f,vec3(1,1,1));
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)

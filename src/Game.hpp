@@ -14,6 +14,7 @@ integrated in
 #include "ResourceManager.hpp"
 #include "SpriteRenderer.hpp"
 #include "Menu.hpp"
+#include "TextRenderer.hpp"
 
 #include <unordered_map>
 #include <map>
@@ -62,7 +63,7 @@ private:
     GameState mCurrentGameState = GameState::START_MENU;
     Window mWindow;
     SpriteRenderer mSpriteRenderer;
-
+    TextRenderer *Text;
     // Store menu class hash table
     unordered_map<GameState, unordered_map<string, Menu*>> mCurrentMenus;
     
