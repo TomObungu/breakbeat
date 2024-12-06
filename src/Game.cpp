@@ -133,7 +133,6 @@ void Game::Update()
     CheckForTransitionState();
 
     UpdateSprites(mCurrentGameState);
-    Text->RenderText("Hello! World.",5.0f,5.0f,1.0f);
 }
 
 void Game::Render()
@@ -145,7 +144,7 @@ void Game::Render()
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
     
-    Text->RenderText(std::to_string(SDL_GetTicks()),480.0f,540.0f,10.0f,vec3(1,1,1));
+    Text->RenderText(std::to_string(SDL_GetTicks()),480.0f,540.0f,2.0f,vec3(1,1,1));
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)

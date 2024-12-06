@@ -16,6 +16,11 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height)
     this->mShader = ResourceManager::GetShader("text");
     this->mShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f), true);
     this->mShader.SetInteger("text", 0);
+    this->mShader.SetVector3f("shadowColor", glm::vec3(0.0f, 0.0f, 0.0f)); // Black shadow
+    this->mShader.SetVector2f("shadowOffset", glm::vec2(0.005f, -0.005f)); // Offset slightly down and right
+    this->mShader.SetFloat("shadowBlur", 0.002f); // Adjust for more/less blur
+
+
     // configure VAO/VBO for texture quads
     glGenVertexArrays(1, &this->mVetexArrayObject);
     glGenBuffers(1, &this->mVertexBufferObject);
