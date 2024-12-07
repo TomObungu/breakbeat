@@ -6,8 +6,9 @@
 Texture::Texture()
     : width(0), 
     height(0), 
-    textureFormat(GL_RGB), 
-    imageFormat(GL_RGB), 
+    handle(0),
+    textureFormat(GL_RGBA), 
+    imageFormat(GL_RGBA), 
     textureWrappingS(GL_REPEAT), 
     textureWrappingT(GL_REPEAT), 
     textureFilteringMinimum(GL_LINEAR), 
@@ -30,9 +31,25 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned char* d
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->textureFIlteringMaximum);
     // unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    this->handle = glGetTextureHandleARB(this->ID);
+    glMakeTextureHandleResidentARB(this->handle);
+}
+
+
+uint64_t Texture::GetHandle() const
+{
+    return this->handle;
 }
 
 void Texture::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, this->ID);
+}
+
+Texture::~Texture() {
+    if (glIsTexture(this->ID))
+        glDeleteTextures(1, &this->ID);
+    if (glIsTextureHandleResidentARB(this->handle))
+        glMakeTextureHandleNonResidentARB(this->handle);
 }

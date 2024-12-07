@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.30.0)
 project(breakbeat)
 
 add_library(glad ${PROJECT_SOURCE_DIR}/src/glad.c)
-target_include_directories(glad PUBLIC C:/Users/deeza/OneDrive/breakbeat/include)
+target_include_directories(glad PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 add_library(SDL2main STATIC IMPORTED)
 set_target_properties(SDL2main PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/include/SDL2-2.30.5/lib/x64/SDL2main.lib)

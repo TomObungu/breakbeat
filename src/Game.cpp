@@ -49,15 +49,13 @@ void Game::Initialize()
     // Set up perspective projection matrix
     float aspectRatio = static_cast<float>(mWindow.GetWindowWidth()) / static_cast<float>(mWindow.GetWindowHeight());
     mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-    
+    CheckGLErrors("After setting the orthographic matrix");
     // load shaders
     ResourceManager::LoadShader("\\shaders\\DefaultVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "default");
     ResourceManager::GetShader("default").Use().SetMatrix4("projection", orthographicProjection);
-    ResourceManager::GetShader("default").Use().SetInteger("image", 0);
     // configure perspective projection
     ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\PerspectiveProjectionFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
-    ResourceManager::GetShader("default-3D").Use().SetInteger("image", 0);
     CheckGLErrors("After setting the projection matrix");
 
     ResourceManager::LoadShader("\\shaders\\TextRendererVertexShader.glsl", "\\shaders\\TextRendererFragmentShader.glsl", "text");
@@ -143,6 +141,8 @@ void Game::Render()
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
+    glFinish();
+    CheckGLErrors("After drawing a sprite!");
     
     Text->RenderText(std::to_string(SDL_GetTicks()),480.0f,540.0f,2.0f,vec3(1,1,1));
 }

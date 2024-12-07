@@ -9,6 +9,7 @@ OpenGL states and the OpenGL context for rendering
 
 // Include libararies
 #include "Window.hpp"
+#include <iostream>
 
 // Window constructor function to initialize window and its properties
 Window::Window() : 
@@ -73,7 +74,6 @@ void Window::Initialize()
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize glad! %s\n", glGetError());
     }
 }
-
 
 SDL_Window*& Window::GetWindow()
 {

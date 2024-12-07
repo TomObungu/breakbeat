@@ -26,6 +26,7 @@ public:
     // holds a list of pre-compiled Characters
     std::map<char, Character> mCharacters; 
     // shader used for text rendering
+    
     Shader mShader;
     // constructor
     TextRenderer(unsigned int width, unsigned int height);

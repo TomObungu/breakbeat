@@ -112,7 +112,6 @@ void Sprite::Draw()
         model = glm::translate(model, vec3((-worldSize * mCurrentScale / 2.0f, 0.0f))); // Center sprite
         model = glm::scale(model, vec3(worldSize * mCurrentScale, 1.0f)); // Scale to match size
 
-
         this->mShader.SetMatrix4("model", model);
     }
     else
@@ -132,11 +131,22 @@ void Sprite::Draw()
 
     // Texture handling
     glActiveTexture(GL_TEXTURE0);
-    mTexture.Bind();
+    // mTexture.Bind();
 
     this->mShader.SetVector2f("texturePosition", mTexturePosition);
     this->mShader.SetFloat("textureScale", mTextureScale);
 
+    // Get the location of the uniform
+    GLint uniformLocation = glGetUniformLocation(this->mShader.ID, "image");
+
+    GLuint64 textureHandle = mTexture.GetHandle();
+    if (!glIsTextureHandleResidentARB(textureHandle)) {
+        glMakeTextureHandleResidentARB(textureHandle);
+    }
+
+    // Pass the handle to the shader
+    glUniformHandleui64ARB(uniformLocation, textureHandle);
+    
     // Draw the sprite
     glBindVertexArray(this->mVertexArrayObject);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);

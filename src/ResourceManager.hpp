@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 
-#include <glad/glad.h>
+// #include <glad/glad.h>
 
 #include "Texture.hpp"
 #include "Shader.hpp"
