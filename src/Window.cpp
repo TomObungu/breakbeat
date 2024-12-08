@@ -11,6 +11,22 @@ OpenGL states and the OpenGL context for rendering
 #include "Window.hpp"
 #include <iostream>
 
+void OnOpenGLDebugMessage(
+[[maybe_unused]] uint32_t source,
+uint32_t type,
+[[maybe_unused]] uint32_t id,
+[[maybe_unused]] uint32_t severity,
+[[maybe_unused]] int32_t length,
+const char* message,
+[[maybe_unused]] const void* userParam) 
+{
+
+    if (type == GL_DEBUG_TYPE_ERROR) {
+        std::cerr << message << "\n"; // << put the breakpoint somewhere in here
+    }
+}
+
+
 // Window constructor function to initialize window and its properties
 Window::Window() : 
     mLastWindowedHeight { ::MinWindowHeight },
@@ -47,7 +63,7 @@ void Window::Initialize()
     
     // Create the window and define its position, width and height properties and the type of window it is
     mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN | SDL_WINDOW_RESIZABLE);
+        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
     // If the value return to the mWindow vairable is null then the window failed to be inictiazlaied
     if (mWindow == nullptr)
@@ -73,6 +89,10 @@ void Window::Initialize()
     {
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize glad! %s\n", glGetError());
     }
+
+    glDebugMessageCallback(OnOpenGLDebugMessage, nullptr);
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 }
 
 SDL_Window*& Window::GetWindow()

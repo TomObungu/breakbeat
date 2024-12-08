@@ -12,7 +12,7 @@ Texture::Texture()
     textureWrappingS(GL_REPEAT), 
     textureWrappingT(GL_REPEAT), 
     textureFilteringMinimum(GL_LINEAR), 
-    textureFIlteringMaximum(GL_LINEAR)
+    textureFilteringMaximum(GL_LINEAR)
 {
     glGenTextures(1, &this->ID);
 }
@@ -28,28 +28,14 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned char* d
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, this->textureWrappingS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->textureWrappingT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->textureFilteringMinimum);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->textureFIlteringMaximum);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->textureFilteringMaximum);
     // unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
-
     this->handle = glGetTextureHandleARB(this->ID);
     glMakeTextureHandleResidentARB(this->handle);
 }
 
-
-uint64_t Texture::GetHandle() const
+GLuint64 Texture::GetHandle()
 {
     return this->handle;
-}
-
-void Texture::Bind() const
-{
-    glBindTexture(GL_TEXTURE_2D, this->ID);
-}
-
-Texture::~Texture() {
-    if (glIsTexture(this->ID))
-        glDeleteTextures(1, &this->ID);
-    if (glIsTextureHandleResidentARB(this->handle))
-        glMakeTextureHandleNonResidentARB(this->handle);
 }

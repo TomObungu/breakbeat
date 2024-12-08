@@ -20,7 +20,6 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height)
     this->mShader.SetVector2f("shadowOffset", glm::vec2(0.005f, -0.005f)); // Offset slightly down and right
     this->mShader.SetFloat("shadowBlur", 0.002f); // Adjust for more/less blur
 
-
     // configure VAO/VBO for texture quads
     glGenVertexArrays(1, &this->mVetexArrayObject);
     glGenBuffers(1, &this->mVertexBufferObject);
@@ -80,7 +79,8 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
        
         // now store character for later use
-        Character character = {
+        Character character = 
+        {
             texture,
             glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
             glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),

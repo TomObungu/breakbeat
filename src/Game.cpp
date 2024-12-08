@@ -76,6 +76,13 @@ void Game::Initialize()
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-selection-user-interface.png",true,"main-menu-chart-selection-button");
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-back-button-user-interface.png",true,"main-menu-back-button");
 
+    for (auto& [key, texture] : ResourceManager::Textures) 
+    {
+    std::cout << "Texture Name: " << key 
+              << ", ID: " << texture.ID 
+              << ", Handle: " << texture.handle << std::endl;
+    }
+
     mSpriteRenderer.Initialize();
 
     mSpriteRenderer.mCurrentlyRenderedSprites.clear();

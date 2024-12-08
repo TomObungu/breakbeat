@@ -328,7 +328,8 @@ void Sprite::SetScale(bool enable, float targetScale, float scaleTime, bool loop
 // The Update method will call Darken and Brighten as needed
 void Sprite::Update(float deltaTime) 
 {
-    if (mIsMovingTo) {
+    if (mIsMovingTo) 
+    {
 
     }
     

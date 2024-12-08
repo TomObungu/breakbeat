@@ -17,6 +17,7 @@ public:
     Sprite(const Sprite& other);
 
     GLuint mVertexArrayObject;
+    
 
     //  Draw method
     void Draw();
