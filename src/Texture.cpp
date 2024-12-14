@@ -31,8 +31,8 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned char* d
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->textureFilteringMaximum);
     // unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
-    this->handle = glGetTextureHandleARB(this->ID);
-    glMakeTextureHandleResidentARB(this->handle);
+    this->handle = glGetTextureHandleARB(this->ID); // Convert the texture to a unsigned 64 bit interger reference
+    glMakeTextureHandleResidentARB(this->handle); // Make the texture reference resident
 }
 
 GLuint64 Texture::GetHandle()

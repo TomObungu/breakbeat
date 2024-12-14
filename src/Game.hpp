@@ -15,13 +15,15 @@ integrated in
 #include "SpriteRenderer.hpp"
 #include "Menu.hpp"
 #include "TextRenderer.hpp"
-
+#include "Mouse.hpp"
 #include <unordered_map>
 #include <map>
 #include <vector>
+#include <format>
 
 using std::unordered_map;
 using std::vector;
+using std::format;
 
 class Game
 {
@@ -57,13 +59,20 @@ public:
 
     void InitializeMenus();
 
+    void InitializeTextures();
+
     Game();
 private:
     // Declare mWindow as a member variable
     GameState mCurrentGameState = GameState::START_MENU;
     Window mWindow;
+
+    Mouse mMouse;
+    
     SpriteRenderer mSpriteRenderer;
+
     TextRenderer *Text;
+
     // Store menu class hash table
     unordered_map<GameState, unordered_map<string, Menu*>> mCurrentMenus;
     

@@ -2,7 +2,10 @@
 in vec2 TexCoords;
 out vec4 color;
 
-uniform sampler2D text;
+#extension GL_ARB_bindless_texture : require
+#extension GL_ARB_gpu_shader5 : require
+
+layout (bindless_sampler) uniform sampler2D text;
 uniform vec3 textColor;
 uniform vec3 shadowColor;
 uniform vec2 shadowOffset; // Base offset for the shadow

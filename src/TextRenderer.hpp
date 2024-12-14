@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <iostream>
 
 #include "Texture.hpp"
 #include "Shader.hpp"

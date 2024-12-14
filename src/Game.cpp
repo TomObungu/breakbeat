@@ -29,6 +29,10 @@ void Game::ProcessEvents()
             
             HandleMenuInput(event);
         }
+        if (event.type == SDL_MOUSEMOTION)
+        {
+            mMouse.Update(event);
+        }
     }
 }
 
@@ -53,28 +57,16 @@ void Game::Initialize()
     // load shaders
     ResourceManager::LoadShader("\\shaders\\DefaultVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "default");
     ResourceManager::GetShader("default").Use().SetMatrix4("projection", orthographicProjection);
+    ResourceManager::LoadShader("\\shaders\\MouseVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "cursor");
+    ResourceManager::GetShader("cursor").Use().SetMatrix4("projection", orthographicProjection);
     // configure perspective projection
     ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\PerspectiveProjectionFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
     CheckGLErrors("After setting the projection matrix");
 
     ResourceManager::LoadShader("\\shaders\\TextRendererVertexShader.glsl", "\\shaders\\TextRendererFragmentShader.glsl", "text");
-    // load textures
 
-    /* START MENU */
-    ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
-    ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-arrows-squares-edit-cropped.png",true,"background");
-    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-logo-2x-new.png", true, "game-logo");
-    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-start-button.png", true, "start-button");
-    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-exit-button.png", true, "exit-button");
-    ResourceManager::LoadTexture("\\assets\\png\\start menu\\breakbeat-start-menu-user-navigation-assist.png", true, "start-menu-ua");
-
-    /* MAIN_MENU */
-    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-user-navigation-assist-new.png",true,"main-menu-ua");
-    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-settings-user-interface.png",true,"main-menu-settings-button");
-    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-editor-user-interface.png",true,"main-menu-chart-editor-button");
-    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-chart-selection-user-interface.png",true,"main-menu-chart-selection-button");
-    ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-back-button-user-interface.png",true,"main-menu-back-button");
+    InitializeTextures();
 
     for (auto& [key, texture] : ResourceManager::Textures) 
     {
@@ -96,7 +88,9 @@ void Game::Initialize()
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
     Text = new TextRenderer(mWindow.GetWindowHeight(), mWindow.GetWindowWidth());
-    Text->Load("C:/Users/deeza/OneDrive/breakbeat/fonts/OpenSans-ExtraBold.ttf",24);
+    Text->Load("C:/Users/deeza/OneDrive/breakbeat/fonts/OpenSans-ExtraBold.ttf",48);
+
+    mMouse.InitializeMouse();
  
     mFirstFrame = true;
     mTransitioningDark = false;
@@ -120,7 +114,6 @@ void Game::Update()
         {
             GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetColor(vec3(1,1,0));
             GetMenu(mCurrentGameState, "start-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,1,0),1,360);
-               
             mFirstFrame = false;
         }
     }
@@ -131,6 +124,7 @@ void Game::Update()
         {
             GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.2,10);
             GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetScale(true,1.05,0.2);
+            GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetColor(vec3(1.0f,1.0f,0.0f));
             mFirstFrame = false;
         }
     }
@@ -148,10 +142,9 @@ void Game::Render()
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
-    glFinish();
+    Text->RenderText("Test",940,720,1.0f);
+    mMouse.DrawMouse();
     CheckGLErrors("After drawing a sprite!");
-    
-    Text->RenderText(std::to_string(SDL_GetTicks()),480.0f,540.0f,2.0f,vec3(1,1,1));
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)

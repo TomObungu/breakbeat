@@ -130,6 +130,7 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         // render quad
+        std::cout<<"The text is still rendering!"<<'\n';
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // now advance cursors for next glyph
         x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)

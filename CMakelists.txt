@@ -24,6 +24,7 @@ file(GLOB_RECURSE src
     "src/*.h"
     "src/*.hpp"
     "src/*.cpp"
+    
 )
 
 add_executable(breakbeat ${src})

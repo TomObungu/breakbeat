@@ -9,6 +9,7 @@
 #include "Sprite.hpp"
 #include "GameState.hpp"
 
+#include <utility> 
 #include <unordered_map>
 #include <map>
 
@@ -35,7 +36,6 @@ public:
     // Hash table to store the sprites currently in use in the render loop
     unordered_map<GameState, map<string, Sprite*>> mCurrentlyRenderedSprites;
     unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
-
 private:
     GLuint mVertexArrayObject;
     GLuint mVertexArrayObject3D;

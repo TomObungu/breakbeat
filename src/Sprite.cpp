@@ -91,28 +91,9 @@ void Sprite::Draw()
         model = rotate(model, glm::radians(mRotation), mRotationOrientation);
 
         model = glm::translate(model, vec3(-worldSize / 2.0f, 0.0f)); // Translate back
- 
-
-        if (mIsScaling)
-        {
-            float timeElapsed = (SDL_GetTicks() - mScaleStartTime) / 1000.0f; // Convert to seconds
-            float progress = timeElapsed / mScaleTime; // Progress as a ratio (0 to 1)
-
-            if (timeElapsed >= mScaleTime && !mIsLoopScaling)
-            {
-                mIsScaling = false; // Stop scaling if done
-                progress = 1.0f;    // Clamp to the final value
-            }
-
-            mCurrentScale = glm::mix(mStartScale, mTargetScale, progress); // Interpolate between scales
-        }
-
-        // Correctly position and scale the sprite
 
         model = glm::translate(model, vec3((-worldSize * mCurrentScale / 2.0f, 0.0f))); // Center sprite
         model = glm::scale(model, vec3(worldSize * mCurrentScale, 1.0f)); // Scale to match size
-
-        this->mShader.SetMatrix4("model", model);
     }
     else
     {
@@ -121,17 +102,16 @@ void Sprite::Draw()
         model = translate(model, vec3(0.5f * mSize.x, 0.5f * mSize.y, 0.0f));
         model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 1.0f, 0.0f));
         model = translate(model, vec3(-0.5f * mSize.x, -0.5f * mSize.y, 0.0f));
-        model = scale(model, vec3(mSize, 1.0f));
+        model = glm::translate(model, vec3((mSize* mCurrentScale / 2.0f, 0.0f))); // Center sprite
+        model = glm::scale(model, vec3(mSize * mCurrentScale, 1.0f)); // Scale to match size
+        model = glm::translate(model, vec3((-mSize* mCurrentScale / 2.0f, 0.0f)));
     }
 
+    // Correctly position and scale the sprite
 
     // Set the model matrix
     this->mShader.SetMatrix4("model", model);
     this->mShader.SetVector3f("color", mColor);
-
-    // Texture handling
-    glActiveTexture(GL_TEXTURE0);
-    // mTexture.Bind();
 
     this->mShader.SetVector2f("texturePosition", mTexturePosition);
     this->mShader.SetFloat("textureScale", mTextureScale);
@@ -139,13 +119,8 @@ void Sprite::Draw()
     // Get the location of the uniform
     GLint uniformLocation = glGetUniformLocation(this->mShader.ID, "image");
 
-    GLuint64 textureHandle = mTexture.GetHandle();
-    if (!glIsTextureHandleResidentARB(textureHandle)) {
-        glMakeTextureHandleResidentARB(textureHandle);
-    }
-
-    // Pass the handle to the shader
-    glUniformHandleui64ARB(uniformLocation, textureHandle);
+    // Pass the sprite's texture handle to the shader
+    glUniformHandleui64ARB(uniformLocation, mTexture.handle);
     
     // Draw the sprite
     glBindVertexArray(this->mVertexArrayObject);
@@ -153,7 +128,6 @@ void Sprite::Draw()
     glBindVertexArray(0);
 }
 
- 
 void Sprite::Move(vec2 pixels)
 {
     mPosition += pixels;
@@ -354,6 +328,20 @@ void Sprite::Update(float deltaTime)
         mIsMovingTo == false && mIsRotating == false) 
     {
         mHasUpdated == true;
+    }
+
+    if (mIsScaling)
+    {
+        float timeElapsed = (SDL_GetTicks() - mScaleStartTime) / 1000.0f; // Convert to seconds
+        float progress = timeElapsed / mScaleTime; // Progress as a ratio (0 to 1)
+
+        if (timeElapsed >= mScaleTime && !mIsLoopScaling)
+        {
+            mIsScaling = false; // Stop scaling if done
+            progress = 1.0f;    // Clamp to the final value
+        }
+
+        mCurrentScale = glm::mix(mStartScale, mTargetScale, progress); // Interpolate between scales
     }
 }
 

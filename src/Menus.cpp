@@ -41,19 +41,21 @@ void Game::InitializeMenus()
 
     mainMenu->SetHighlightAnimation(
         [this,mainMenu](){
-        mainMenu->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.1,5);
+        mainMenu->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.1,5); // Rotate the sprite when its being highlighted
         mainMenu->GetCurrentMenuOption()->SetScale(true,1.05,0.2);
+        mainMenu->GetCurrentMenuOption()->SetColor(vec3(1.f,1.0f,0.0f)); // Highlight the sprite
     });
 
     mainMenu->SetSelectionAnimation(
         [this,mainMenu](){
-        mainMenu->GetCurrentMenuOption()->SetRotation(true,vec3(0,1,0),0.5,360);
+        mainMenu->GetCurrentMenuOption()->SetRotation(true,vec3(0.0f,1.0f,0),0.5,360); // Play a spinning animation when enter is pressed
     });
 
     mainMenu->SetUnhighlightAnimation(
         [this,mainMenu](){
         mainMenu->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.05,0);
         mainMenu->GetCurrentMenuOption()->SetScale(true,1.0,0.1);
+        mainMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));  
     });
 }
 
