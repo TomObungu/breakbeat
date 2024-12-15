@@ -44,6 +44,7 @@ public:
 
     Sprite* GetSprite(GameState, string);
     Sprite* GetDefaultSprite(GameState gameState, string name);
+    string GetCollidingSprite(GameState);
     void UpdateSprites(GameState);
     void LoadDefaultSprites(GameState gameState);
 
@@ -67,7 +68,7 @@ private:
     GameState mCurrentGameState = GameState::START_MENU;
     Window mWindow;
 
-    Mouse mMouse;
+    Mouse* mMouse;
     
     SpriteRenderer mSpriteRenderer;
 

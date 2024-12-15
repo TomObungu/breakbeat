@@ -2,14 +2,20 @@
 
 Mouse::Mouse()
 {
-    mColor = vec3(1.0f);
-    mSize = vec2(9.0f,9.0f);
-    mCurrentScale = 1.0f;
+}
+
+Mouse::~Mouse()
+{
+    // Clean up OpenGL objects
+    if (this->mVertexArrayObject != 0)
+    {
+        glDeleteVertexArrays(1, &this->mVertexArrayObject);
+    }
 }
 
 void Mouse::InitializeMouse()
 {
-  
+    GLuint vertexBufferObject;
     float vertices[] = 
     {
         // Position       // Tex Coords
@@ -24,10 +30,10 @@ void Mouse::InitializeMouse()
 
     // Set up 2D VAO/VBO
     glGenVertexArrays(1, &this->mVertexArrayObject);
-    glGenBuffers(1, &mVertexBufferObject);
+    glGenBuffers(1, &vertexBufferObject);
 
     glBindVertexArray(this->mVertexArrayObject);
-    glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Position attribute
@@ -41,8 +47,22 @@ void Mouse::InitializeMouse()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    mShader = ResourceManager::GetShader("cursor");
-    mTexture = ResourceManager::GetTexture("cursor");
+    if (this->mVertexArrayObject == 0) {
+    std::cerr << "VAO not initialized. Call InitializeMouse() first." << std::endl;
+    return;
+    }
+
+    this->mShader = ResourceManager::GetShader("cursor");
+    if (this->mShader.ID == 0) {
+        std::cerr << "Failed to load shader: cursor" << std::endl;
+        return;
+    }
+
+    this->mTexture = ResourceManager::GetTexture("cursor");
+    if (mTexture.handle == 0) {
+        std::cerr << "Failed to load texture: cursor" << std::endl;
+        return;
+    }
 }
 
 void Mouse::Update(SDL_Event& event)
@@ -67,6 +87,11 @@ void Mouse::DrawMouse()
     
     GLint uniformLocation = glGetUniformLocation(this->mShader.ID, "image");
 
+    if (uniformLocation == -1) {
+        std::cerr << "Uniform 'image' not found in shader" << std::endl;
+        return;
+    }
+
     // Pass the sprite's texture handle to the shader
     glUniformHandleui64ARB(uniformLocation, mTexture.handle);
     
@@ -76,4 +101,13 @@ void Mouse::DrawMouse()
     glBindVertexArray(0);
 }
 
+vec2 Mouse::GetMouseCoordinate()
+{
+    return mPosition;
+}
+
+vec2 Mouse::GetMouseSize()
+{
+    return mSize;
+}
 

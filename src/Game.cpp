@@ -31,7 +31,7 @@ void Game::ProcessEvents()
         }
         if (event.type == SDL_MOUSEMOTION)
         {
-            mMouse.Update(event);
+            mMouse->Update(event);
         }
     }
 }
@@ -85,13 +85,14 @@ void Game::Initialize()
     // Initialize menus;
     InitializeMenus();
 
+    mMouse = new Mouse();
+    mMouse->InitializeMouse();
+
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
-    Text = new TextRenderer(mWindow.GetWindowHeight(), mWindow.GetWindowWidth());
-    Text->Load("C:/Users/deeza/OneDrive/breakbeat/fonts/OpenSans-ExtraBold.ttf",48);
+    // Text = new TextRenderer(mWindow.GetWindowHeight(), mWindow.GetWindowWidth());
+    // Text->Load("C:/Users/deeza/OneDrive/breakbeat/fonts/OpenSans-ExtraBold.ttf",48);
 
-    mMouse.InitializeMouse();
- 
     mFirstFrame = true;
     mTransitioningDark = false;
     mAllDark = false;
@@ -132,6 +133,8 @@ void Game::Update()
     CheckForTransitionState();
 
     UpdateSprites(mCurrentGameState);
+
+    std::cout<<GetCollidingSprite(mCurrentGameState)<<'\n';
 }
 
 void Game::Render()
@@ -142,8 +145,8 @@ void Game::Render()
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
-    Text->RenderText("Test",940,720,1.0f);
-    mMouse.DrawMouse();
+    // Text->RenderText("Test",940,720,1.0f);
+    mMouse->DrawMouse();
     CheckGLErrors("After drawing a sprite!");
 }
 
@@ -319,4 +322,25 @@ void Game::CheckGLErrors(const string& context)
         }
         std::cerr << std::endl;
     }
+}
+
+std::string Game::GetCollidingSprite(GameState gameState)
+{
+    string spriteName;
+    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
+    {
+        // Check for collision using AABB
+        bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
+                          (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
+
+        bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
+                          (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
+
+        // If both X and Y collisions are true, return the sprite's key
+        if (CollisionX && CollisionY)
+        {
+            spriteName=key; // Found a collision
+        }
+    }
+    return spriteName;
 }

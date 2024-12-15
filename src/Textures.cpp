@@ -6,7 +6,7 @@ void Game::InitializeTextures()
 
     /* MOUSE */
     ResourceManager::LoadTexture("\\assets\\png\\mouse\\cursor.png",true,"cursor");
-
+    
     /* START MENU */
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-dots-dots-cropped.png",true,"background-dots");
     ResourceManager::LoadTexture("\\assets\\png\\breakbeat-background-arrows-squares-edit-cropped.png",true,"background");
