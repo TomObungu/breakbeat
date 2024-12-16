@@ -148,3 +148,8 @@ bool Menu::CheckSelectionTime()
 {
     return (mCurrentTime - mLastSelectionTime >= mSelectionDelay);
 }
+
+void Menu::SetCurrentMenuOption(Sprite* sprite)
+{
+    mCurrentlySelectedMenuChoice = sprite;
+}

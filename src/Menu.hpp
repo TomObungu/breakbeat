@@ -22,6 +22,7 @@ public:
 
     void SetHighlightAnimation(Callback animationCallback);
     void SetSelectionAnimation(Callback animationcCallback);
+    void SetCurrentMenuOption(Sprite*);
 
     void SetUnhighlightAnimation(Callback callback);
     void SetUnselectionAnimation(Callback callback);

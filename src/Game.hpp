@@ -35,6 +35,7 @@ public:
     void Render();
     void HandleWindowEvent(SDL_Event&);
     void HandleMenuInput(SDL_Event&);
+    void HandleMouseInput(SDL_Event&);
 
 	double mDeltaTime;
 	double mLastFrame;
@@ -44,7 +45,7 @@ public:
 
     Sprite* GetSprite(GameState, string);
     Sprite* GetDefaultSprite(GameState gameState, string name);
-    string GetCollidingSprite(GameState);
+    Sprite* CheckCollidingSprite(GameState);
     void UpdateSprites(GameState);
     void LoadDefaultSprites(GameState gameState);
 
