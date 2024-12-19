@@ -5,8 +5,6 @@ void Game::HandleMouseInput(SDL_Event& event)
     if (event.type == SDL_MOUSEMOTION)
     {
         // Update mouse position based on the event
-        mMouse->Update(event);
-
         // Check for colliding sprite in the current game state
         Sprite* collidingSprite = CheckCollidingSprite(mCurrentGameState);
 

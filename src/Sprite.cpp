@@ -206,7 +206,8 @@ Shader& Sprite::GetShader() const
 }
 
 void Sprite::MoveTo(vec2 coordinate, float time) {
-    if (mHasUpdated) {
+    if (mHasUpdated) 
+    {
 
     }
 }

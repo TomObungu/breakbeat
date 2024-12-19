@@ -2,6 +2,7 @@
 #define TEXT_RENDERER_HPP
 
 #include <map>
+#include <unordered_map>
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -9,14 +10,12 @@
 
 #include "Texture.hpp"
 #include "Shader.hpp"
+#include "GameState.hpp"
+#include "Text.hpp"
 
-/// Holds all state information relevant to a character as loaded using FreeType
-struct Character {
-    unsigned int TextureID; // ID handle of the glyph texture
-    glm::ivec2   Size;      // size of glyph
-    glm::ivec2   Bearing;   // offset from baseline to left/top of glyph
-    unsigned int Advance;   // horizontal offset to advance to next glyph
-};
+using std::string;
+using std::unordered_map;
+using std::map;
 
 // A renderer class for rendering text displayed by a font loaded using the 
 // FreeType library. A single font is loaded, processed into a list of Character
@@ -24,20 +23,21 @@ struct Character {
 class TextRenderer
 {
 public:
-    // holds a list of pre-compiled Characters
-    std::map<char, Character> mCharacters; 
-    // shader used for text rendering
-    
+    unordered_map<string, map<char, Character>> mFonts;
+    unordered_map<GameState, map<string, Text*>> mCurrentlyRenderedTexts;
+    unordered_map<GameState, map<string, Text*>> mDefaultTexts;
+
     Shader mShader;
     // constructor
-    TextRenderer(unsigned int width, unsigned int height);
+    TextRenderer();
+    void Initialize();
     // pre-compiles a list of characters from the given font
-    void Load(string font, unsigned int fontSize);
-    // renders a string of text using the precompiled list of characters
-    void RenderText(string text, float x, float y, float scale, vec3 color = vec3(1.0f));
+    void LoadFont(string fontPath, unsigned int fontSize, string identifer);
+    void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color = vec3(1.0f), string fontName = "default-24");
+    void LoadTexts(GameState gameState);
+    void DrawTexts(GameState gameState);
 private:
-    // render state
-    unsigned int mVetexArrayObject, mVertexBufferObject;
+    unsigned int mVertexArrayObject, mVertexBufferObject;
 };
 
 #endif 

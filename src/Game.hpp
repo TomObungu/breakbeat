@@ -49,6 +49,9 @@ public:
     void UpdateSprites(GameState);
     void LoadDefaultSprites(GameState gameState);
 
+    Text* GetDefaultText(GameState gameState, string name);
+    Text* GetText(GameState gameState, string name);
+
     void CheckForTransitionState();
     void TransitionToGameState(GameState newGameState);
     string GetGLErrorString(GLenum error);
@@ -63,18 +66,20 @@ public:
 
     void InitializeTextures();
 
+    void InitializeTexts();
+
+    void InitializeFonts();
+
     Game();
 private:
     // Declare mWindow as a member variable
     GameState mCurrentGameState = GameState::START_MENU;
     Window mWindow;
 
-    Mouse* mMouse;
-    
     SpriteRenderer mSpriteRenderer;
-
-    TextRenderer *Text;
-
+    TextRenderer mTextRenderer;
+    Mouse* mMouse;
+ 
     // Store menu class hash table
     unordered_map<GameState, unordered_map<string, Menu*>> mCurrentMenus;
     

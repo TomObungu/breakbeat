@@ -2,7 +2,8 @@
 
 Game::Game() :
     mWindow(Window()),
-    mSpriteRenderer(SpriteRenderer())
+    mSpriteRenderer(SpriteRenderer()),
+    mTextRenderer(TextRenderer())
 {
 }
 
@@ -33,7 +34,8 @@ void Game::ProcessEvents()
         {
             mMouse->Update(event);
         }
-        HandleMouseInput(event);
+        if(mHasTransitioned)
+            HandleMouseInput(event);
     }
 }
 
@@ -64,17 +66,17 @@ void Game::Initialize()
     ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\PerspectiveProjectionFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
     CheckGLErrors("After setting the projection matrix");
-
     ResourceManager::LoadShader("\\shaders\\TextRendererVertexShader.glsl", "\\shaders\\TextRendererFragmentShader.glsl", "text");
-
+    ResourceManager::GetShader("text").Use().SetMatrix4("projection", orthographicProjection);
+    
     InitializeTextures();
 
-    for (auto& [key, texture] : ResourceManager::Textures) 
-    {
-    std::cout << "Texture Name: " << key 
-              << ", ID: " << texture.ID 
-              << ", Handle: " << texture.handle << std::endl;
-    }
+    // for (auto& [key, texture] : ResourceManager::Textures) 
+    // {
+    // std::cout << "Texture Name: " << key 
+    //           << ", ID: " << texture.ID 
+    //           << ", Handle: " << texture.handle << std::endl;
+    // }
 
     mSpriteRenderer.Initialize();
 
@@ -86,13 +88,20 @@ void Game::Initialize()
     // Initialize menus;
     InitializeMenus();
 
-    mMouse = new Mouse();
-    mMouse->InitializeMouse();
-
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
-    // Text = new TextRenderer(mWindow.GetWindowHeight(), mWindow.GetWindowWidth());
-    // Text->Load("C:/Users/deeza/OneDrive/breakbeat/fonts/OpenSans-ExtraBold.ttf",48);
+    mTextRenderer.Initialize();
+
+    mTextRenderer.mCurrentlyRenderedTexts.clear();
+
+    InitializeFonts();
+
+    InitializeTexts();
+
+    mTextRenderer.LoadTexts(GameState::START_MENU);
+
+    mMouse = new Mouse();
+    mMouse->InitializeMouse();
 
     mFirstFrame = true;
     mTransitioningDark = false;
@@ -144,7 +153,7 @@ void Game::Render()
 
     // Render all sprites for the current game state
     mSpriteRenderer.DrawSprites(mCurrentGameState);
-    // Text->RenderText("Test",940,720,1.0f);
+    mTextRenderer.DrawTexts(mCurrentGameState);
     mMouse->DrawMouse();
     CheckGLErrors("After drawing a sprite!");
 }
@@ -184,13 +193,11 @@ void Game::UpdateSprites(GameState gameState)
     {
         sprite->Update(mDeltaTime);
         CheckGLErrors("After updating a sprite");
-    }
-    
+    } 
 }
 
 void Game::Transition(GameState newGameState)
 {
-
     // If it is the first frame and the sprites are not being darkened 
     // enable the darken animation for all sprites in current game state 
     
