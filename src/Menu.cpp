@@ -9,6 +9,14 @@ Menu::Menu(vector<Sprite*> sprites, bool wrapAround)
     mHorizontalLength = 2;
 }
 
+Menu::Menu(vector<Text*> texts, bool wrapAround)
+    : mTexts(texts),
+      mWrapAround(wrapAround),
+      mTextMenuChoice(0),
+      mCurrentlySelectedTextChoice(mTexts[mTextMenuChoice])
+{
+}
+
 void Menu::AppendSprite(Sprite* sprite)
 {
     mSprites.push_back(sprite);
@@ -85,6 +93,89 @@ void Menu::MoveMenuChoiceDown()
     mCurrentlySelectedMenuChoice = mSprites[mMenuChoice];
 }
 
+void Menu::AppendText(Text* text)
+{
+    mTexts.push_back(text);
+}
+
+void Menu::IncrementTextMenuChoice()
+{
+    if (mWrapAround)
+    {
+        mTextMenuChoice = (mTextMenuChoice + 1) % mTexts.size();
+    }
+    else
+    {
+        if (mTextMenuChoice < mTexts.size() - 1) 
+        {
+            ++mTextMenuChoice;
+        }
+    }
+    mCurrentlySelectedTextChoice = mTexts[mTextMenuChoice];
+}
+
+void Menu::MoveTextMenuChoiceUp()
+{
+    int totalTextItems = mTexts.size(); // Get totalTextItems 
+ 
+    if (mWrapAround) // If menu wrap around is true
+    {   
+        // Minus the length of the menu and the length of the menu columns
+        mTextMenuChoice = (mTextMenuChoice - mHorizontalLength + totalTextItems) % totalTextItems; 
+    }
+    else
+    {   
+        if (mTextMenuChoice >= mHorizontalLength)
+        {
+            mTextMenuChoice -= mHorizontalLength;
+        }
+    }
+
+    mCurrentlySelectedTextChoice = mTexts[mMenuChoice];
+    
+}
+
+void Menu::MoveTextMenuChoiceDown()
+{
+
+    int totalTextItems = mTexts.size();
+
+    if (mWrapAround)
+    {
+        mTextMenuChoice = (mTextMenuChoice + mHorizontalLength) % totalTextItems;
+    }
+    else
+    {
+        if (mTextMenuChoice + mHorizontalLength < totalTextItems)
+        {
+            mTextMenuChoice += mHorizontalLength;
+        }
+    }
+
+    mCurrentlySelectedTextChoice = mTexts[mTextMenuChoice];
+}
+
+void Menu::DecrementTextMenuChoice()
+{
+    if (mWrapAround)
+    {
+        mTextMenuChoice = (mTextMenuChoice - 1 + mTexts.size()) % mTexts.size(); // Handle negative mod
+    }
+    else
+    {
+        if (mTextMenuChoice > 0) 
+        {
+            --mTextMenuChoice;
+        }
+    }
+    mCurrentlySelectedTextChoice = mTexts[mTextMenuChoice];
+}
+
+Text* Menu::GetCurrentTextOption()
+{
+    return mCurrentlySelectedTextChoice;
+}
+
 void Menu::SetHighlightAnimation(Callback callback)
 {
     mHighlightAnimation = callback;
@@ -152,4 +243,9 @@ bool Menu::CheckSelectionTime()
 void Menu::SetCurrentMenuOption(Sprite* sprite)
 {
     mCurrentlySelectedMenuChoice = sprite;
+}
+
+void Menu::SetCurrentTextMenuOption(Text* text)
+{
+    mCurrentlySelectedTextChoice = text;
 }

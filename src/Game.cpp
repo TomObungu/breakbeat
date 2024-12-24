@@ -1,4 +1,5 @@
 #include "Game.hpp"
+#include <format>
 
 Game::Game() :
     mWindow(Window()),
@@ -71,12 +72,12 @@ void Game::Initialize()
     
     InitializeTextures();
 
-    // for (auto& [key, texture] : ResourceManager::Textures) 
-    // {
-    // std::cout << "Texture Name: " << key 
-    //           << ", ID: " << texture.ID 
-    //           << ", Handle: " << texture.handle << std::endl;
-    // }
+    for (auto& [key, texture] : ResourceManager::Textures) 
+    {
+    std::cout << "Texture Name: " << key 
+              << ", ID: " << texture.ID 
+              << ", Handle: " << texture.handle << std::endl;
+    }
 
     mSpriteRenderer.Initialize();
 
@@ -84,9 +85,6 @@ void Game::Initialize()
 
     // Initialize sprites
     InitializeSprites();
-
-    // Initialize menus;
-    InitializeMenus();
 
     mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
 
@@ -99,6 +97,9 @@ void Game::Initialize()
     InitializeTexts();
 
     mTextRenderer.LoadTexts(GameState::START_MENU);
+
+    // Initialize menus;
+    InitializeMenus();
 
     mMouse = new Mouse();
     mMouse->InitializeMouse();
@@ -139,10 +140,22 @@ void Game::Update()
             mFirstFrame = false;
         }
     }
+    if(mCurrentGameState == GameState::SETTINGS)
+    {
+        if(mFirstFrame)
+        {
+            GetMenu(mCurrentGameState, "settings-menu")->SetCurrentTextMenuOption(
+                GetText(GameState::SETTINGS,"scroll-speed-text"));
+            GetMenu(mCurrentGameState, "settings-menu")->PlayHighlightAnimation();
+            mFirstFrame = false;
+        }
+    }
 
     CheckForTransitionState();
 
     UpdateSprites(mCurrentGameState);
+
+    UpdateTexts(mCurrentGameState);
 }
 
 void Game::Render()
@@ -196,6 +209,15 @@ void Game::UpdateSprites(GameState gameState)
     } 
 }
 
+void Game::UpdateTexts(GameState gameState)
+{
+    for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[gameState])
+    {
+        text->Update(mDeltaTime);
+        CheckGLErrors("After updating a text");
+    } 
+}
+
 void Game::Transition(GameState newGameState)
 {
     // If it is the first frame and the sprites are not being darkened 
@@ -208,6 +230,10 @@ void Game::Transition(GameState newGameState)
         {
             sprite->SetDarken(true);
         }
+        for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
+        {
+            text->SetDarken(true);
+        }
         mTransitioningDark = true;
         mFirstTransitionFrame = false;
     }
@@ -217,7 +243,7 @@ void Game::Transition(GameState newGameState)
 
     if(mTransitioningDark && !mAllDark)
     {
-        std::cout << "Checking if sprites are darkened!\n";
+        // std::cout << "Checking if sprites are darkened!\n";
         mAllDark = true;
 
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
@@ -233,16 +259,20 @@ void Game::Transition(GameState newGameState)
 
     if(mAllDark)
     {
-        std::cout << "Loading new sprites!\n";
+        // std::cout << "Loading new sprites!\n";
         mTransitioningDark = false;
         mTransitioningLight = true;
         LoadDefaultSprites(newGameState);
+        mTextRenderer.LoadTexts(newGameState);
         mCurrentGameState = newGameState;
-        mFirstFrame = true;
         std::cout << "Loading new sprites and setting them to color 0!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetColor(vec3(0));
+        }
+        for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
+        {
+            text->SetColor(vec3(0));
         }
         mAllLight = false;
         std::cout << "Brightening new sprites!\n";
@@ -250,12 +280,16 @@ void Game::Transition(GameState newGameState)
         {
             sprite->SetBrighten(true);
         }
+        for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
+        {
+            text->SetBrighten(true);
+        }
         mAllDark = false;
     }
 
     if(mTransitioningLight && !mAllLight)
     {
-        std::cout << "Checking if new sprites are brightened!\n";
+        // std::cout << "Checking if new sprites are brightened!\n";
         mAllLight = true;
 
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
@@ -268,7 +302,7 @@ void Game::Transition(GameState newGameState)
 
     if(mAllLight)
     {
-        std::cout << "Finished transition!\n";
+        // std::cout << "Finished transition!\n";
         mAllDark = false;
         mAllLight = true;
         mTransitioningDark = false;
@@ -276,6 +310,7 @@ void Game::Transition(GameState newGameState)
         mTransitioningGameState = GameState::NOT_TRANSITIONING;
         mHasTransitioned = true;
         mFirstTransitionFrame = true;
+        mFirstFrame = true;
     }
 }
 

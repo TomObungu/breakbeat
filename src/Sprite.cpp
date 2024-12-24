@@ -1,5 +1,4 @@
 #include "Sprite.hpp"
-#include "Window.hpp"
 
 // Constructor that initializes sprite properties
 Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective,  vec2 texturePosition, float textureScale)
@@ -15,31 +14,6 @@ Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 co
 {
     mHasUpdated = true;
     mOriginalColor = color;
-    mStartCoordinate = vec3(0);
-    mEndCoordinate = vec3(0);
-    mDistanceBetween = 0;
-    mIncrement = vec2(0);
-    mIsMovingTo = false;
-    mIsScaling = false;
-    mCurrentScale = 1.0f;
-    mStartScale = 1.0f;
-    mTargetScale = 1.0f;
-    mIsRotating = false;
-}
-
-Sprite::Sprite(const Sprite& other)
-    :   mTexture(other.mTexture),
-        mTexturePosition(other.mTexturePosition),
-        mTextureScale(other.mTextureScale),
-        mPosition(other.mPosition),
-        mSize(other.mSize),
-        mRotation(other.mRotation),
-        mColor(other.mColor),
-        mShader(other.mShader),
-        mPerspective(other.mPerspective)
-{
-    mHasUpdated = true;
-    mOriginalColor = other.mOriginalColor;
     mStartCoordinate = vec3(0);
     mEndCoordinate = vec3(0);
     mDistanceBetween = 0;
@@ -298,7 +272,6 @@ void Sprite::SetScale(bool enable, float targetScale, float scaleTime, bool loop
         mIsLoopScaling = looping;
     }
 }
-
 
 // The Update method will call Darken and Brighten as needed
 void Sprite::Update(float deltaTime) 

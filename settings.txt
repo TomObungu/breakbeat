@@ -1,0 +1,7 @@
+Scroll speed : 100
+Receptor size : 100
+Scroll direction : Down
+Left keybind : Z
+Down keybind : X
+Up keybind : ,
+Right keybind : .

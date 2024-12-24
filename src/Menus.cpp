@@ -7,8 +7,8 @@ void Game::InitializeMenus()
     CreateMenu(GameState::START_MENU,
         vector<Sprite*> 
         {
-          GetDefaultSprite(GameState::START_MENU, "start-button"),
-          GetDefaultSprite(GameState::START_MENU, "exit-button"), 
+            GetDefaultSprite(GameState::START_MENU, "start-button"),
+            GetDefaultSprite(GameState::START_MENU, "exit-button"), 
         }, 
         true,
         "start-menu"
@@ -26,8 +26,24 @@ void Game::InitializeMenus()
         "main-menu"
     );
 
+    CreateMenu(GameState::SETTINGS,
+        vector<Text*> 
+        {
+            GetDefaultText(GameState::SETTINGS, "scroll-speed-text"),
+            GetDefaultText(GameState::SETTINGS, "receptor-size-text"),
+            GetDefaultText(GameState::SETTINGS, "scroll-direction-text"),
+            GetDefaultText(GameState::SETTINGS, "left-keybind-text"),
+            GetDefaultText(GameState::SETTINGS, "down-keybind-text"),
+            GetDefaultText(GameState::SETTINGS, "up-keybind-text"),
+            GetDefaultText(GameState::SETTINGS, "right-keybind-text"), 
+        }, 
+        true,
+        "settings-menu"
+    );
+
     Menu* startMenu = GetMenu(GameState::START_MENU, "start-menu");
     Menu* mainMenu = GetMenu(GameState::MAIN_MENU, "main-menu");
+    Menu* settingsMenu = GetMenu(GameState::SETTINGS, "settings-menu");
 
     startMenu->SetHighlightAnimation(
         [this,startMenu](){
@@ -43,7 +59,7 @@ void Game::InitializeMenus()
         [this,mainMenu](){
         mainMenu->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.1,5); // Rotate the sprite when its being highlighted
         mainMenu->GetCurrentMenuOption()->SetScale(true,1.05,0.2);
-        mainMenu->GetCurrentMenuOption()->SetColor(vec3(1.f,1.0f,0.0f)); // Highlight the sprite
+        mainMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f,1.0f,0.0f)); // Highlight the sprite
     });
 
     mainMenu->SetSelectionAnimation(
@@ -57,6 +73,23 @@ void Game::InitializeMenus()
         mainMenu->GetCurrentMenuOption()->SetScale(true,1.0,0.1);
         mainMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));  
     });
+
+    settingsMenu->SetHighlightAnimation(
+        [this,settingsMenu](){
+        settingsMenu->GetCurrentTextOption()->SetScale(true, 1.3,0.1);
+    });
+
+    settingsMenu->SetSelectionAnimation(
+        [this,settingsMenu](){
+        settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f,1.0f,0.0f));
+    });
+
+    settingsMenu->SetUnhighlightAnimation(
+        [this,settingsMenu](){
+        settingsMenu->GetCurrentTextOption()->SetScale(true,1.0,0.1);
+        settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f));
+    });
+    
 }
 
 void Game::HandleMenuInput(SDL_Event& event)
@@ -168,11 +201,148 @@ void Game::HandleMenuInput(SDL_Event& event)
             }
         }
     }
+    else if (mCurrentGameState == GameState::SETTINGS)
+    {
+        Menu* settingsMenu = GetMenu(mCurrentGameState, "settings-menu");
+
+        // Navigation between settings options
+        if (event.key.keysym.sym == SDLK_UP && !mSelectedSetting)
+        {
+            settingsMenu->PlayUnhighlightAnimation();
+            settingsMenu->DecrementTextMenuChoice();
+            settingsMenu->PlayHighlightAnimation();
+        }
+        else if (event.key.keysym.sym == SDLK_DOWN && !mSelectedSetting)
+        {
+            settingsMenu->PlayUnhighlightAnimation();
+            settingsMenu->IncrementTextMenuChoice();
+            settingsMenu->PlayHighlightAnimation();
+        }
+        else if (event.key.keysym.sym == SDLK_RETURN)
+        {
+            if (!mSelectedSetting)
+            {
+                settingsMenu->PlaySelectionAnimation();
+                mSelectedSetting = true;
+            }
+            else if (mKeybindMode)
+            {
+                // Re-enter into keybind mode only after exiting
+                mKeybindMode = false;
+                settingsMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
+            }
+        }
+        else if (event.key.keysym.sym == SDLK_ESCAPE)
+        {
+            if (mSelectedSetting)
+            {
+                settingsMenu->PlayUnselectionAnimation();
+                mSelectedSetting = false;
+            }
+            else
+            {
+                TransitionToGameState(GameState::MAIN_MENU);
+            }
+        }
+        else if (mSelectedSetting)
+        {
+            Text* currentText = settingsMenu->GetCurrentTextOption();
+
+            if (currentText == GetText(mCurrentGameState, "scroll-speed-text"))
+            {
+                if (event.key.keysym.sym == SDLK_RIGHT)
+                {
+                    mScrollSpeed++;
+                    currentText->UpdateText(std::to_string(mScrollSpeed));
+                    UpdateSettings();
+                }
+                else if (event.key.keysym.sym == SDLK_LEFT)
+                {
+                    mScrollSpeed--;
+                    currentText->UpdateText(std::to_string(mScrollSpeed));
+                    UpdateSettings();
+                }
+            }
+            else if (currentText == GetText(mCurrentGameState, "receptor-size-text"))
+            {
+                if (event.key.keysym.sym == SDLK_RIGHT)
+                {
+                    mReceptorSize++;
+                    currentText->UpdateText(std::to_string(mReceptorSize) + "%");
+                    UpdateSettings();
+                }
+                else if (event.key.keysym.sym == SDLK_LEFT)
+                {
+                    mReceptorSize--;
+                    currentText->UpdateText(std::to_string(mReceptorSize) + "%");
+                    UpdateSettings();
+                }
+            }
+            else if(currentText == GetText(mCurrentGameState, "scroll-direction-text"))
+            {
+                if (event.key.keysym.sym == SDLK_RIGHT || event.key.keysym.sym == SDLK_LEFT)
+                {
+                    if (currentText->GetText() == "Down")
+                    {
+                        currentText->UpdateText("Up");
+                        mScrollDirection = "Up";
+                        UpdateSettings();
+                    }
+                    else if (currentText->GetText() == "Up")
+                    {
+                        currentText->UpdateText("Down");
+                        mScrollDirection = "Down";
+                        UpdateSettings();
+                    }
+                }
+            }
+            else if (
+                currentText == GetText(mCurrentGameState, "left-keybind-text") ||
+                currentText == GetText(mCurrentGameState, "down-keybind-text") ||
+                currentText == GetText(mCurrentGameState, "up-keybind-text") ||
+                currentText == GetText(mCurrentGameState, "right-keybind-text"))
+            {
+                currentText->SetColor(vec3(1.0f,1.0f,0.0f));
+                currentText->UpdateText("Press any key...");
+                if (event.type == SDL_KEYDOWN) // Wait for the next key press
+                {
+                    const char* keyName = SDL_GetKeyName(event.key.keysym.sym);
+                    if (keyName && strlen(keyName) > 0) // Check if the key name is valid
+                    {
+                        std::string newKeybind = keyName;
+
+                        if (currentText == GetText(mCurrentGameState, "left-keybind-text"))
+                            mLeftKeybind = newKeybind;
+                        else if (currentText == GetText(mCurrentGameState, "down-keybind-text"))
+                            mDownKeybind = newKeybind;
+                        else if (currentText == GetText(mCurrentGameState, "up-keybind-text"))
+                            mUpKeybind = newKeybind;
+                        else if (currentText == GetText(mCurrentGameState, "right-keybind-text"))
+                            mRightKeybind = newKeybind;
+
+                        // Update the text and settings file
+                        currentText->UpdateText(newKeybind);
+                        UpdateSettings();
+
+                        // Exit selection mode
+                        settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f));
+                        mSelectedSetting = false;
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Game::CreateMenu(GameState gamestate, vector<Sprite*> sprites,bool wrapAround, string name)
 {
     Menu* menu = new Menu(sprites,wrapAround);
+    mCurrentMenus[gamestate][name] = menu;
+}
+
+void Game::CreateMenu(GameState gamestate, vector<Text*> texts,bool wrapAround, string name)
+{
+    Menu* menu = new Menu(texts, wrapAround);
     mCurrentMenus[gamestate][name] = menu;
 }
 

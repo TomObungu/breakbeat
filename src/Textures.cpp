@@ -23,5 +23,6 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\main menu\\breakbeat-main-menu-back-button-user-interface.png",true,"main-menu-back-button");
 
     /* SETTINGS MENU */
-    // ResourceManager::LoadTexture("\\assets\\png\\settings menu")
+    ResourceManager::LoadTexture("\\assets\\png\\settings menu\\breakbeat-settings-user-navigation-assist.png",true,"settings-menu-ua");
+    ResourceManager::LoadTexture("\\assets\\png\\settings menu\\breakbeat-settings-information-text-2.png",true,"settings-menu-text");
 }

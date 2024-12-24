@@ -107,8 +107,9 @@ void Window::Initialize()
     glDebugMessageCallback(OnOpenGLDebugMessage, nullptr);
 
     SDL_ShowCursor(SDL_DISABLE);
-    // glEnable(GL_DEBUG_OUTPUT);
-    // glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 }
 
 SDL_Window*& Window::GetWindow()

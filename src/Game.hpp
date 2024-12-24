@@ -20,10 +20,19 @@ integrated in
 #include <map>
 #include <vector>
 #include <format>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 using std::unordered_map;
 using std::vector;
 using std::format;
+using std::ifstream;
+using std::getline;
+using std::stringstream;
+using std::to_string;
+using std::ostringstream;
+using std::ofstream;
 
 class Game
 {
@@ -42,11 +51,11 @@ public:
 
     void CalculateDeltaTime();
 
-
     Sprite* GetSprite(GameState, string);
     Sprite* GetDefaultSprite(GameState gameState, string name);
     Sprite* CheckCollidingSprite(GameState);
     void UpdateSprites(GameState);
+    void UpdateTexts(GameState);
     void LoadDefaultSprites(GameState gameState);
 
     Text* GetDefaultText(GameState gameState, string name);
@@ -56,9 +65,13 @@ public:
     void TransitionToGameState(GameState newGameState);
     string GetGLErrorString(GLenum error);
     void CreateMenu(GameState, vector<Sprite*>, bool, string);
+    void CreateMenu(GameState, vector<Text*>,bool, string);
     Menu* GetMenu(GameState, string);
     void CheckGLErrors(const std::string& context = "");
     void Transition(GameState newGameState);
+
+    void LoadSettings();
+    void UpdateSettings();
 
     void InitializeSprites();
 
@@ -85,6 +98,18 @@ private:
     
     float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
     Uint32 mLastSelectionTime = 0; 
+
+    int mReceptorSize;
+    int mScrollSpeed;
+
+    string mScrollDirection;
+
+    bool mSelectedSetting = false;
+    bool mKeybindMode = false;
+    string mLeftKeybind;
+    string mDownKeybind;
+    string mUpKeybind;
+    string mRightKeybind;
 
     bool mTransitioningDark = false;
     bool mTransitioningLight = false;

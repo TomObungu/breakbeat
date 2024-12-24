@@ -2,6 +2,7 @@
 #define MENU_HPP
 
 #include "Sprite.hpp"
+#include "Text.hpp"
 #include <vector>
 
 using std::vector;
@@ -14,15 +15,23 @@ class Menu
 {
 public:
     Menu(vector<Sprite*>,bool);
+    Menu(vector<Text*>, bool);
     void AppendSprite(Sprite*);
+    void AppendText(Text* text);
     void IncrementMenuChoice();
     void MoveMenuChoiceUp();
     void MoveMenuChoiceDown();
     void DecrementMenuChoice();
 
+    void IncrementTextMenuChoice();
+    void MoveTextMenuChoiceUp();
+    void MoveTextMenuChoiceDown();
+    void DecrementTextMenuChoice();
+
     void SetHighlightAnimation(Callback animationCallback);
     void SetSelectionAnimation(Callback animationcCallback);
     void SetCurrentMenuOption(Sprite*);
+    void SetCurrentTextMenuOption(Text* sprite);
 
     void SetUnhighlightAnimation(Callback callback);
     void SetUnselectionAnimation(Callback callback);
@@ -33,6 +42,7 @@ public:
     void PlayUnselectionAnimation();
 
     Sprite* GetCurrentMenuOption();
+    Text* GetCurrentTextOption();
     
     void UpdateCurrentTime();
     void UpdateLastSelectedTime();
@@ -40,8 +50,11 @@ public:
 
 private:
     vector<Sprite*> mSprites;
+    vector<Text*> mTexts;
     int mMenuChoice = 0;
+    int mTextMenuChoice = 0;
     Sprite* mCurrentlySelectedMenuChoice;
+    Text* mCurrentlySelectedTextChoice;
     bool mWrapAround;
     int mHorizontalLength;
     int mVerticalLength;

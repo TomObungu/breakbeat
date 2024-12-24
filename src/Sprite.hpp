@@ -137,7 +137,6 @@ private:
     // State varible to determine when the varible is dark or bright
     bool mDarkened = false;
     bool mBrightened = false;
-
 };
 
 #endif // SPRITE_HPP

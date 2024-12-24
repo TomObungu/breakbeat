@@ -13,6 +13,9 @@
 #include "GameState.hpp"
 #include "Text.hpp"
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 using std::string;
 using std::unordered_map;
 using std::map;
@@ -33,7 +36,7 @@ public:
     void Initialize();
     // pre-compiles a list of characters from the given font
     void LoadFont(string fontPath, unsigned int fontSize, string identifer);
-    void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color = vec3(1.0f), string fontName = "default-24");
+    void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color, string fontName, float scale);
     void LoadTexts(GameState gameState);
     void DrawTexts(GameState gameState);
 private:

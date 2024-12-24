@@ -9,13 +9,15 @@
 #include "TextRenderer.hpp"
 #include "ResourceManager.hpp"
 
+namespace fs = std::filesystem;
+
 TextRenderer::TextRenderer()
 {
 }
 
 void TextRenderer::Initialize()
 {
-    std::cout<<"Initializing text renderer"<<'\n';
+    // std::cout<<"Initializing text renderer"<<'\n';
     // load and configure shader
     this->mShader = ResourceManager::GetShader("text");
     this->mShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(1920), static_cast<float>(1080), 0.0f), true);
@@ -40,7 +42,7 @@ void TextRenderer::Initialize()
 
 void TextRenderer::LoadFont(string fontPath, unsigned int fontSize, string identifer) 
 {
-        std::cout<<"Loading font!"<<'\n';
+        // std::cout<<"Loading font!"<<'\n';
         // Load font using FreeType
         FT_Library ft;
         if (FT_Init_FreeType(&ft)) {
@@ -49,7 +51,7 @@ void TextRenderer::LoadFont(string fontPath, unsigned int fontSize, string ident
         }
 
         FT_Face face;
-        if (FT_New_Face(ft, fontPath.c_str(), 0, &face)) {
+        if (FT_New_Face(ft, (fs::current_path().string() + fontPath.c_str()).c_str(), 0, &face)) {
             std::cerr << "ERROR::FREETYPE: Failed to load font" << std::endl;
             return;
         }
@@ -108,15 +110,14 @@ void TextRenderer::LoadFont(string fontPath, unsigned int fontSize, string ident
         FT_Done_FreeType(ft);
 }
 
-void TextRenderer::CreateText(GameState gameState, string identifier, string text, glm::vec2 position, vec3 color, string fontName) 
+void TextRenderer::CreateText(GameState gameState, string identifier, string text, glm::vec2 position, vec3 color, string fontName, float scale) 
 {
-    std::cout<<"Creating new text!"<<'\n';
-    auto textObj = new Text(text, position, vec3(1.0f), 5.0f);
+    // std::cout<<"Creating new text!"<<'\n';
+    auto textObj = new Text(text, position, color, scale);
     textObj->mVertexArrayObject = this->mVertexArrayObject;
     textObj->mVertexBufferObject = this->mVertexBufferObject;
     textObj->mShader = this->mShader;
     textObj->mCharacters = mFonts[fontName];
-    textObj->mColor;
     mDefaultTexts[gameState][identifier] = textObj;
 }
 

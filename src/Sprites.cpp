@@ -153,6 +153,44 @@ void Game::InitializeSprites()
         ResourceManager::GetShader("default-3D"),
         true
     );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::SETTINGS,
+        "background",
+        ResourceManager::GetTexture("background"),
+        vec2(0, 0),
+        glm::vec2(1960.178, 1033.901),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false,
+        vec2(0,0),
+        2
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::SETTINGS,
+        "settings-menu-ua",
+        ResourceManager::GetTexture("settings-menu-ua"),
+        vec2(-1.1, 988.918),
+        vec2(1920.866, 91.082),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::SETTINGS,
+        "settings-menu-text",
+        ResourceManager::GetTexture("settings-menu-text"),
+        vec2(0, 200),
+        vec2(1203.980, 542.850),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
 }
 
 Sprite* Game::GetSprite(GameState gameState, string name)
