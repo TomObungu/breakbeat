@@ -364,38 +364,3 @@ void Game::CheckGLErrors(const string& context)
         std::cerr << std::endl;
     }
 }
-
-Sprite* Game::CheckCollidingSprite(GameState gameState)
-{
-    // Define relevant sprites for each game state
-    std::vector<std::string> relevantSprites;
-
-    if (gameState == GameState::START_MENU)
-    {
-        relevantSprites = {"start-button", "exit-button"};
-    }
-    else if (gameState == GameState::MAIN_MENU)
-    {
-        relevantSprites = {"main-menu-back-button", "main-menu-chart-editor-button", "main-menu-chart-selection-button", "main-menu-settings-button"};
-    }
-
-    // Check collision for relevant sprites
-    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
-    {
-        if (std::find(relevantSprites.begin(), relevantSprites.end(), key) != relevantSprites.end())
-        {
-            bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
-                              (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
-
-            bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
-                              (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
-
-            if (CollisionX && CollisionY)
-            {
-                return sprite; // Return the first colliding sprite
-            }
-        }
-    }
-
-    return nullptr; // No collision detected
-}

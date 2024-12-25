@@ -74,7 +74,7 @@ void Sprite::Draw()
         // Apply transformations: center, rotate, and scale
         model = translate(model, vec3(mPosition, 0.0f));
         model = translate(model, vec3(0.5f * mSize.x, 0.5f * mSize.y, 0.0f));
-        model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(mRotation), vec3(0.0f, 0.0f, 1.0f));
         model = translate(model, vec3(-0.5f * mSize.x, -0.5f * mSize.y, 0.0f));
         model = glm::translate(model, vec3((mSize* mCurrentScale / 2.0f, 0.0f))); // Center sprite
         model = glm::scale(model, vec3(mSize * mCurrentScale, 1.0f)); // Scale to match size

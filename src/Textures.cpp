@@ -25,4 +25,11 @@ void Game::InitializeTextures()
     /* SETTINGS MENU */
     ResourceManager::LoadTexture("\\assets\\png\\settings menu\\breakbeat-settings-user-navigation-assist.png",true,"settings-menu-ua");
     ResourceManager::LoadTexture("\\assets\\png\\settings menu\\breakbeat-settings-information-text-2.png",true,"settings-menu-text");
+    ResourceManager::LoadTexture("\\assets\\png\\settings menu\\breakbeat-settings-increment-right.png",true,"settings-increment-right");
+    ResourceManager::LoadTexture("\\assets\\png\\settings menu\\breakbeat-settings-increment-left.png",true,"settings-increment-left");
+
+    /* CHART EDITOR SELECTION MENU */
+    ResourceManager::LoadTexture("\\assets\\png\\chart selection menu\\breakbeat-chart-selection-menu-map-selection.png", true, "chart-editor-map-selection");
+    ResourceManager::LoadTexture("\\assets\\png\\chart selection menu\\breakbeat-chart-editor-menu-user-navigation-assist-new-2.png",true,"chart-editor-selection-menu-ua");
+    ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-button.png",true,"chart-editor-new-chart-button");
 }

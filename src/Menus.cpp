@@ -76,12 +76,17 @@ void Game::InitializeMenus()
 
     settingsMenu->SetHighlightAnimation(
         [this,settingsMenu](){
-        settingsMenu->GetCurrentTextOption()->SetScale(true, 1.3,0.1);
+        settingsMenu->GetCurrentTextOption()->SetScale(true, 1.25,0.05);
     });
 
     settingsMenu->SetSelectionAnimation(
         [this,settingsMenu](){
         settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f,1.0f,0.0f));
+    });
+
+    settingsMenu->SetUnselectionAnimation(
+        [this,settingsMenu](){
+        settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f,1.0f,1.0f));
     });
 
     settingsMenu->SetUnhighlightAnimation(
@@ -132,12 +137,11 @@ void Game::HandleMenuInput(SDL_Event& event)
                 {
                     TransitionToGameState(GameState::MAIN_MENU);
                 }
-
+                // If the current menu option is the exit button sprite then close the application
                 if (startMenu->GetCurrentMenuOption() == GetSprite(mCurrentGameState, "exit-button"))
                 {
                     mWindow.SetWindowClosedBoolean(true);
                 }
-                // If the current menu option is the exit button sprite then close the application
             }
         }
     }
@@ -198,6 +202,11 @@ void Game::HandleMenuInput(SDL_Event& event)
                     mainMenu->PlaySelectionAnimation();
                     TransitionToGameState(GameState::START_MENU);
                 }
+                if (mainMenu->GetCurrentMenuOption() == GetSprite(mCurrentGameState, "main-menu-chart-editor-button"))
+                {
+                    mainMenu->PlaySelectionAnimation();
+                    TransitionToGameState(GameState::CHART_EDITOR_SELECTION_MENU);
+                }
             }
         }
     }
@@ -205,46 +214,53 @@ void Game::HandleMenuInput(SDL_Event& event)
     {
         Menu* settingsMenu = GetMenu(mCurrentGameState, "settings-menu");
 
-        // Navigation between settings options
-        if (event.key.keysym.sym == SDLK_UP && !mSelectedSetting)
+        settingsMenu->UpdateCurrentTime();
+
+        if(settingsMenu->CheckSelectionTime())
         {
-            settingsMenu->PlayUnhighlightAnimation();
-            settingsMenu->DecrementTextMenuChoice();
-            settingsMenu->PlayHighlightAnimation();
-        }
-        else if (event.key.keysym.sym == SDLK_DOWN && !mSelectedSetting)
-        {
-            settingsMenu->PlayUnhighlightAnimation();
-            settingsMenu->IncrementTextMenuChoice();
-            settingsMenu->PlayHighlightAnimation();
-        }
-        else if (event.key.keysym.sym == SDLK_RETURN)
-        {
-            if (!mSelectedSetting)
+            // Navigation between settings options
+            if (event.key.keysym.sym == SDLK_UP && !mSelectedSetting)
             {
-                settingsMenu->PlaySelectionAnimation();
-                mSelectedSetting = true;
+                settingsMenu->PlayUnhighlightAnimation();
+                settingsMenu->DecrementTextMenuChoice();
+                settingsMenu->PlayHighlightAnimation();
+                settingsMenu->UpdateLastSelectedTime();
             }
-            else if (mKeybindMode)
+            else if (event.key.keysym.sym == SDLK_DOWN && !mSelectedSetting)
             {
-                // Re-enter into keybind mode only after exiting
-                mKeybindMode = false;
-                settingsMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
+                settingsMenu->PlayUnhighlightAnimation();
+                settingsMenu->IncrementTextMenuChoice();
+                settingsMenu->PlayHighlightAnimation();
+                settingsMenu->UpdateLastSelectedTime();
+            }
+            else if (event.key.keysym.sym == SDLK_RETURN)
+            {
+                if (!mSelectedSetting)
+                {
+                    settingsMenu->PlaySelectionAnimation();
+                    mSelectedSetting = true;
+                }
+                else if (mKeybindMode)
+                {
+                    // Re-enter into keybind mode only after exiting
+                    mKeybindMode = false;
+                    settingsMenu->GetCurrentMenuOption()->SetColor(vec3(1.0f));
+                }
+            }
+            else if (event.key.keysym.sym == SDLK_ESCAPE)
+            {
+                if (mSelectedSetting)
+                {
+                    settingsMenu->PlayUnselectionAnimation();
+                    mSelectedSetting = false;
+                }
+                else
+                {
+                    TransitionToGameState(GameState::MAIN_MENU);
+                }
             }
         }
-        else if (event.key.keysym.sym == SDLK_ESCAPE)
-        {
-            if (mSelectedSetting)
-            {
-                settingsMenu->PlayUnselectionAnimation();
-                mSelectedSetting = false;
-            }
-            else
-            {
-                TransitionToGameState(GameState::MAIN_MENU);
-            }
-        }
-        else if (mSelectedSetting)
+        if (mSelectedSetting)
         {
             Text* currentText = settingsMenu->GetCurrentTextOption();
 
@@ -303,7 +319,6 @@ void Game::HandleMenuInput(SDL_Event& event)
                 currentText == GetText(mCurrentGameState, "right-keybind-text"))
             {
                 currentText->SetColor(vec3(1.0f,1.0f,0.0f));
-                currentText->UpdateText("Press any key...");
                 if (event.type == SDL_KEYDOWN) // Wait for the next key press
                 {
                     const char* keyName = SDL_GetKeyName(event.key.keysym.sym);
