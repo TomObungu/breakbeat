@@ -36,27 +36,39 @@ void Game::HandleMouseInput(SDL_Event& event)
 
                 if (collidingSprite == GetSprite(GameState::MAIN_MENU, "main-menu-back-button"))
                 {
-                    currentMenu->PlayUnhighlightAnimation();
-                    currentMenu->SetCurrentMenuOption(collidingSprite);
-                    currentMenu->PlayHighlightAnimation();
+                    if(currentMenu->GetCurrentMenuOption() != GetSprite(GameState::MAIN_MENU, "main-menu-back-button"))
+                    {
+                        currentMenu->PlayUnhighlightAnimation();
+                        currentMenu->SetCurrentMenuOption(collidingSprite);
+                        currentMenu->PlayHighlightAnimation();
+                    }
                 }
                 else if (collidingSprite == GetSprite(GameState::MAIN_MENU, "main-menu-chart-editor-button"))
                 {
-                    currentMenu->PlayUnhighlightAnimation();
-                    currentMenu->SetCurrentMenuOption(collidingSprite);
-                    currentMenu->PlayHighlightAnimation();
+                    if(currentMenu->GetCurrentMenuOption() != GetSprite(GameState::MAIN_MENU, "main-menu-chart-editor-button"))
+                    {
+                        currentMenu->PlayUnhighlightAnimation();
+                        currentMenu->SetCurrentMenuOption(collidingSprite);
+                        currentMenu->PlayHighlightAnimation();
+                    }
                 }
                 else if (collidingSprite == GetSprite(GameState::MAIN_MENU, "main-menu-chart-selection-button"))
                 {
-                    currentMenu->PlayUnhighlightAnimation();
-                    currentMenu->SetCurrentMenuOption(collidingSprite);
-                    currentMenu->PlayHighlightAnimation();
+                    if(currentMenu->GetCurrentMenuOption() != GetSprite(GameState::MAIN_MENU, "main-menu-chart-selection-button"))
+                    {
+                        currentMenu->PlayUnhighlightAnimation();
+                        currentMenu->SetCurrentMenuOption(collidingSprite);
+                        currentMenu->PlayHighlightAnimation();
+                    }
                 }
                 else if (collidingSprite == GetSprite(GameState::MAIN_MENU, "main-menu-settings-button"))
                 {
-                    currentMenu->PlayUnhighlightAnimation();
-                    currentMenu->SetCurrentMenuOption(collidingSprite);
-                    currentMenu->PlayHighlightAnimation();
+                    if(currentMenu->GetCurrentMenuOption() != GetSprite(GameState::MAIN_MENU, "main-menu-settings-button"))
+                    {
+                        currentMenu->PlayUnhighlightAnimation();
+                        currentMenu->SetCurrentMenuOption(collidingSprite);
+                        currentMenu->PlayHighlightAnimation();
+                    }
                 }
             }
         }
@@ -160,6 +172,14 @@ void Game::HandleMouseInput(SDL_Event& event)
                     }
                 }
             }
+            else if (mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
+            {
+                if(collidingSprite == GetSprite(mCurrentGameState, "chart-editor-new-chart-button") 
+                    && !mShowNewChartScreen)
+                {
+                    mShowNewChartScreen = true;
+                }
+            }
         }
     }
 }
@@ -180,6 +200,10 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
     else if (gameState == GameState::SETTINGS)
     {
         relevantSprites = {"settings-increment-left-1", "settings-increment-left-2", "settings-increment-left-3", "settings-increment-right-1", "settings-increment-right-2","settings-increment-right-3"};
+    }
+    else if (gameState == GameState::CHART_EDITOR_SELECTION_MENU)
+    {
+        relevantSprites = {"chart-editor-new-chart-button"};
     }
 
     // Check collision for relevant sprites

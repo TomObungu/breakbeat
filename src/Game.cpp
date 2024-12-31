@@ -150,6 +150,20 @@ void Game::Update()
             mFirstFrame = false;
         }
     }
+    if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
+    {
+        if(mShowNewChartScreen)
+        {
+            for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
+            {
+                sprite->SetColor(vec3(0.5f));
+            }
+            for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
+            {
+                text->SetColor(vec3(0.5f));
+            }
+        }
+    }
 
     CheckForTransitionState();
 
@@ -225,7 +239,7 @@ void Game::Transition(GameState newGameState)
     
     if(!mTransitioningDark && mFirstTransitionFrame)
     {
-        std::cout << "Darkening sprites!\n";
+        // std::cout << "Darkening sprites!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetDarken(true);
@@ -275,7 +289,7 @@ void Game::Transition(GameState newGameState)
             text->SetColor(vec3(0));
         }
         mAllLight = false;
-        std::cout << "Brightening new sprites!\n";
+        // std::cout << "Brightening new sprites!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetBrighten(true);

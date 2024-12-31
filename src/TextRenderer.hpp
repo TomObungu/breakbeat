@@ -26,19 +26,19 @@ using std::map;
 class TextRenderer
 {
 public:
-    unordered_map<string, map<char, Character>> mFonts;
-    unordered_map<GameState, map<string, Text*>> mCurrentlyRenderedTexts;
-    unordered_map<GameState, map<string, Text*>> mDefaultTexts;
+unordered_map<string, map<char, Character>> mFonts;
+unordered_map<GameState, map<string, Text*>> mCurrentlyRenderedTexts;
+unordered_map<GameState, map<string, Text*>> mDefaultTexts;
 
-    Shader mShader;
-    // constructor
-    TextRenderer();
-    void Initialize();
-    // pre-compiles a list of characters from the given font
-    void LoadFont(string fontPath, unsigned int fontSize, string identifer);
-    void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color, string fontName, float scale);
-    void LoadTexts(GameState gameState);
-    void DrawTexts(GameState gameState);
+Shader mShader;
+// constructor
+TextRenderer();
+void Initialize();
+// pre-compiles a list of characters from the given font
+void LoadFont(string fontPath, unsigned int fontSize, string identifer);
+void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color, string fontName, float scale);
+void LoadTexts(GameState gameState);
+void DrawTexts(GameState gameState);
 private:
     unsigned int mVertexArrayObject, mVertexBufferObject;
 };

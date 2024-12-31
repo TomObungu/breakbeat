@@ -119,6 +119,9 @@ private:
     GameState mTransitioningGameState = GameState::NOT_TRANSITIONING;
     bool mFirstFrame = true;
     bool mFirstTransitionFrame = true;
+
+    bool mShowNewChartScreen = false;
+    bool mPlayHoverAnimation = false;
 };
     
 #endif

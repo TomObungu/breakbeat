@@ -328,16 +328,100 @@ void Game::InitializeSprites()
 
     mSpriteRenderer.CreateSprite(
         GameState::CHART_EDITOR_SELECTION_MENU,
-        "chart-editor-map-selection",
-        ResourceManager::GetTexture("chart-editor-map-selection"),
-        vec2(946.962f,0.000),
-        vec2(901.444f,1084.318f),
+        "chart-editor-selection-menu-highlight-1",
+        ResourceManager::GetTexture("chart-editor-selection-menu-highlight"),
+        vec2(946.962f, 421.652),
+        vec2(795.886, 150.255),
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
     );
 
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-selection-menu-ui-3",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1006.986, 137.932),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-selection-menu-ui-2",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(977.394, 278.654),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-selection-menu-ui-4",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1052.574, 0.726),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-selection-menu-ui-5",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(977.294, 567.628),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-selection-menu-ui-6",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1006.986, 710.910),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-selection-menu-ui-7",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1045.369, 848.019),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "chart-editor-new-chart-button",
+        ResourceManager::GetTexture("chart-editor-new-chart-button"),
+        vec2(84.226f, 54.383f),
+        vec2(642.458f,419.031f),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+    
     mSpriteRenderer.CreateSprite(
         GameState::CHART_EDITOR_SELECTION_MENU,
         "chart-editor-new-chart-button",

@@ -17,7 +17,6 @@ TextRenderer::TextRenderer()
 
 void TextRenderer::Initialize()
 {
-    // std::cout<<"Initializing text renderer"<<'\n';
     // load and configure shader
     this->mShader = ResourceManager::GetShader("text");
     this->mShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(1920), static_cast<float>(1080), 0.0f), true);
@@ -37,6 +36,7 @@ void TextRenderer::Initialize()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    // Clear any values within the font hash table on first initalization
     mFonts.clear();
 }
 
@@ -56,12 +56,15 @@ void TextRenderer::LoadFont(string fontPath, unsigned int fontSize, string ident
             return;
         }
 
+        // Set font size of font
         FT_Set_Pixel_Sizes(face, 0, fontSize);
 
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
+        // Create character hash table to be put in nested hash table
         std::map<char, Character> characters;
 
+        // Generate first 128 ASCII characters
         for (GLubyte c = 0; c < 128; c++) {
             // Load character glyph
             if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
@@ -112,13 +115,13 @@ void TextRenderer::LoadFont(string fontPath, unsigned int fontSize, string ident
 
 void TextRenderer::CreateText(GameState gameState, string identifier, string text, glm::vec2 position, vec3 color, string fontName, float scale) 
 {
-    // std::cout<<"Creating new text!"<<'\n';
-    auto textObj = new Text(text, position, color, scale);
-    textObj->mVertexArrayObject = this->mVertexArrayObject;
-    textObj->mVertexBufferObject = this->mVertexBufferObject;
-    textObj->mShader = this->mShader;
-    textObj->mCharacters = mFonts[fontName];
-    mDefaultTexts[gameState][identifier] = textObj;
+    // Create text object and store its properties within the text hash table
+    auto textObject = new Text(text, position, color, scale);
+    textObject->mVertexArrayObject = this->mVertexArrayObject;
+    textObject->mVertexBufferObject = this->mVertexBufferObject;
+    textObject->mShader = this->mShader;
+    textObject->mCharacters = mFonts[fontName];
+    mDefaultTexts[gameState][identifier] = textObject;
 }
 
 void TextRenderer::DrawTexts(GameState gameState)

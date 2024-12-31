@@ -4,6 +4,8 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 #include "Texture.hpp"
 #include "Shader.hpp"

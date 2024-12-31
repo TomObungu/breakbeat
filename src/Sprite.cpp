@@ -98,7 +98,7 @@ void Sprite::Draw()
     
     // Draw the sprite
     glBindVertexArray(this->mVertexArrayObject);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
 

@@ -4,8 +4,6 @@
 #include <sstream>
 #include <fstream>
 #include <stdlib.h>
-#include <filesystem>
-namespace fs = std::filesystem;
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

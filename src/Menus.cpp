@@ -318,8 +318,12 @@ void Game::HandleMenuInput(SDL_Event& event)
                 currentText == GetText(mCurrentGameState, "up-keybind-text") ||
                 currentText == GetText(mCurrentGameState, "right-keybind-text"))
             {
-                currentText->SetColor(vec3(1.0f,1.0f,0.0f));
-                if (event.type == SDL_KEYDOWN) // Wait for the next key press
+                if (!mKeybindMode)
+                {
+                    mKeybindMode = true;
+                    settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f,1.0f,0.0f)); // Change color to indicate keybind mode
+                }
+                else if (event.type == SDL_KEYDOWN) // Wait for the next key press
                 {
                     const char* keyName = SDL_GetKeyName(event.key.keysym.sym);
                     if (keyName && strlen(keyName) > 0) // Check if the key name is valid
@@ -341,6 +345,7 @@ void Game::HandleMenuInput(SDL_Event& event)
 
                         // Exit selection mode
                         settingsMenu->GetCurrentTextOption()->SetColor(vec3(1.0f));
+                        mKeybindMode = false;
                         mSelectedSetting = false;
                     }
                 }

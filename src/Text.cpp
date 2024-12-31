@@ -20,8 +20,8 @@ void Text::Draw()
     for (const char& c : mText) 
     {
         Character ch = mCharacters[c];
-        float xpos = x + ch.Bearing.x * mScale;
-        float ypos = mPosition.y + (this->mCharacters['H'].Bearing.y - ch.Bearing.y) * mScale;
+        float xpos = x + ch.Bearing.x;
+        float ypos = mPosition.y + (this->mCharacters['H'].Bearing.y - ch.Bearing.y);
         float w = ch.Size.x * mScale;
         float h = ch.Size.y * mScale;
 

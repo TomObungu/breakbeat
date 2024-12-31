@@ -6,6 +6,7 @@ using std::format;
 void Game::InitializeFonts()
 {
     mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",48,"default-48");
+    mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",24,"default-24");
     // std::cout<<"Initialized fonts"<<'\n';
 }
 
@@ -90,6 +91,160 @@ void Game::InitializeTexts()
         vec2(723.69,681.38),
         vec3(1.0f),
         "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-1",
+        "Song #1",
+        vec2(1030.842, 460.287),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-1",
+        "Artist #1",
+        vec2(1031.634, 510.431),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-2",
+        "Song #2",
+        vec2(1059.748, 323.983),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-2",
+        "Artist #2",
+        vec2(1060.540, 374.127),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-3",
+        "Song #3",
+        vec2(1099.192, 179.243),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-3",
+        "Artist #3",
+        vec2(1099.984, 229.387),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-4",
+        "Song #4",
+        vec2(1136.992, 46.164),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-4",
+        "Artist #4",
+        vec2(1137.784, 96.308),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-5",
+        "Song #5",
+        vec2(1059.748, 601.635),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+     mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-5",
+        "Artist #5",
+        vec2(1060.540, 651.779),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-6",
+        "Song #6",
+        vec2(1094.595, 747.443),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-6",
+        "Artist #6",
+        vec2(1095.387, 797.587),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-7",
+        "Song #7",
+        vec2(1129.620, 891.209),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-7",
+        "Artist #7",
+        vec2(1131.483, 943.292),
+        vec3(1.0f),
+        "default-24",
         1.0f
     );
 }

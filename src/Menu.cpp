@@ -98,6 +98,7 @@ void Menu::AppendText(Text* text)
     mTexts.push_back(text);
 }
 
+// Increment menu choice for text objects
 void Menu::IncrementTextMenuChoice()
 {
     if (mWrapAround)
@@ -114,6 +115,7 @@ void Menu::IncrementTextMenuChoice()
     mCurrentlySelectedTextChoice = mTexts[mTextMenuChoice];
 }
 
+// Allow vertical movement of the menu choice for text objects
 void Menu::MoveTextMenuChoiceUp()
 {
     int totalTextItems = mTexts.size(); // Get totalTextItems 
@@ -135,6 +137,7 @@ void Menu::MoveTextMenuChoiceUp()
     
 }
 
+// Allow vertical movement of the menu choice for text objects
 void Menu::MoveTextMenuChoiceDown()
 {
 
@@ -155,6 +158,7 @@ void Menu::MoveTextMenuChoiceDown()
     mCurrentlySelectedTextChoice = mTexts[mTextMenuChoice];
 }
 
+// Increment menu choice for text objects
 void Menu::DecrementTextMenuChoice()
 {
     if (mWrapAround)
@@ -171,6 +175,7 @@ void Menu::DecrementTextMenuChoice()
     mCurrentlySelectedTextChoice = mTexts[mTextMenuChoice];
 }
 
+// Set menu option for text objects
 Text* Menu::GetCurrentTextOption()
 {
     return mCurrentlySelectedTextChoice;
