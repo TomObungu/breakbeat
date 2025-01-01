@@ -195,6 +195,10 @@ void Game::Update()
                 textTable.erase("artist-text-2");
                 textTable.erase("song-text-5");
                 textTable.erase("artist-text-5");
+                textTable["new-chart-screen-song-name-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-song-name-text");
+                textTable["new-chart-screen-artist-name-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-artist-name-text");
+                textTable["new-chart-screen-song-bpm-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-song-bpm-text");
+                textTable["new-chart-screen-chart-image-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-chart-image-text");
                 mNewChartSpritesOnScreen = true;
                 mAddingSprites = false;
             }
@@ -210,6 +214,11 @@ void Game::Update()
                     table.erase("z-chart-editor-new-chart-user-interface");
                     table.erase("zz-chart-editor-new-chart-create-button");
                     table.erase("zz-chart-editor-new-chart-user-interface-box-new-image");
+
+                    textTable.erase("new-chart-screen-song-name-text");
+                    textTable.erase("new-chart-screen-artist-name-text");
+                    textTable.erase("new-chart-screen-song-bpm-text");
+                    textTable.erase("new-chart-screen-chart-image-text");
                 }
                 mNewChartSpritesOnScreen = false;
             }
