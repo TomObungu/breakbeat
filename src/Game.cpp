@@ -152,15 +152,89 @@ void Game::Update()
     }
     if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
+        auto& table = mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState];
+        auto& textTable =  mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState];
+
         if(mShowNewChartScreen)
         {
-            for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
+            if(!mTransitioningDark && !mAllDark)
             {
-                sprite->SetColor(vec3(0.5f));
+                mTransitioningDark = true;
+                mAllLight = false;
+                for (auto& [key, sprite] : table)
+                {
+                    if(sprite != nullptr)
+                        sprite->SetColor(vec3(0.5f));
+                }
+                for (auto& [key, text] : textTable)
+                {
+                    if(text != nullptr)
+                        text->SetColor(vec3(0.5f));
+                }
+                mTransitioningDark = false;
+                mAllDark = true;
             }
-            for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
+            if(!mAddingSprites && !mNewChartSpritesOnScreen)
             {
-                text->SetColor(vec3(0.5f));
+                if(table.contains("z-chart-editor-new-chart-user-interface") ||
+                table.contains("z-chart-editor-new-chart-create-button") || 
+                table.contains("z-chart-editor-new-chart-create-button"))
+                {
+                    mNewChartSpritesOnScreen = true;
+                }
+                mAddingSprites = true;
+            }
+            if(mAddingSprites && !mNewChartSpritesOnScreen)
+            {
+                table["z-chart-editor-new-chart-user-interface"] = GetDefaultSprite(mCurrentGameState,"z-chart-editor-new-chart-user-interface");
+                table["zz-chart-editor-new-chart-create-button"] = GetDefaultSprite(mCurrentGameState,"zz-chart-editor-new-chart-create-button");
+                table["zz-chart-editor-new-chart-user-interface-box-new-image"] = GetDefaultSprite(mCurrentGameState,"zz-chart-editor-new-chart-user-interface-box-new-image");
+                textTable.erase("song-text-1");
+                textTable.erase("artist-text-1");
+                textTable.erase("song-text-2");
+                textTable.erase("artist-text-2");
+                textTable.erase("song-text-5");
+                textTable.erase("artist-text-5");
+                mNewChartSpritesOnScreen = true;
+                mAddingSprites = false;
+            }
+        }
+        else 
+        {
+            if(table.contains("z-chart-editor-new-chart-user-interface") ||
+                table.contains("zz-chart-editor-new-chart-create-button") ||
+                table.contains("zz-chart-editor-new-chart-user-interface-box-new-image"))
+            {
+                for (auto& [key, sprite] : table)
+                {
+                    table.erase("z-chart-editor-new-chart-user-interface");
+                    table.erase("zz-chart-editor-new-chart-create-button");
+                    table.erase("zz-chart-editor-new-chart-user-interface-box-new-image");
+                }
+                mNewChartSpritesOnScreen = false;
+            }
+            textTable["song-text-1"] = GetDefaultText(mCurrentGameState, "song-text-1");
+            textTable["artist-text-1"] = GetDefaultText(mCurrentGameState, "artist-text-1");
+            textTable["song-text-2"] = GetDefaultText(mCurrentGameState, "song-text-2");
+            textTable["artist-text-2"] = GetDefaultText(mCurrentGameState, "artist-text-2");
+            textTable["song-text-5"] = GetDefaultText(mCurrentGameState, "song-text-5");
+            textTable["artist-text-5"] = GetDefaultText(mCurrentGameState, "artist-text-5"); 
+            if(!mTransitioningLight && !mAllLight) 
+            {
+                mTransitioningLight = true;
+                for (auto& [key, sprite] : table)
+                {
+                    if(sprite != nullptr)
+                        sprite->SetColor(vec3(1.0f));
+                }
+                for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
+                {
+                    if(text != nullptr)
+                        text->SetColor(vec3(1.0f));
+                }
+                mTransitioningLight = false;
+                mAllLight = true;
+                mAllDark = false;
             }
         }
     }
@@ -218,7 +292,8 @@ void Game::UpdateSprites(GameState gameState)
 {
     for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
     {
-        sprite->Update(mDeltaTime);
+        if(sprite != nullptr)
+            sprite->Update(mDeltaTime);
         CheckGLErrors("After updating a sprite");
     } 
 }
@@ -227,7 +302,8 @@ void Game::UpdateTexts(GameState gameState)
 {
     for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[gameState])
     {
-        text->Update(mDeltaTime);
+        if(text != nullptr)
+            text->Update(mDeltaTime);
         CheckGLErrors("After updating a text");
     } 
 }
@@ -279,7 +355,7 @@ void Game::Transition(GameState newGameState)
         LoadDefaultSprites(newGameState);
         mTextRenderer.LoadTexts(newGameState);
         mCurrentGameState = newGameState;
-        std::cout << "Loading new sprites and setting them to color 0!\n";
+        // std::cout << "Loading new sprites and setting them to color 0!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
             sprite->SetColor(vec3(0));

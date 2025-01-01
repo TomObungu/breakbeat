@@ -424,10 +424,34 @@ void Game::InitializeSprites()
     
     mSpriteRenderer.CreateSprite(
         GameState::CHART_EDITOR_SELECTION_MENU,
-        "chart-editor-new-chart-button",
-        ResourceManager::GetTexture("chart-editor-new-chart-button"),
-        vec2(84.226f, 54.383f),
-        vec2(642.458f,419.031f),
+        "z-chart-editor-new-chart-user-interface",
+        ResourceManager::GetTexture("chart-editor-new-chart-user-interface"),
+        vec2(556.138, 275.083),
+        vec2(807.725, 465.429),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "zz-chart-editor-new-chart-create-button",
+        ResourceManager::GetTexture("chart-editor-new-chart-create-button"),
+        vec2(800.957, 625.448),
+        vec2(318.086, 92.036),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "zz-chart-editor-new-chart-user-interface-box-new-image",
+        ResourceManager::GetTexture("chart-editor-new-chart-user-interface-box-new-image"),
+        vec2(1127.000, 410.447),
+        vec2(136.391, 142.929),
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),

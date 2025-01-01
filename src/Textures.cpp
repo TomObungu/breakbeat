@@ -35,5 +35,8 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-button.png",true,"chart-editor-new-chart-button");
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-user-interface-box.png",true,"chart-editor-new-chart-user-interface");
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-user-interface-box-create-button.png",true,"chart-editor-new-chart-create-button");
+    ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-user-interface-box-new-image.png",true,"chart-editor-new-chart-user-interface-box-new-image");
+
+    
 
 }

@@ -63,7 +63,7 @@ void Window::Initialize()
     
     // Create the window and define its position, width and height properties and the type of window it is
     mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_FULLSCREEN_DESKTOP);
+        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
     // If the value return to the mWindow vairable is null then the window failed to be inictiazlaied
     if (mWindow == nullptr)

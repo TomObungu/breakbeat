@@ -101,7 +101,8 @@ void SpriteRenderer::DrawSprites(GameState gameState)
     // Iterate through each sprite in sprite hash table and call its draw function
     for (auto& [key, sprite] : mCurrentlyRenderedSprites[gameState])
     {
-        sprite->Draw(); // Use sprite directly
+        if(sprite != nullptr)
+            sprite->Draw(); // Use sprite directly
     }
 }
 

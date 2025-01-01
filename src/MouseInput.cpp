@@ -179,6 +179,12 @@ void Game::HandleMouseInput(SDL_Event& event)
                 {
                     mShowNewChartScreen = true;
                 }
+                else if(mNewChartSpritesOnScreen)
+                {
+                    if(collidingSprite != GetSprite(mCurrentGameState, "chart-editor-new-chart-user-interface"))
+                        mShowNewChartScreen = false;
+
+                }
             }
         }
     }
@@ -203,7 +209,7 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
     }
     else if (gameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
-        relevantSprites = {"chart-editor-new-chart-button"};
+        relevantSprites = {"chart-editor-new-chart-button","chart-editor-selection-menu-ui","chart-editor-selection-menu-ua"};
     }
 
     // Check collision for relevant sprites

@@ -18,6 +18,7 @@ integrated in
 #include "Mouse.hpp"
 #include <unordered_map>
 #include <map>
+#include <utility>
 #include <vector>
 #include <format>
 #include <fstream>
@@ -33,6 +34,7 @@ using std::stringstream;
 using std::to_string;
 using std::ostringstream;
 using std::ofstream;
+using std::make_pair;
 
 class Game
 {
@@ -121,7 +123,10 @@ private:
     bool mFirstTransitionFrame = true;
 
     bool mShowNewChartScreen = false;
+    bool mNewChartSpritesOnScreen = false;
+    bool mAddingSprites = false;
     bool mPlayHoverAnimation = false;
+    
 };
     
 #endif
