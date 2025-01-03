@@ -30,6 +30,7 @@ void Game::ProcessEvents()
             }
             
             HandleMenuInput(event);
+            HandleKeyboardInput(event);
         }
         if (event.type == SDL_MOUSEMOTION)
         {
@@ -57,7 +58,6 @@ void Game::Initialize()
     // Set up perspective projection matrix
     float aspectRatio = static_cast<float>(mWindow.GetWindowWidth()) / static_cast<float>(mWindow.GetWindowHeight());
     mat4 perspectiveProjection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 100.0f);
-    CheckGLErrors("After setting the orthographic matrix");
     // load shaders
     ResourceManager::LoadShader("\\shaders\\DefaultVertexShader.glsl", "\\shaders\\DefaultFragmentShader.glsl", "default");
     ResourceManager::GetShader("default").Use().SetMatrix4("projection", orthographicProjection);
@@ -66,7 +66,6 @@ void Game::Initialize()
     // configure perspective projection
     ResourceManager::LoadShader("\\shaders\\PerspectiveProjectionVertexShader.glsl","\\shaders\\PerspectiveProjectionFragmentShader.glsl", "default-3D");
     ResourceManager::GetShader("default-3D").Use().SetMatrix4("projection", perspectiveProjection);
-    CheckGLErrors("After setting the projection matrix");
     ResourceManager::LoadShader("\\shaders\\TextRendererVertexShader.glsl", "\\shaders\\TextRendererFragmentShader.glsl", "text");
     ResourceManager::GetShader("text").Use().SetMatrix4("projection", orthographicProjection);
     
@@ -152,100 +151,7 @@ void Game::Update()
     }
     if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
-        auto& table = mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState];
-        auto& textTable =  mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState];
-
-        if(mShowNewChartScreen)
-        {
-            if(!mTransitioningDark && !mAllDark)
-            {
-                mTransitioningDark = true;
-                mAllLight = false;
-                for (auto& [key, sprite] : table)
-                {
-                    if(sprite != nullptr)
-                        sprite->SetColor(vec3(0.5f));
-                }
-                for (auto& [key, text] : textTable)
-                {
-                    if(text != nullptr)
-                        text->SetColor(vec3(0.5f));
-                }
-                mTransitioningDark = false;
-                mAllDark = true;
-            }
-            if(!mAddingSprites && !mNewChartSpritesOnScreen)
-            {
-                if(table.contains("z-chart-editor-new-chart-user-interface") ||
-                table.contains("z-chart-editor-new-chart-create-button") || 
-                table.contains("z-chart-editor-new-chart-create-button"))
-                {
-                    mNewChartSpritesOnScreen = true;
-                }
-                mAddingSprites = true;
-            }
-            if(mAddingSprites && !mNewChartSpritesOnScreen)
-            {
-                table["z-chart-editor-new-chart-user-interface"] = GetDefaultSprite(mCurrentGameState,"z-chart-editor-new-chart-user-interface");
-                table["zz-chart-editor-new-chart-create-button"] = GetDefaultSprite(mCurrentGameState,"zz-chart-editor-new-chart-create-button");
-                table["zz-chart-editor-new-chart-user-interface-box-new-image"] = GetDefaultSprite(mCurrentGameState,"zz-chart-editor-new-chart-user-interface-box-new-image");
-                textTable.erase("song-text-1");
-                textTable.erase("artist-text-1");
-                textTable.erase("song-text-2");
-                textTable.erase("artist-text-2");
-                textTable.erase("song-text-5");
-                textTable.erase("artist-text-5");
-                textTable["new-chart-screen-song-name-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-song-name-text");
-                textTable["new-chart-screen-artist-name-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-artist-name-text");
-                textTable["new-chart-screen-song-bpm-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-song-bpm-text");
-                textTable["new-chart-screen-chart-image-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-chart-image-text");
-                mNewChartSpritesOnScreen = true;
-                mAddingSprites = false;
-            }
-        }
-        else 
-        {
-            if(table.contains("z-chart-editor-new-chart-user-interface") ||
-                table.contains("zz-chart-editor-new-chart-create-button") ||
-                table.contains("zz-chart-editor-new-chart-user-interface-box-new-image"))
-            {
-                for (auto& [key, sprite] : table)
-                {
-                    table.erase("z-chart-editor-new-chart-user-interface");
-                    table.erase("zz-chart-editor-new-chart-create-button");
-                    table.erase("zz-chart-editor-new-chart-user-interface-box-new-image");
-
-                    textTable.erase("new-chart-screen-song-name-text");
-                    textTable.erase("new-chart-screen-artist-name-text");
-                    textTable.erase("new-chart-screen-song-bpm-text");
-                    textTable.erase("new-chart-screen-chart-image-text");
-                }
-                mNewChartSpritesOnScreen = false;
-            }
-            textTable["song-text-1"] = GetDefaultText(mCurrentGameState, "song-text-1");
-            textTable["artist-text-1"] = GetDefaultText(mCurrentGameState, "artist-text-1");
-            textTable["song-text-2"] = GetDefaultText(mCurrentGameState, "song-text-2");
-            textTable["artist-text-2"] = GetDefaultText(mCurrentGameState, "artist-text-2");
-            textTable["song-text-5"] = GetDefaultText(mCurrentGameState, "song-text-5");
-            textTable["artist-text-5"] = GetDefaultText(mCurrentGameState, "artist-text-5"); 
-            if(!mTransitioningLight && !mAllLight) 
-            {
-                mTransitioningLight = true;
-                for (auto& [key, sprite] : table)
-                {
-                    if(sprite != nullptr)
-                        sprite->SetColor(vec3(1.0f));
-                }
-                for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
-                {
-                    if(text != nullptr)
-                        text->SetColor(vec3(1.0f));
-                }
-                mTransitioningLight = false;
-                mAllLight = true;
-                mAllDark = false;
-            }
-        }
+        CheckNewChartButton();
     }
 
     CheckForTransitionState();
@@ -265,7 +171,6 @@ void Game::Render()
     mSpriteRenderer.DrawSprites(mCurrentGameState);
     mTextRenderer.DrawTexts(mCurrentGameState);
     mMouse->DrawMouse();
-    CheckGLErrors("After drawing a sprite!");
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)
@@ -303,7 +208,6 @@ void Game::UpdateSprites(GameState gameState)
     {
         if(sprite != nullptr)
             sprite->Update(mDeltaTime);
-        CheckGLErrors("After updating a sprite");
     } 
 }
 
@@ -313,7 +217,6 @@ void Game::UpdateTexts(GameState gameState)
     {
         if(text != nullptr)
             text->Update(mDeltaTime);
-        CheckGLErrors("After updating a text");
     } 
 }
 
@@ -425,41 +328,4 @@ void Game::TransitionToGameState(GameState newGameState)
 {
     mTransitioningGameState = newGameState;
     mHasTransitioned = false;
-}
-
-// Function to get the string representation of an OpenGL error
-string Game::GetGLErrorString(GLenum error)
-{
-    switch (error)
-    {
-        case GL_NO_ERROR:
-            return "No error";
-        case GL_INVALID_ENUM:
-            return "GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument.";
-        case GL_INVALID_VALUE:
-            return "GL_INVALID_VALUE: A numeric argument is out of range.";
-        case GL_INVALID_OPERATION:
-            return "GL_INVALID_OPERATION: The specified operation is not allowed in the current state.";
-        case GL_OUT_OF_MEMORY:
-            return "GL_OUT_OF_MEMORY: There is not enough memory left to execute the command.";
-        case GL_INVALID_FRAMEBUFFER_OPERATION:
-            return "GL_INVALID_FRAMEBUFFER_OPERATION: The framebuffer object is not complete.";
-        default:
-            return "Unknown error code";
-    }
-}
-
-// Function to check for OpenGL errors and print them
-void Game::CheckGLErrors(const string& context)
-{
-    GLenum error;
-    while ((error = glGetError()) != GL_NO_ERROR)
-    {
-        std::cerr << "[OpenGL Error] (" << error << "): " << GetGLErrorString(error);
-        if (!context.empty())
-        {
-            std::cerr << " | Context: " << context;
-        }
-        std::cerr << std::endl;
-    }
 }

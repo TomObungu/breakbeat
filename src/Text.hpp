@@ -19,6 +19,7 @@ public:
     string mText;
     vec3 mColor;
     vec2 mPosition;
+    vec2 mSize;
     float mScale = 1.0f;
     map<char,Character> mCharacters;
 
@@ -38,6 +39,8 @@ public:
     void SetBrighten(bool enable, float invertTime = 1.0f);  // New method to start/stop inverting
     void Brighten();  // Existing method to handle inversion (lightening
     void SetScale(bool enable, float targetScale, float scaleTime = 1.0f, bool looping = false);
+    vec2 GetSize();
+    vec2 GetPosition();
     const string& GetText();
 private:
     bool mIsScaling = false;

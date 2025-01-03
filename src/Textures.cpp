@@ -36,7 +36,7 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-user-interface-box.png",true,"chart-editor-new-chart-user-interface");
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-user-interface-box-create-button.png",true,"chart-editor-new-chart-create-button");
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-new-chart-user-interface-box-new-image.png",true,"chart-editor-new-chart-user-interface-box-new-image");
-
-    
-
+    ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-selection-difficulty-select-box.png",true, "chart-selection-difficulty-select-box");
+    ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-menu-difficulty-new-difficulty-button.png",true, "chart-editor-menu-difficulty-new-difficulty-button");
+    ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-menu-difficulty-indicator.png",true, "chart-editor-menu-difficulty-indicator");
 }

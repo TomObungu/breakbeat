@@ -13,6 +13,7 @@ integrated in
 #include "Window.hpp"
 #include "ResourceManager.hpp"
 #include "SpriteRenderer.hpp"
+#include "tinyfiledialogs.h"
 #include "Menu.hpp"
 #include "TextRenderer.hpp"
 #include "Mouse.hpp"
@@ -46,6 +47,7 @@ public:
     void Render();
     void HandleWindowEvent(SDL_Event&);
     void HandleMenuInput(SDL_Event&);
+    void HandleKeyboardInput(SDL_Event&);
     void HandleMouseInput(SDL_Event&);
 
 	double mDeltaTime;
@@ -56,24 +58,25 @@ public:
     Sprite* GetSprite(GameState, string);
     Sprite* GetDefaultSprite(GameState gameState, string name);
     Sprite* CheckCollidingSprite(GameState);
+    Text* CheckCollidingText(GameState);
     void UpdateSprites(GameState);
     void UpdateTexts(GameState);
     void LoadDefaultSprites(GameState gameState);
-
+    
     Text* GetDefaultText(GameState gameState, string name);
     Text* GetText(GameState gameState, string name);
 
     void CheckForTransitionState();
     void TransitionToGameState(GameState newGameState);
-    string GetGLErrorString(GLenum error);
     void CreateMenu(GameState, vector<Sprite*>, bool, string);
     void CreateMenu(GameState, vector<Text*>,bool, string);
     Menu* GetMenu(GameState, string);
-    void CheckGLErrors(const std::string& context = "");
     void Transition(GameState newGameState);
 
     void LoadSettings();
     void UpdateSettings();
+    
+    void CheckNewChartButton();
 
     void InitializeSprites();
 
@@ -108,6 +111,8 @@ private:
 
     bool mSelectedSetting = false;
     bool mKeybindMode = false;
+    bool mTypingMode = false;
+    Text* mCurrentTextBox = nullptr;
     string mLeftKeybind;
     string mDownKeybind;
     string mUpKeybind;
@@ -124,6 +129,15 @@ private:
 
     bool mShowNewChartScreen = false;
     bool mNewChartSpritesOnScreen = false;
+
+    string mNewChartAudioPath;
+    string mNewChartImagePath;
+    string mNewChartSongName;
+    string mNewChartArtistName;
+    string mNewChartDifficultyName;
+    string mNewChartBPM;
+
+
     bool mAddingSprites = false;
     bool mPlayHoverAnimation = false;
     

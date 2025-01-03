@@ -76,6 +76,7 @@ void Game::HandleMouseInput(SDL_Event& event)
     else if (event.type == SDL_MOUSEBUTTONDOWN)
     {
         Sprite* collidingSprite = CheckCollidingSprite(mCurrentGameState);
+        Text* collidingText = CheckCollidingText(mCurrentGameState);
 
         if (collidingSprite)
         {
@@ -174,16 +175,94 @@ void Game::HandleMouseInput(SDL_Event& event)
             }
             else if (mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
             {
-                if(collidingSprite == GetSprite(mCurrentGameState, "chart-editor-new-chart-button") 
-                    && !mShowNewChartScreen)
+                if (collidingSprite == GetSprite(mCurrentGameState, "chart-editor-new-chart-button") && !mShowNewChartScreen)
                 {
-                    mShowNewChartScreen = true;
-                }
-                else if(mNewChartSpritesOnScreen)
-                {
-                    if(collidingSprite != GetSprite(mCurrentGameState, "chart-editor-new-chart-user-interface"))
-                        mShowNewChartScreen = false;
+                    // Open file explorer and store the selected path in mNewChartAudioPath
+                    const char* filterPatterns[] = {"*.mp3", "*.wav", "*.ogg"};
+                    const char* path = tinyfd_openFileDialog(
+                        "Select Audio File",  // Title of the dialog
+                        "",                   // Default path (empty for current directory)
+                        3,                    // Number of filter patterns
+                        filterPatterns,       // File type filters
+                        "Audio Files (*.mp3, *.wav, *.ogg)", // Description of filters
+                        0                     // Single selection (0: single file, 1: multiple files)
+                    );
 
+                    if (path) // If a file was selected
+                        mNewChartAudioPath = string(path);
+                    else mNewChartAudioPath = ""; // Return an empty string if the user cancels
+
+                    if (!mNewChartAudioPath.empty())
+                    {
+                        mShowNewChartScreen = true; // Show the new chart screen if a valid path is selected
+                    }
+                    else
+                    {
+                        mShowNewChartScreen = false; // Do not show the screen if no file is selected
+                    }
+                }
+                else if (mNewChartSpritesOnScreen)
+                {
+                    if (collidingSprite != GetSprite(mCurrentGameState, "z-chart-editor-new-chart-user-interface") &&
+                        collidingSprite != GetSprite(mCurrentGameState, "zz-chart-editor-new-chart-create-button") &&
+                        collidingSprite != GetSprite(mCurrentGameState, "zz-chart-editor-new-chart-user-interface-box-new-image"))
+                    {
+                        mShowNewChartScreen = false;
+                    }
+                    else if(collidingSprite == GetSprite(mCurrentGameState, "zz-chart-editor-new-chart-user-interface-box-new-image"))
+                    {
+                        // Open file dialog to select the image
+                        const char* filterPatterns[] = {"*.png", "*.jpg", "*.jpeg", "*.bmp"};
+                        const char* imagePath = tinyfd_openFileDialog(
+                            "Select Image File",                  // Title of the dialog
+                            "",                                  // Default path
+                            4,                                   // Number of filter patterns
+                            filterPatterns,                      // Image file extensions
+                            "Image Files (*.png, *.jpg, *.jpeg, *.bmp)", // Description of filters
+                            0                                    // Single selection mode
+                        );
+                        if (imagePath) // If a file was selected
+                        {
+                            mNewChartImagePath = std::string(imagePath);
+                            GetText(mCurrentGameState,"new-chart-screen-chart-image-text")->UpdateText("Image : "+mNewChartImagePath);
+                        }
+                        else
+                        {
+                            mNewChartImagePath = ""; // If no file was selected, leave it empty
+                        }
+                    }
+                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-song-name-text"))
+                    {
+                        if(!mTypingMode)
+                        {
+                            mCurrentTextBox = GetText(mCurrentGameState,"new-chart-screen-song-name-text-box");
+                            mTypingMode = true;
+                        }
+                    }
+                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-artist-name-text"))
+                    {
+                        if(!mTypingMode)
+                        {
+                            mCurrentTextBox = GetText(mCurrentGameState,"new-chart-screen-artist-name-text-box");
+                            mTypingMode = true;
+                        }
+                    }
+                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-difficulty-name-text"))
+                    {
+                        if(!mTypingMode)
+                        {
+                            mCurrentTextBox = GetText(mCurrentGameState,"new-chart-screen-difficulty-name-text-box");
+                            mTypingMode = true;
+                        }
+                    }
+                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-song-bpm-text"))
+                    {
+                        if(!mTypingMode)
+                        {
+                            mCurrentTextBox = GetText(mCurrentGameState,"new-chart-screen-song-bpm-text-box");
+                            mTypingMode = true;
+                        }
+                    }
                 }
             }
         }
@@ -209,24 +288,92 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
     }
     else if (gameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
-        relevantSprites = {"chart-editor-new-chart-button","chart-editor-selection-menu-ui","chart-editor-selection-menu-ua"};
+        // Reorder relevantSprites to prioritize specific sprites
+        relevantSprites = {
+            "zz-chart-editor-new-chart-user-interface-box-new-image",
+            "zz-chart-editor-new-chart-create-button",
+            "z-chart-editor-new-chart-user-interface",
+            "chart-editor-new-chart-button",
+            "chart-editor-selection-menu-ua"};
     }
 
-    // Check collision for relevant sprites
+    // Collect colliding sprites
+    std::vector<std::string> collidingSprites;
+
     for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
     {
         if (std::find(relevantSprites.begin(), relevantSprites.end(), key) != relevantSprites.end())
         {
             bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
-                              (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
+                            (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
 
             bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
-                              (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
+                            (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
 
             if (CollisionX && CollisionY)
             {
-                return sprite; // Return the first colliding sprite
+                collidingSprites.push_back(key);
             }
+        }
+    }
+
+    // Determine which sprite to return based on priority
+    for (const auto& relevantKey : relevantSprites)
+    {
+        auto it = std::find(collidingSprites.begin(), collidingSprites.end(), relevantKey);
+        if (it != collidingSprites.end())
+        {
+            return GetSprite(mCurrentGameState,relevantKey);
+        }
+    }
+
+    return nullptr; // No collision detected
+}
+
+Text* Game::CheckCollidingText(GameState gameState)
+{
+    // Define relevant texts for CHART_EDITOR_SELECTION_MENU
+    std::vector<std::string> relevantTexts;
+
+    if (gameState == GameState::CHART_EDITOR_SELECTION_MENU)
+    {
+        relevantTexts = 
+        {
+            "new-chart-screen-song-name-text",
+            "new-chart-screen-artist-name-text",
+            "new-chart-screen-song-bpm-text",
+            "new-chart-screen-difficulty-name-text"
+        };
+    }
+
+    // Collect colliding texts
+    std::vector<std::string> collidingTexts;
+
+    for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[gameState])
+    {
+        if (std::find(relevantTexts.begin(), relevantTexts.end(), key) != relevantTexts.end())
+        {
+            bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= text->mPosition.x) &&
+                              (text->mPosition.x + text->GetSize().x >= mMouse->GetMouseCoordinate().x);
+
+            bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= text->mPosition.y) &&
+                              (text->mPosition.y + text->GetSize().y >= mMouse->GetMouseCoordinate().y);
+
+            if (CollisionX && CollisionY)
+            {
+                collidingTexts.push_back(key);
+            }
+        }
+    }
+
+    // Determine which text to return based on priority
+    for (const auto& relevantKey : relevantTexts)
+    {
+        auto it = std::find(collidingTexts.begin(), collidingTexts.end(), relevantKey);
+        if (it != collidingTexts.end())
+        {
+            std::cout << relevantKey << '\n';
+            return GetText(mCurrentGameState, relevantKey);
         }
     }
 

@@ -43,6 +43,7 @@ void Text::Draw()
         glDrawArrays(GL_TRIANGLES, 0, 6);
         x += (ch.Advance >> 6) * mScale;
     }
+    mSize = vec2(x - mPosition.x, this->mCharacters['H'].Size.y);
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -166,4 +167,14 @@ void Text::Update(float deltaTime)
 
         mScale = glm::mix(mStartScale, mTargetScale, progress); // Interpolate between scales
     }
+}
+
+vec2 Text::GetPosition()
+{
+    return mPosition;
+}
+
+vec2 Text::GetSize()
+{
+    return mSize;
 }
