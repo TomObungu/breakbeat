@@ -26,6 +26,7 @@ integrated in
 #include <sstream>
 #include <regex>
 #include <string>
+#include <array>
 
 using std::unordered_map;
 using std::vector;
@@ -37,6 +38,7 @@ using std::to_string;
 using std::ostringstream;
 using std::ofstream;
 using std::make_pair;
+using std::array;
 
 class Game
 {
@@ -50,6 +52,7 @@ public:
     void HandleMenuInput(SDL_Event&);
     void HandleKeyboardInput(SDL_Event&);
     void HandleMouseInput(SDL_Event&);
+    void UpdateChartSelection();
 
 	double mDeltaTime;
 	double mLastFrame;
@@ -78,6 +81,8 @@ public:
     void UpdateSettings();
     
     void CheckNewChartButton();
+    void InitializeChartSelection();
+    void HandleChartScrolling(SDL_Event& event);
     
     void CreateNewChart();
 
@@ -140,6 +145,10 @@ private:
     string mNewChartDifficultyName;
     string mNewChartBPM;
 
+    vector<string> mAllCharts;
+    array<string, 7> mCurrentlyPreviewedCharts;
+    unsigned mChartPreviewStartIndex = 0; 
+    size_t mChartPreviewEndIndex = 0; 
 
     bool mAddingSprites = false;
     bool mPlayHoverAnimation = false;

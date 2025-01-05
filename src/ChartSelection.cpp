@@ -115,6 +115,116 @@ void Game::CheckNewChartButton()
     }
 }
 
+void Game::UpdateChartSelection()
+{
+  unsigned totalCharts = mAllCharts.size();
+
+    // Ensure valid state when no charts are available
+    if (totalCharts == 0)
+    {
+        mCurrentlyPreviewedCharts.fill("");
+        for (unsigned i = 0; i < 7; ++i)
+        {
+            GetText(mCurrentGameState, "artist-name-" + std::to_string(i + 1))->UpdateText("");
+            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("");
+        }
+        return;
+    }
+
+    // Calculate the end index based on the start index
+    mChartPreviewEndIndex = (mChartPreviewStartIndex + 6) % totalCharts;
+    
+
+    // Update `mCurrentlyPreviewedCharts` based on start and end indices
+    for (unsigned i = 0; i < 7; ++i)
+    {
+        unsigned currentIndex = (mChartPreviewStartIndex + i) % totalCharts;
+        mCurrentlyPreviewedCharts[i] = mAllCharts[currentIndex];
+    }
+
+    // Update the UI with artist and song names
+    for (unsigned i = 0; i < 7; ++i)
+    {
+        const std::string& chartName = mCurrentlyPreviewedCharts[i];
+        unsigned delimiterPos = chartName.find('-');
+        if (delimiterPos != std::string::npos)
+        {
+            std::string artistName = chartName.substr(0, delimiterPos);
+            std::string songName = chartName.substr(delimiterPos + 1);
+
+            // Update the respective text objects
+            GetText(mCurrentGameState, "artist-text-" + std::to_string(i + 1))->UpdateText(artistName);
+            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText(songName);
+        }
+        else
+        {
+            // Clear the text for invalid chart name formats
+            GetText(mCurrentGameState, "artist-name-" + std::to_string(i + 1))->UpdateText("");
+            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("");
+        }
+    }
+}
+
+void Game::HandleChartScrolling(SDL_Event& event)
+{
+    if (event.type == SDL_KEYDOWN && !mNewChartSpritesOnScreen)
+    {
+        unsigned totalCharts = mAllCharts.size();
+
+        // Ensure there are charts to scroll through
+        if (totalCharts == 0)
+        {
+            return;
+        }
+
+        switch (event.key.keysym.sym)
+        {
+            case SDLK_RIGHT:
+                // Increment start index and wrap around if necessary
+                mChartPreviewStartIndex = (mChartPreviewStartIndex + 1) % totalCharts;
+                break;
+
+            case SDLK_LEFT:
+                // Decrement start index and wrap around if necessary
+                if (mChartPreviewStartIndex == 0)
+                {
+                    mChartPreviewStartIndex = totalCharts - 1;
+                }
+                else
+                {
+                    mChartPreviewStartIndex = (mChartPreviewStartIndex - 1) % totalCharts;
+                }
+                break;
+
+            default:
+                // Do nothing for other keys
+                return;
+        }
+
+        // Update the currently previewed charts
+        UpdateChartSelection();
+    }
+}
+
+void Game::InitializeChartSelection()
+{
+    // Clear previous chart data
+    mAllCharts.clear();
+
+    // Iterate through the charts folder and store chart folder names
+    const std::string chartDirectory = "charts";
+    for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
+    {
+        if (entry.is_directory())
+        {
+            mAllCharts.push_back(entry.path().filename().string());
+        }
+    }
+
+    // Ensure mCurrentlyPreviewedCharts is updated
+    UpdateChartSelection();
+}
+
 void Game::CreateNewChart()
 {
     // Step 1: Retrieve inputs from member variables

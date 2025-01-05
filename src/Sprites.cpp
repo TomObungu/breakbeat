@@ -529,7 +529,6 @@ void Game::InitializeSprites()
         ResourceManager::GetShader("default"),
         false
     );
-
 }
 
 Sprite* Game::GetSprite(GameState gameState, string name)

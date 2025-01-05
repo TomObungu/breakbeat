@@ -31,6 +31,8 @@ void Game::ProcessEvents()
             
             HandleMenuInput(event);
             HandleKeyboardInput(event);
+            if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
+                HandleChartScrolling(event);
         }
         if (event.type == SDL_MOUSEMOTION)
         {
@@ -151,7 +153,15 @@ void Game::Update()
     }
     if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
+        
         CheckNewChartButton();
+
+        if(mFirstFrame)
+        {
+            InitializeChartSelection();
+            mFirstFrame = false;
+        }
+            
     }
 
     CheckForTransitionState();
