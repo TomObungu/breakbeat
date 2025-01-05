@@ -74,16 +74,16 @@ void Game::CheckNewChartButton()
 
                 textTable.erase("new-chart-screen-song-name-text");
                 textTable.erase("new-chart-screen-song-name-text-box");
-                mNewChartSongName = "";
+
                 textTable.erase("new-chart-screen-artist-name-text");
                 textTable.erase("new-chart-screen-artist-name-text-box");
-                mNewChartArtistName = "";
+
                 textTable.erase("new-chart-screen-difficulty-name-text");
                 textTable.erase("new-chart-screen-difficulty-name-text-box");
-                mNewChartDifficultyName = "";
+
                 textTable.erase("new-chart-screen-song-bpm-text");
                 textTable.erase("new-chart-screen-song-bpm-text-box");
-                mNewChartBPM = "";
+
                 textTable.erase("new-chart-screen-chart-image-text");
                 textTable.erase("new-chart-screen-chart-audio-text");
             }

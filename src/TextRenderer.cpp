@@ -113,10 +113,10 @@ void TextRenderer::LoadFont(string fontPath, unsigned int fontSize, string ident
         FT_Done_FreeType(ft);
 }
 
-void TextRenderer::CreateText(GameState gameState, string identifier, string text, glm::vec2 position, vec3 color, string fontName, float scale) 
+void TextRenderer::CreateText(GameState gameState, string identifier, string text, glm::vec2 position, vec3 color, string fontName, float scale, unsigned windowSize, bool scrollableText) 
 {
     // Create text object and store its properties within the text hash table
-    auto textObject = new Text(text, position, color, scale);
+    auto textObject = new Text(text, position, color, scale, windowSize, scrollableText);
     textObject->mVertexArrayObject = this->mVertexArrayObject;
     textObject->mVertexBufferObject = this->mVertexBufferObject;
     textObject->mShader = this->mShader;

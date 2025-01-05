@@ -8,7 +8,7 @@ void Game::InitializeFonts()
     mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",48,"default-48");
     mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",24,"default-24");
     mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",20,"default-20");
-    mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",18,"default-18");
+    mTextRenderer.LoadFont("\\fonts\\OpenSans-ExtraBold.ttf",16,"default-18");
     // std::cout<<"Initialized fonts"<<'\n';
 }
 
@@ -255,11 +255,10 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-song-name-text",
         "Enter song name:",
-        vec2(606.250, 400.971),
+        vec2(616.250, 380.971),
         vec3(1.0f),
         "default-20",
         1.0f
-
     );
 
     mTextRenderer.CreateText
@@ -267,10 +266,12 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-song-name-text-box",
         "",
-        vec2(606.250, 429.75),
+        vec2(616.250, 409.75),
         vec3(1.0f),
         "default-20",
-        1.0f
+        1.0f,
+        36,
+        false
     );
 
     mTextRenderer.CreateText
@@ -278,7 +279,7 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-artist-name-text",
         "Enter artist name:",
-        vec2(606.250, 459.5),
+        vec2(616.250, 439.5),
         vec3(1.0f),
         "default-20",
         1.0f
@@ -289,10 +290,12 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-artist-name-text-box",
         "",
-        vec2(606.250, 489.25),
+        vec2(616.250, 469.25),
         vec3(1.0f),
         "default-20",
-        1.0f
+        1.0f,
+        36,
+        false
     );
 
     mTextRenderer.CreateText
@@ -300,7 +303,7 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-difficulty-name-text",
         "Enter difficulty name:",
-        vec2(606.250, 519),
+        vec2(616.250, 499),
         vec3(1.0f),
         "default-20",
         1.0f
@@ -311,10 +314,12 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-difficulty-name-text-box",
         "",
-        vec2(606.250, 548.75),
+        vec2(616.250, 528.75),
         vec3(1.0f),
         "default-20",
-        1.0f
+        1.0f,
+        36,
+        false
     );
 
     mTextRenderer.CreateText
@@ -322,7 +327,7 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-song-bpm-text",
         "Enter song BPM:",
-        vec2(606.250, 568.5),
+        vec2(616.250, 548.5),
         vec3(1.0f),
         "default-20",
         1.0f
@@ -333,10 +338,12 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-song-bpm-text-box",
         "",
-        vec2(606.250, 598.023),
+        vec2(616.250, 578.023),
         vec3(1.0f),
         "default-20",
-        1.0f
+        1.0f,
+        36,
+        false
     );
 
     mTextRenderer.CreateText
@@ -347,7 +354,8 @@ void Game::InitializeTexts()
         vec2(1157.25, 558.085),
         vec3(1.0f),
         "default-18",
-        1.0f
+        1.0f,
+        18
     );
 
     mTextRenderer.CreateText
@@ -358,7 +366,8 @@ void Game::InitializeTexts()
         vec2(1157.25, 580.085),
         vec3(1.0f),
         "default-18",
-        1.0f
+        1.0f,
+        18
     );
 
     mTextRenderer.CreateText
@@ -366,20 +375,42 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "difficulty-select-box-text-1",
         "Easy : 1.31",
-        vec2(239.282, 580.085),
+        vec2(239.282, 559.974),
         vec3(1.0f),
-        "default-18",
+        "default-18", 
         1.0f
     );
-    
+
     mTextRenderer.CreateText
     (
         GameState::CHART_EDITOR_SELECTION_MENU,
-        "difficulty-select-box-text-1",
+        "difficulty-select-box-text-2",
         "Easy : 1.31",
-        vec2(239.282, 580.085),
+        vec2(239.282, 631.911),
         vec3(1.0f),
-        "default-18",
+        "default-18", 
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "difficulty-select-box-text-3",
+        "Easy : 1.31",
+        vec2(239.282, 709.260),
+        vec3(1.0f),
+        "default-18", 
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "difficulty-select-box-text-4",
+        "Easy : 1.31",
+        vec2(239.282, 789.195),
+        vec3(1.0f),
+        "default-18", 
         1.0f
     );
 }

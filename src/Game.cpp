@@ -159,6 +159,7 @@ void Game::Update()
     UpdateSprites(mCurrentGameState);
 
     UpdateTexts(mCurrentGameState);
+
 }
 
 void Game::Render()
@@ -216,7 +217,9 @@ void Game::UpdateTexts(GameState gameState)
     for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[gameState])
     {
         if(text != nullptr)
+        {
             text->Update(mDeltaTime);
+        }
     } 
 }
 

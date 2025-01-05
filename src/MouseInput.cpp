@@ -107,11 +107,17 @@ void Game::HandleMouseInput(SDL_Event& event)
                     if(currentMenu->GetCurrentMenuOption()->IsAnimationComplete())
                         TransitionToGameState(GameState::SETTINGS);
                 }
-                if (collidingSprite == GetSprite(mCurrentGameState, "main-menu-back-button"))
+                else if (collidingSprite == GetSprite(mCurrentGameState, "main-menu-back-button"))
                 {
                     currentMenu->SetCurrentMenuOption(collidingSprite);
                     currentMenu->PlaySelectionAnimation();
                     TransitionToGameState(GameState::START_MENU);
+                }
+                else if (collidingSprite == GetSprite(mCurrentGameState, "main-menu-chart-editor-button"))
+                {
+                    currentMenu->SetCurrentMenuOption(collidingSprite);
+                    currentMenu->PlaySelectionAnimation();
+                    TransitionToGameState(GameState::CHART_EDITOR_SELECTION_MENU);
                 }
             }
             else if( mCurrentGameState == GameState::SETTINGS)
@@ -255,7 +261,7 @@ void Game::HandleMouseInput(SDL_Event& event)
                             mTypingMode = true;
                         }
                     }
-                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-song-bpm-text"))
+                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-song-bpm-text"));
                     {
                         if(!mTypingMode)
                         {

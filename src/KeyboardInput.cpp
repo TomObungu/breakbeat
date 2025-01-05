@@ -8,23 +8,25 @@ void Game::HandleKeyboardInput(SDL_Event& event)
         {
             SDL_Keycode keyCode = event.key.keysym.sym;
 
+            // Define the maximum window size for the text box
+            string text = mCurrentTextBox->GetText();
+            unsigned startIndex = mCurrentTextBox->GetStartIndex(); // Get the start index of the visible window
+
             // Handle Backspace key to delete the last character
             if (keyCode == SDLK_BACKSPACE)
             {
-                std::string text = mCurrentTextBox->GetText();
                 if (!text.empty()) // Check if there's text to delete
                 {
                     text.pop_back(); // Remove the last character
-                    mCurrentTextBox->UpdateText(text); // Update the text box
+                    mCurrentTextBox->UpdateText(text);
                 }
             }
             // Handle spaces
             else if (keyCode == SDLK_SPACE)
             {
-                std::string text = mCurrentTextBox->GetText();
-                mCurrentTextBox->UpdateText(text + " ");
+                mCurrentTextBox->UpdateText(text += " ");
             }
-            // Check if the key is a valid character (printable ASCII or explicitly letters)
+            // Check if the key is a valid character (printable ASCII)
             else if ((keyCode >= 32 && keyCode <= 126))
             {
                 const char* keyName = SDL_GetKeyName(keyCode);
@@ -53,14 +55,18 @@ void Game::HandleKeyboardInput(SDL_Event& event)
                         }
                     }
 
-                    std::string text = mCurrentTextBox->GetText();
-                    mCurrentTextBox->UpdateText(text + inputChar);
+                    mCurrentTextBox->UpdateText(text += inputChar);
                 }
             }
             else if (keyCode == SDLK_RETURN) // Exit typing mode on Enter key
             {
                 mTypingMode = false;
             }
+        }
+
+        if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU && mNewChartSpritesOnScreen)
+        {
+
         }
     }
 }

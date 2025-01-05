@@ -112,7 +112,7 @@ private:
     bool mSelectedSetting = false;
     bool mKeybindMode = false;
     bool mTypingMode = false;
-    Text* mCurrentTextBox = nullptr;
+    Text* mCurrentTextBox;
     string mLeftKeybind;
     string mDownKeybind;
     string mUpKeybind;

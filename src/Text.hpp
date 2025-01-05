@@ -21,12 +21,15 @@ public:
     vec2 mPosition;
     vec2 mSize;
     float mScale = 1.0f;
+    string mVisibleText;  
+    unsigned mStartIndex=0;      
+    unsigned mWindowSize=10;   
     map<char,Character> mCharacters;
 
     unsigned int mVertexArrayObject,  mVertexBufferObject;
     Shader mShader;
 
-    Text(const string& text, vec2 position, vec3 color, float scale);
+    Text(const string& text, vec2 position, vec3 color, float scale, unsigned windowSize, bool scrollableText);
     void Draw();
     void UpdateText(const std::string& newText);
     void Update(float deltaTime);
@@ -42,6 +45,10 @@ public:
     vec2 GetSize();
     vec2 GetPosition();
     const string& GetText();
+    unsigned GetStartIndex();
+    void SetStartIndex(unsigned startIndex);
+    void UpdateVisibleText();
+    void SetWindowSize(unsigned);
 private:
     bool mIsScaling = false;
     float mStartScale = 1.0f;
@@ -56,6 +63,10 @@ private:
     float mBrightenStartTime = 0.0f;
     float mDarkenTime = 1.0f;
     float mBrightenTime = 1.0f;
+
+    bool mScrollableText = true;
+    unsigned mScrollInterval = 250;        
+    unsigned mLastScrollTime = 0;         
 
     bool mDarkening = false;
     bool mBrightening = false;

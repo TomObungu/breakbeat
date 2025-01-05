@@ -1,10 +1,12 @@
 #include "Text.hpp"
 #include <iostream>
-Text::Text(const string& text, vec2 position, vec3 color, float scale)
+Text::Text(const string& text, vec2 position, vec3 color, float scale, unsigned windowSize, bool scrollableText)
     : mText(text), 
     mPosition(position), 
     mColor(color), 
-    mScale(scale) 
+    mScale(scale),
+    mWindowSize(windowSize),
+    mScrollableText(scrollableText)
 {
     mOriginalColor = color;
 }
@@ -17,7 +19,7 @@ void Text::Draw()
     glBindVertexArray(this->mVertexArrayObject);
 
     float x = mPosition.x;
-    for (const char& c : mText) 
+    for (const char& c : mVisibleText) 
     {
         Character ch = mCharacters[c];
         float xpos = x + ch.Bearing.x;
@@ -167,6 +169,9 @@ void Text::Update(float deltaTime)
 
         mScale = glm::mix(mStartScale, mTargetScale, progress); // Interpolate between scales
     }
+
+    UpdateVisibleText();
+
 }
 
 vec2 Text::GetPosition()
@@ -177,4 +182,53 @@ vec2 Text::GetPosition()
 vec2 Text::GetSize()
 {
     return mSize;
+}
+
+void Text::SetStartIndex(unsigned startIndex) 
+{ 
+    mStartIndex = startIndex; 
+}
+
+void Text::UpdateVisibleText()
+{
+    // Ensure the startIndex is within valid bounds
+    if (mText.size() <= mWindowSize)
+    {
+        mStartIndex = 0;
+    }
+    else if(mScrollableText)
+    {
+        float currentTicks = SDL_GetTicks();
+
+        if (currentTicks - mLastScrollTime >= mScrollInterval)
+        {
+            if (mStartIndex >= mText.size() - mWindowSize)
+            {
+                mStartIndex = 0; // Reset the text to loop
+            }
+            else
+            {
+                ++mStartIndex; // Increment index normally
+            }
+
+            mLastScrollTime = currentTicks;
+        }
+    } else 
+    {
+        mStartIndex = mText.size() > mWindowSize ? mText.size()-mWindowSize : 0;
+    }
+
+    mVisibleText = mText.substr(mStartIndex, mWindowSize);
+}
+
+
+// Getter for the current start index
+unsigned Text::GetStartIndex()
+{
+    return mStartIndex;
+}
+
+void Text::SetWindowSize(unsigned size)
+{
+    mWindowSize = size;
 }

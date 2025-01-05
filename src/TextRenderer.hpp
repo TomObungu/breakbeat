@@ -36,7 +36,7 @@ TextRenderer();
 void Initialize();
 // pre-compiles a list of characters from the given font
 void LoadFont(string fontPath, unsigned int fontSize, string identifer);
-void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color, string fontName, float scale);
+void CreateText(GameState gameState, string identifier, string text, vec2 position, vec3 color, string fontName, float scale, unsigned windowSize = 48, bool scrollableText = true);
 void LoadTexts(GameState gameState);
 void DrawTexts(GameState gameState);
 private:
