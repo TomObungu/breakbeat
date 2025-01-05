@@ -261,13 +261,24 @@ void Game::HandleMouseInput(SDL_Event& event)
                             mTypingMode = true;
                         }
                     }
-                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-song-bpm-text"));
+                    else if(collidingText == GetText(mCurrentGameState, "new-chart-screen-song-bpm-text"))
                     {
                         if(!mTypingMode)
                         {
                             mCurrentTextBox = GetText(mCurrentGameState,"new-chart-screen-song-bpm-text-box");
                             mTypingMode = true;
                         }
+                    }
+                    else if(collidingSprite == GetSprite(mCurrentGameState, "zz-chart-editor-new-chart-create-button"))
+                    {
+                        mNewChartSongName = GetText(mCurrentGameState, "new-chart-screen-song-name-text-box")->GetText();
+                        mNewChartArtistName = GetText(mCurrentGameState, "new-chart-screen-artist-name-text-box")->GetText();
+                        mNewChartDifficultyName = GetText(mCurrentGameState, "new-chart-screen-difficulty-name-text-box")->GetText();
+                        mNewChartBPM = GetText(mCurrentGameState, "new-chart-screen-song-bpm-text-box")->GetText();
+                        mNewChartImagePath = GetText(mCurrentGameState, "new-chart-screen-chart-image-text")->GetText();
+                        mNewChartAudioPath = GetText(mCurrentGameState, "new-chart-screen-chart-audio-text")->GetText();
+
+                        CreateNewChart();
                     }
                 }
             }

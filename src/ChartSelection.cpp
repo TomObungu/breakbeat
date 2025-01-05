@@ -114,3 +114,62 @@ void Game::CheckNewChartButton()
         }
     }
 }
+
+void Game::CreateNewChart()
+{
+    // Step 1: Retrieve inputs from member variables
+    string artistName = mNewChartArtistName;
+    string songName = mNewChartSongName;
+    string difficultyName = mNewChartDifficultyName;
+    string bpm = mNewChartBPM;
+    string audioPath = mNewChartAudioPath;
+    string imagePath = mNewChartImagePath;
+
+    // Step 2: Create chart folder path
+    string chartFolderName = artistName + "-" + songName;
+    string chartFolderPath = "charts/" + chartFolderName;
+
+    try
+    {
+        // Step 3: Create directory
+        if (!std::filesystem::exists("charts"))
+        {
+            std::filesystem::create_directory("charts");
+        }
+        std::filesystem::create_directory(chartFolderPath);
+
+        // Step 4: Copy audio and image files into the folder
+        std::string copiedAudioPath = chartFolderPath + "\\" + std::filesystem::path(audioPath).filename().string();
+        std::string copiedImagePath = chartFolderPath + "\\" + std::filesystem::path(imagePath).filename().string();
+
+        std::filesystem::copy_file(audioPath.substr(8), copiedAudioPath, std::filesystem::copy_options::overwrite_existing);
+        std::filesystem::copy_file(imagePath.substr(8), copiedImagePath, std::filesystem::copy_options::overwrite_existing);
+
+        // Step 5: Create and write to the chart text file
+        std::string chartFilePath = chartFolderPath + "\\" + difficultyName + ".txt";
+
+        // Create and write to the chart filex
+        std::ofstream chartFile(chartFilePath);
+
+        if (chartFile.is_open())
+        {
+            chartFile << "Artist : " << artistName << "\n";
+            chartFile << "Song Name : " << songName << "\n";
+            chartFile << "Difficulty Name : " << difficultyName << "\n";
+            chartFile << "BPM : " << bpm << "\n";
+            chartFile << "Background Image : " << copiedImagePath << "\n";
+            chartFile << "Audio : " << copiedAudioPath << "\n";
+            chartFile.close();
+        }
+        else
+        {
+            throw std::ios_base::failure("Failed to create chart text file.");
+        }
+
+        std::cout << "Chart successfully created at " << chartFolderPath << std::endl;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error creating chart: " << e.what() << std::endl;
+    }
+}

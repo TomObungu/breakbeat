@@ -63,10 +63,5 @@ void Game::HandleKeyboardInput(SDL_Event& event)
                 mTypingMode = false;
             }
         }
-
-        if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU && mNewChartSpritesOnScreen)
-        {
-
-        }
     }
 }

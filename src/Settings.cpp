@@ -1,7 +1,3 @@
-#include <regex>
-#include <fstream>
-#include <sstream>
-
 #include "Game.hpp"
 
 void Game::LoadSettings()

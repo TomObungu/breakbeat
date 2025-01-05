@@ -24,6 +24,7 @@ integrated in
 #include <format>
 #include <fstream>
 #include <sstream>
+#include <regex>
 #include <string>
 
 using std::unordered_map;
@@ -77,6 +78,8 @@ public:
     void UpdateSettings();
     
     void CheckNewChartButton();
+    
+    void CreateNewChart();
 
     void InitializeSprites();
 
