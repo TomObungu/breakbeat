@@ -1,0 +1,6 @@
+Artist : DJ SHARPNEL
+Song Name : WE LUV LAMA
+Difficulty Name : Challenge
+BPM : 210
+Background Image : charts/DJ SHARPNEL-WE LUV LAMA\pixiv_id_65742336.png
+Audio : charts/DJ SHARPNEL-WE LUV LAMA\WE LUV LAMA.mp3

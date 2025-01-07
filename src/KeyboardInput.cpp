@@ -10,7 +10,6 @@ void Game::HandleKeyboardInput(SDL_Event& event)
 
             // Define the maximum window size for the text box
             string text = mCurrentTextBox->GetText();
-            unsigned startIndex = mCurrentTextBox->GetStartIndex(); // Get the start index of the visible window
 
             // Handle Backspace key to delete the last character
             if (keyCode == SDLK_BACKSPACE)
@@ -34,12 +33,40 @@ void Game::HandleKeyboardInput(SDL_Event& event)
                 {
                     char inputChar = keyName[0];
 
-                    // Check Caps Lock and Shift states
+                    // Check Shift state
                     SDL_Keymod keyMod = SDL_GetModState();
                     bool isShiftPressed = keyMod & KMOD_SHIFT;
-                    bool isCapsLockOn = keyMod & KMOD_CAPS;
 
-                    // Adjust case based on Shift and Caps Lock
+                    // Map shifted keys for special characters
+                    if (isShiftPressed)
+                    {
+                        switch (inputChar)
+                        {
+                            case '1': inputChar = '!'; break;
+                            case '2': inputChar = '@'; break;
+                            case '3': inputChar = '#'; break;
+                            case '4': inputChar = '$'; break;
+                            case '5': inputChar = '%'; break;
+                            case '6': inputChar = '^'; break;
+                            case '7': inputChar = '&'; break;
+                            case '8': inputChar = '*'; break;
+                            case '9': inputChar = '('; break;
+                            case '0': inputChar = ')'; break;
+                            case '-': inputChar = '_'; break;
+                            case '=': inputChar = '+'; break;
+                            case '[': inputChar = '{'; break;
+                            case ']': inputChar = '}'; break;
+                            case '\\': inputChar = '|'; break;
+                            case ';': inputChar = ':'; break;
+                            case '\'': inputChar = '"'; break;
+                            case ',': inputChar = '<'; break;
+                            case '.': inputChar = '>'; break;
+                            case '/': inputChar = '?'; break;
+                        }
+                    }
+
+                    // Check Caps Lock and adjust alphabetic case
+                    bool isCapsLockOn = keyMod & KMOD_CAPS;
                     if (inputChar >= 'A' && inputChar <= 'Z')
                     {
                         if (!(isCapsLockOn ^ isShiftPressed))

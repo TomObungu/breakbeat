@@ -1,0 +1,6 @@
+Artist : DJ SHARPNEL
+Song Name : Cyber Induntance
+Difficulty Name : Insane
+BPM : 200
+Background Image : charts/DJ SHARPNEL-Cyber Induntance\zth5Vcd2.jpg
+Audio : charts/DJ SHARPNEL-Cyber Induntance\audio.mp3

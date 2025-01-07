@@ -1,0 +1,6 @@
+Artist : xi
+Song Name : Blue Zenith
+Difficulty Name : Challenge
+BPM : 200
+Background Image : charts/xi-Blue Zenith\bluezenithbg.png
+Audio : charts/xi-Blue Zenith\blue_zenith.mp3

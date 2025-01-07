@@ -1,0 +1,6 @@
+Artist : DETRO
+Song Name : Volcanic
+Difficulty Name : Challenge
+BPM : 191
+Background Image : charts/DETRO-Volcanic\Volcanic.jpg
+Audio : charts/DETRO-Volcanic\audio.mp3

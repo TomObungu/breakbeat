@@ -39,10 +39,10 @@ void Game::CheckNewChartButton()
             table["z-chart-editor-new-chart-user-interface"] = GetDefaultSprite(mCurrentGameState,"z-chart-editor-new-chart-user-interface");
             table["zz-chart-editor-new-chart-create-button"] = GetDefaultSprite(mCurrentGameState,"zz-chart-editor-new-chart-create-button");
             table["zz-chart-editor-new-chart-user-interface-box-new-image"] = GetDefaultSprite(mCurrentGameState,"zz-chart-editor-new-chart-user-interface-box-new-image");
-            textTable.erase("song-text-1");
-            textTable.erase("artist-text-1");
-            textTable.erase("song-text-2");
-            textTable.erase("artist-text-2");
+            textTable.erase("song-text-3");
+            textTable.erase("artist-text-3");
+            textTable.erase("song-text-4");
+            textTable.erase("artist-text-4");
             textTable.erase("song-text-5");
             textTable.erase("artist-text-5");
             textTable["new-chart-screen-song-name-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-song-name-text");
@@ -89,12 +89,13 @@ void Game::CheckNewChartButton()
             }
             mNewChartSpritesOnScreen = false;
         }
-        textTable["song-text-1"] = GetDefaultText(mCurrentGameState, "song-text-1");
-        textTable["artist-text-1"] = GetDefaultText(mCurrentGameState, "artist-text-1");
-        textTable["song-text-2"] = GetDefaultText(mCurrentGameState, "song-text-2");
-        textTable["artist-text-2"] = GetDefaultText(mCurrentGameState, "artist-text-2");
+        textTable["song-text-3"] = GetDefaultText(mCurrentGameState, "song-text-3");
+        textTable["artist-text-3"] = GetDefaultText(mCurrentGameState, "artist-text-3");
+        textTable["song-text-4"] = GetDefaultText(mCurrentGameState, "song-text-4");
+        textTable["artist-text-4"] = GetDefaultText(mCurrentGameState, "artist-text-4");
         textTable["song-text-5"] = GetDefaultText(mCurrentGameState, "song-text-5");
         textTable["artist-text-5"] = GetDefaultText(mCurrentGameState, "artist-text-5"); 
+        InitializeChartSelection();
         if(!mTransitioningLight && !mAllLight) 
         {
             mTransitioningLight = true;
@@ -125,8 +126,8 @@ void Game::UpdateChartSelection()
         mCurrentlyPreviewedCharts.fill("");
         for (unsigned i = 0; i < 7; ++i)
         {
-            GetText(mCurrentGameState, "artist-name-" + std::to_string(i + 1))->UpdateText("");
-            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("");
+            GetText(mCurrentGameState, "artist-text-" + std::to_string(i + 1))->UpdateText("NO SONG");
+            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("NO ARTIST");
         }
         return;
     }
@@ -159,7 +160,7 @@ void Game::UpdateChartSelection()
         else
         {
             // Clear the text for invalid chart name formats
-            GetText(mCurrentGameState, "artist-name-" + std::to_string(i + 1))->UpdateText("");
+            GetText(mCurrentGameState, "artist-text-" + std::to_string(i + 1))->UpdateText("");
             GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("");
         }
     }

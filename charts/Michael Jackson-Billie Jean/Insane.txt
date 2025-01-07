@@ -1,6 +1,0 @@
-Artist : Michael Jackson
-Song Name : Billie Jean
-Difficulty Name : Insane
-BPM : 117
-Background Image : charts/Michael Jackson-Billie Jean\R-216956-1254392826.jpg
-Audio : charts/Michael Jackson-Billie Jean\Billie Jean (192 kbps).mp3
