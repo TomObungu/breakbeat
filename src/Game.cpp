@@ -31,8 +31,12 @@ void Game::ProcessEvents()
             
             HandleMenuInput(event);
             HandleKeyboardInput(event);
-            if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
+            if (mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
+            {
                 HandleChartScrolling(event);
+                HandleDifficultyScrolling(event);
+            }
+                
         }
         if (event.type == SDL_MOUSEMOTION)
         {
@@ -104,6 +108,8 @@ void Game::Initialize()
 
     mMouse = new Mouse();
     mMouse->InitializeMouse();
+
+    mSoundEngine = createIrrKlangDevice();
 
     mFirstFrame = true;
     mTransitioningDark = false;

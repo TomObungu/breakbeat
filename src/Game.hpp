@@ -14,6 +14,7 @@ integrated in
 #include "ResourceManager.hpp"
 #include "SpriteRenderer.hpp"
 #include "tinyfiledialogs.h"
+#include <irrklang/irrKlang.h>
 #include "Menu.hpp"
 #include "TextRenderer.hpp"
 #include "Mouse.hpp"
@@ -28,6 +29,8 @@ integrated in
 #include <string>
 #include <array>
 
+#pragma comment(lib, "irrKlang.lib")
+
 using std::unordered_map;
 using std::vector;
 using std::format;
@@ -39,6 +42,7 @@ using std::ostringstream;
 using std::ofstream;
 using std::make_pair;
 using std::array;
+using namespace irrklang;
 
 class Game
 {
@@ -56,7 +60,7 @@ public:
 
 	double mDeltaTime;
 	double mLastFrame;
-
+    
     void CalculateDeltaTime();
 
     Sprite* GetSprite(GameState, string);
@@ -82,7 +86,11 @@ public:
     
     void CheckNewChartButton();
     void InitializeChartSelection();
+    void PlayCurrentlySelectedChartAudio();
     void HandleChartScrolling(SDL_Event& event);
+    void GetCurrentChartDifficulties();
+    void HandleDifficultyScrolling(SDL_Event& event);
+    void UpdateCurrentChartDifficulties();
     
     void CreateNewChart();
 
@@ -105,7 +113,8 @@ private:
     SpriteRenderer mSpriteRenderer;
     TextRenderer mTextRenderer;
     Mouse* mMouse;
- 
+    ISoundEngine* mSoundEngine;
+    
     // Store menu class hash table
     unordered_map<GameState, unordered_map<string, Menu*>> mCurrentMenus;
     
@@ -146,9 +155,13 @@ private:
     string mNewChartBPM;
 
     vector<string> mAllCharts;
+    vector<string> mAllCurrentChartDifficulties;
     array<string, 7> mCurrentlyPreviewedCharts;
+    array<string, 4> mCurrentlyPreviewedDifficulties;
     unsigned mChartPreviewStartIndex = 0; 
-    size_t mChartPreviewEndIndex = 0; 
+    size_t mChartPreviewEndIndex = 0;     
+    unsigned mChartDifficultyPreviewStartIndex = 0; 
+    size_t mChartDifficultyPreviewEndIndex = 0; 
 
     bool mAddingSprites = false;
     bool mPlayHoverAnimation = false;

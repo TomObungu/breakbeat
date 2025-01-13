@@ -1,6 +1,0 @@
-Artist : Sharkey And Architech
-Song Name : Quadraphinix
-Difficulty Name : Challenege
-BPM : 180
-Background Image : charts/Sharkey And Architech-Quadraphinix\quad-BG.jpg
-Audio : charts/Sharkey And Architech-Quadraphinix\25 Quadraphinix.mp3

@@ -1,11 +1,9 @@
 #version 460 core
-
-layout (location = 0) in vec3 vertexCoordinateAttribute; // Correctly defined for 3D vertices
-layout (location = 1) in vec2 textureCoordinateAttribute;
-
 #extension GL_ARB_bindless_texture : require
 #extension GL_ARB_gpu_shader5 : require
 
+layout (location = 0) in vec3 vertexCoordinateAttribute; // Correctly defined for 3D vertices
+layout (location = 1) in vec2 textureCoordinateAttribute;
 
 out vec2 textureCoordinate;
 

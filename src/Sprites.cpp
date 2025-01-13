@@ -485,7 +485,7 @@ void Game::InitializeSprites()
     mSpriteRenderer.CreateSprite(
         GameState::CHART_EDITOR_SELECTION_MENU,
         "chart-selection-difficulty-select-box-3",
-        ResourceManager::GetTexture("chart-selection-difficulty-select-box"),
+        ResourceManager::GetTexture("chart-selection-difficulty-select-box-highlighted"),
         vec2(199.012, 682.378),
         vec2(425.283, 75.853),
         0.0f,
@@ -518,17 +518,6 @@ void Game::InitializeSprites()
         false
     );
 
-    mSpriteRenderer.CreateSprite(
-        GameState::CHART_EDITOR_SELECTION_MENU,
-        "chart-editor-menu-difficulty-indicator",
-        ResourceManager::GetTexture("chart-editor-menu-difficulty-indicator"),
-        vec2(110.658, 696.047),
-        vec2(81.080, 46.349),
-        0.0f,
-        vec3(1.0f),
-        ResourceManager::GetShader("default"),
-        false
-    );
 }
 
 Sprite* Game::GetSprite(GameState gameState, string name)

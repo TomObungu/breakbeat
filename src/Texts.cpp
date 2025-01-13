@@ -99,75 +99,9 @@ void Game::InitializeTexts()
     mTextRenderer.CreateText
     (
         GameState::CHART_EDITOR_SELECTION_MENU,
-        "song-text-1",
-        "Song #1",
-        vec2(1030.842, 460.287),
-        vec3(1.0f),
-        "default-48",
-        1.0f
-    );
-
-    mTextRenderer.CreateText
-    (
-        GameState::CHART_EDITOR_SELECTION_MENU,
-        "artist-text-1",
-        "Artist #1",
-        vec2(1031.634, 510.431),
-        vec3(1.0f),
-        "default-24",
-        1.0f
-    );
-
-    mTextRenderer.CreateText
-    (
-        GameState::CHART_EDITOR_SELECTION_MENU,
-        "song-text-2",
-        "Song #2",
-        vec2(1059.748, 323.983),
-        vec3(1.0f),
-        "default-48",
-        1.0f
-    );
-
-    mTextRenderer.CreateText
-    (
-        GameState::CHART_EDITOR_SELECTION_MENU,
-        "artist-text-2",
-        "Artist #2",
-        vec2(1060.540, 374.127),
-        vec3(1.0f),
-        "default-24",
-        1.0f
-    );
-
-    mTextRenderer.CreateText
-    (
-        GameState::CHART_EDITOR_SELECTION_MENU,
-        "song-text-3",
-        "Song #3",
-        vec2(1099.192, 179.243),
-        vec3(1.0f),
-        "default-48",
-        1.0f
-    );
-
-    mTextRenderer.CreateText
-    (
-        GameState::CHART_EDITOR_SELECTION_MENU,
-        "artist-text-3",
-        "Artist #3",
-        vec2(1099.984, 229.387),
-        vec3(1.0f),
-        "default-24",
-        1.0f
-    );
-
-    mTextRenderer.CreateText
-    (
-        GameState::CHART_EDITOR_SELECTION_MENU,
         "song-text-4",
         "Song #4",
-        vec2(1136.992, 46.164),
+        vec2(1030.842, 460.287),
         vec3(1.0f),
         "default-48",
         1.0f
@@ -178,6 +112,72 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "artist-text-4",
         "Artist #4",
+        vec2(1031.634, 510.431),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-3",
+        "Song #3",
+        vec2(1059.748, 323.983),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-3",
+        "Artist #3",
+        vec2(1060.540, 374.127),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-2",
+        "Song #2",
+        vec2(1099.192, 179.243),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-2",
+        "Artist #2",
+        vec2(1099.984, 229.387),
+        vec3(1.0f),
+        "default-24",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "song-text-1",
+        "Song #1",
+        vec2(1136.992, 46.164),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "artist-text-1",
+        "Artist #1",
         vec2(1137.784, 96.308),
         vec3(1.0f),
         "default-24",
@@ -196,7 +196,7 @@ void Game::InitializeTexts()
     );
 
      mTextRenderer.CreateText
-    (
+    (   
         GameState::CHART_EDITOR_SELECTION_MENU,
         "artist-text-5",
         "Artist #5",
@@ -376,7 +376,7 @@ void Game::InitializeTexts()
         "difficulty-select-box-text-1",
         "Easy : 1.31",
         vec2(239.282, 559.974),
-        vec3(1.0f),
+        vec3(0.0f),
         "default-18", 
         1.0f
     );
@@ -387,7 +387,7 @@ void Game::InitializeTexts()
         "difficulty-select-box-text-2",
         "Easy : 1.31",
         vec2(239.282, 631.911),
-        vec3(1.0f),
+        vec3(0.0f),
         "default-18", 
         1.0f
     );
@@ -398,7 +398,7 @@ void Game::InitializeTexts()
         "difficulty-select-box-text-3",
         "Easy : 1.31",
         vec2(239.282, 709.260),
-        vec3(1.0f),
+        vec3(0.0f),
         "default-18", 
         1.0f
     );
@@ -409,7 +409,7 @@ void Game::InitializeTexts()
         "difficulty-select-box-text-4",
         "Easy : 1.31",
         vec2(239.282, 789.195),
-        vec3(1.0f),
+        vec3(0.0f),
         "default-18", 
         1.0f
     );
