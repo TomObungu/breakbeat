@@ -1,10 +1,9 @@
 #version 460 core
+#extension GL_ARB_bindless_texture : require
+#extension GL_ARB_gpu_shader5 : require
 
 layout (location = 0) in vec2 vertexCoordinateAttribute;
 layout (location = 1) in vec2 textureCoordinateAttribute;
-
-#extension GL_ARB_bindless_texture : require
-#extension GL_ARB_gpu_shader5 : require
 
 out vec2 textureCoordinate;
 

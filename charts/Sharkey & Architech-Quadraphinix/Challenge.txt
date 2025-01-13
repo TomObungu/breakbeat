@@ -1,0 +1,6 @@
+Artist : Sharkey & Architech
+Song Name : Quadraphinix
+Difficulty : 0
+BPM : 180
+Background Image : charts\Sharkey & Architech-Quadraphinix\quad-BG.jpg
+Audio : charts\Sharkey & Architech-Quadraphinix\25 Quadraphinix.mp3

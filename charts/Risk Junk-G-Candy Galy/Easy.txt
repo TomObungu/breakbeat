@@ -1,0 +1,6 @@
+Artist : Risk Junk-G
+Song Name : Candy Galy
+Difficulty : 0
+BPM : 184
+Background Image : charts\Risk Junk-G-Candy Galy\bg.jpg
+Audio : charts\Risk Junk-G-Candy Galy\Candy Galy.mp3

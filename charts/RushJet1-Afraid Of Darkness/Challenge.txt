@@ -1,0 +1,6 @@
+Artist : RushJet1
+Song Name : Afraid Of Darkness
+Difficulty : 0
+BPM : 180
+Background Image : charts\RushJet1-Afraid Of Darkness\bg.png
+Audio : charts\RushJet1-Afraid Of Darkness\Afraid_of_Darkness.ogg

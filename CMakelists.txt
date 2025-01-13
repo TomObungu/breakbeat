@@ -21,6 +21,10 @@ add_library(tinyfiledialogs STATIC IMPORTED)
 set_target_properties(tinyfiledialogs PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/tinyfiledialogs64.lib)
 target_include_directories(tinyfiledialogs INTERFACE ${PROJECT_SOURCE_DIR}/include)
 
+add_library(irrKlang STATIC IMPORTED)
+set_target_properties(irrKlang PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/lib/irrKlang.lib)
+target_include_directories(irrKlang INTERFACE ${PROJECT_SOURCE_DIR}/include/irrKlang)
+
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 
 file(GLOB_RECURSE src
@@ -28,7 +32,6 @@ file(GLOB_RECURSE src
     "src/*.h"
     "src/*.hpp"
     "src/*.cpp"
-    
 )
 
 add_executable(breakbeat ${src})
@@ -38,6 +41,6 @@ set_target_properties(breakbeat PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SO
 
 target_include_directories(breakbeat PRIVATE ${PROJECT_SOURCE_DIR}/include/glm)
 
-target_link_libraries(breakbeat PRIVATE SDL2main SDL2 glad freetype-2.13.3)
+target_link_libraries(breakbeat PRIVATE SDL2main SDL2 glad freetype-2.13.3 irrKlang)
 
 

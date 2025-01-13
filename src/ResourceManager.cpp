@@ -15,7 +15,7 @@ std::map<std::string, Shader>       ResourceManager::Shaders;
 
 Shader& ResourceManager::LoadShader(const char *vertexShaderPath, const char *fragmentShaderPath, string name)
 {
-    Shaders[name] = loadShaderFromFile((fs::current_path().string() + vertexShaderPath).c_str(),
+    Shaders[name] = loadShaderFromFile((fs::current_path().string()+"\\"+vertexShaderPath).c_str(),
         (fs::current_path().string() + fragmentShaderPath).c_str());
     return Shaders[name];
 }
