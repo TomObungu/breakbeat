@@ -1,6 +1,6 @@
 Artist : DJ SHARPNEL
 Song Name : 11eleven
-Difficulty Name : Insane
+Difficulty : 23.4
 BPM : 203
-Background Image : charts/DJ SHARPNEL-11eleven\11eleven-BG.jpg
-Audio : charts/DJ SHARPNEL-11eleven\01_11ELEVEN(DJ Sharpnel).mp3
+Background Image : charts\DJ SHARPNEL-11eleven\11eleven-BG.jpg
+Audio : charts\DJ SHARPNEL-11eleven\01_11ELEVEN(DJ Sharpnel).mp3

@@ -22,13 +22,26 @@ Testing
 # glad library
 libglad.a
 
-
+# Cmake build
+build
 
 # CMake Cache
 CMakeCache.txt
 
 # CMake CMakeFiles folder
 CMakeFiles
+
+# Visual studio out
+out
+
+# Visual studio debug
+Debug
+
+# Visual studio database debug
+*.pdb
+
+# Visual studio code analysis
+*.lastcodeanalysissucceeded
 
 # Hidden docx files
 ~$ntentof NEA Programing Project (Component 03).docx

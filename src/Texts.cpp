@@ -314,7 +314,7 @@ void Game::InitializeTexts()
         GameState::CHART_EDITOR_SELECTION_MENU,
         "new-chart-screen-difficulty-name-text-box",
         "",
-        vec2(616.250, 528.75),
+        vec2(616.250, 428.75),
         vec3(1.0f),
         "default-20",
         1.0f,
@@ -369,6 +369,43 @@ void Game::InitializeTexts()
         1.0f,
         18
     );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "new-difficulty-screen-difficulty-name-text",
+        "Enter difficulty name:",
+        vec2(616.250, 399),
+        vec3(1.0f),
+        "default-20",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "new-difficulty-screen-difficulty-name-text-box",
+        "",
+        vec2(616.250, 429),
+        vec3(1.0f),
+        "default-20",
+        1.0f,
+        36,
+        false
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "new-difficulty-screen-chart-image-text",
+        "Image : ",
+        vec2(1157.25, 558.085),
+        vec3(1.0f),
+        "default-18",
+        1.0f,
+        18
+    );
+
 
     mTextRenderer.CreateText
     (

@@ -18,7 +18,10 @@ void Game::CheckNewChartButton()
             }
             for (auto& [key, text] : textTable)
             {
-                if(text != nullptr)
+                if (text != nullptr && key != ("difficulty-select-box-text-1")
+                    && key != ("difficulty-select-box-text-2")
+                    && key != ("difficulty-select-box-text-3")
+                    && key != ("difficulty-select-box-text-4"))
                     text->SetColor(vec3(0.5f));
             }
             mTransitioningDark = false;
@@ -56,56 +59,122 @@ void Game::CheckNewChartButton()
             textTable["new-chart-screen-chart-image-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-chart-image-text");
             textTable["new-chart-screen-chart-audio-text"] = GetDefaultText(mCurrentGameState, "new-chart-screen-chart-audio-text");
             textTable["new-chart-screen-chart-audio-text"]->UpdateText("Audio : " + mNewChartAudioPath);
-            mNewChartSpritesOnScreen = true;
             mAddingSprites = false;
         }
     }
-    else 
+    else if (mShowNewDifficultyScreen)
+    {
+        if (!mTransitioningDark && !mAllDark)
+        {
+            mTransitioningDark = true;
+            mAllLight = false;
+            for (auto& [key, sprite] : table)
+            {
+                if (sprite != nullptr)
+                    sprite->SetColor(vec3(0.5f));
+            }
+            for (auto& [key, text] : textTable)
+            {
+                if (text != nullptr && key != ("difficulty-select-box-text-1")
+                    && key != ("difficulty-select-box-text-2")
+                    && key != ("difficulty-select-box-text-3")
+                    && key != ("difficulty-select-box-text-4"))
+                    text->SetColor(vec3(0.5f));
+            }
+            mTransitioningDark = false;
+            mAllDark = true;
+        }
+        if (!mAddingSprites && !mNewDifficultySpritesOnScreen)
+        {
+            if (table.contains("z-chart-editor-new-difficullty-user-interface-box") ||
+                table.contains("zz-chart-editor-new-difficulty-user-interface-box-new-image") ||
+                table.contains("zz-chart-editor-new-difficulty-create-button"))
+            {
+                mNewDifficultySpritesOnScreen = true;
+            }
+            mAddingSprites = true;
+        }
+        if (mAddingSprites && !mNewDifficultySpritesOnScreen)
+        {
+            table["z-chart-editor-new-difficullty-user-interface-box"] = GetDefaultSprite(mCurrentGameState, "z-chart-editor-new-difficullty-user-interface-box");
+            table["zz-chart-editor-new-difficulty-user-interface-box-new-image"] = GetDefaultSprite(mCurrentGameState, "zz-chart-editor-new-difficulty-user-interface-box-new-image");
+            table["zz-chart-editor-new-difficulty-create-button"] = GetDefaultSprite(mCurrentGameState, "zz-chart-editor-new-difficulty-create-button");
+            textTable.erase("song-text-3");
+            textTable.erase("artist-text-3");
+            textTable.erase("song-text-4");
+            textTable.erase("artist-text-4");
+            textTable.erase("song-text-5");
+            textTable.erase("artist-text-5");
+            textTable["new-difficulty-screen-difficulty-name-text"] = GetDefaultText(mCurrentGameState, "new-difficulty-screen-difficulty-name-text");
+            textTable["new-difficulty-screen-difficulty-name-text-box"] = GetDefaultText(mCurrentGameState, "new-difficulty-screen-difficulty-name-text-box");
+            textTable["new-difficulty-screen-chart-image-text"] = GetDefaultText(mCurrentGameState, "new-difficulty-screen-chart-image-text");
+            mAddingSprites = false;
+        }
+    }
+    else if(removingSprites)
     {
         if(table.contains("z-chart-editor-new-chart-user-interface") ||
             table.contains("zz-chart-editor-new-chart-create-button") ||
-            table.contains("zz-chart-editor-new-chart-user-interface-box-new-image"))
+            table.contains("zz-chart-editor-new-chart-user-interface-box-new-image") ||
+            table.contains("z-chart-editor-new-difficullty-user-interface-box") ||
+            table.contains("zz-chart-editor-new-difficulty-user-interface-box-new-image") ||
+            table.contains("zz-chart-editor-new-difficulty-create-button") )
         {
-            for (auto& [key, sprite] : table)
-            {
-                table.erase("z-chart-editor-new-chart-user-interface");
-                table.erase("zz-chart-editor-new-chart-create-button");
-                table.erase("zz-chart-editor-new-chart-user-interface-box-new-image");
+            table.erase("z-chart-editor-new-chart-user-interface");
+            table.erase("zz-chart-editor-new-chart-create-button");
+            table.erase("zz-chart-editor-new-chart-user-interface-box-new-image");
 
-                textTable.erase("new-chart-screen-song-name-text");
-                textTable.erase("new-chart-screen-song-name-text-box");
+            textTable.erase("new-chart-screen-song-name-text");
+            textTable.erase("new-chart-screen-song-name-text-box");
 
-                textTable.erase("new-chart-screen-artist-name-text");
-                textTable.erase("new-chart-screen-artist-name-text-box");
+            textTable.erase("new-chart-screen-artist-name-text");
+            textTable.erase("new-chart-screen-artist-name-text-box");
 
-                textTable.erase("new-chart-screen-difficulty-name-text");
-                textTable.erase("new-chart-screen-difficulty-name-text-box");
+            textTable.erase("new-chart-screen-difficulty-name-text");
+            textTable.erase("new-chart-screen-difficulty-name-text-box");
 
-                textTable.erase("new-chart-screen-song-bpm-text");
-                textTable.erase("new-chart-screen-song-bpm-text-box");
+            textTable.erase("new-chart-screen-song-bpm-text");
+            textTable.erase("new-chart-screen-song-bpm-text-box");
 
-                textTable.erase("new-chart-screen-chart-image-text");
-                textTable.erase("new-chart-screen-chart-audio-text");
-            }
+            textTable.erase("new-chart-screen-chart-image-text");
+            textTable.erase("new-chart-screen-chart-audio-text");
+            
             mNewChartSpritesOnScreen = false;
-        }
-        textTable["song-text-3"] = GetDefaultText(mCurrentGameState, "song-text-3");
-        textTable["artist-text-3"] = GetDefaultText(mCurrentGameState, "artist-text-3");
-        textTable["song-text-4"] = GetDefaultText(mCurrentGameState, "song-text-4");
-        textTable["artist-text-4"] = GetDefaultText(mCurrentGameState, "artist-text-4");
-        textTable["song-text-5"] = GetDefaultText(mCurrentGameState, "song-text-5");
-        textTable["artist-text-5"] = GetDefaultText(mCurrentGameState, "artist-text-5");
 
-        const std::string chartDirectory = "charts";
-        for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
-        {
-            if (entry.is_directory())
+            // Remove all new difficulty UI elements
+            table.erase("z-chart-editor-new-difficullty-user-interface-box");
+            table.erase("zz-chart-editor-new-difficulty-user-interface-box-new-image");
+            table.erase("zz-chart-editor-new-difficulty-create-button");
+
+            textTable.erase("new-difficulty-screen-difficulty-name-text");
+            textTable.erase("new-difficulty-screen-difficulty-name-text-box");
+            textTable.erase("new-difficulty-screen-chart-image-text");
+       
+            mNewDifficultySpritesOnScreen = false;
+
+            // Restore the standard chart UI elements
+            textTable["song-text-3"] = GetDefaultText(mCurrentGameState, "song-text-3");
+            textTable["artist-text-3"] = GetDefaultText(mCurrentGameState, "artist-text-3");
+            textTable["song-text-4"] = GetDefaultText(mCurrentGameState, "song-text-4");
+            textTable["artist-text-4"] = GetDefaultText(mCurrentGameState, "artist-text-4");
+            textTable["song-text-5"] = GetDefaultText(mCurrentGameState, "song-text-5");
+            textTable["artist-text-5"] = GetDefaultText(mCurrentGameState, "artist-text-5");
+
+
+            // Reload the charts from the directory
+            const std::string chartDirectory = "charts";
+            for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
             {
-                mAllCharts.push_back(entry.path().filename().string());
+                if (entry.is_directory())
+                {
+                    mAllCharts.push_back(entry.path().filename().string());
+                }
             }
-        }
 
-        UpdateChartSelection();
+            // Update the chart selection to reflect the current state
+            UpdateChartSelection();
+            removingSprites = true;
+        }
 
         if(!mTransitioningLight && !mAllLight) 
         {
@@ -117,8 +186,13 @@ void Game::CheckNewChartButton()
             }
             for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
             {
-                if(text != nullptr)
+                if (text != nullptr && key != ("difficulty-select-box-text-1")
+                    && key != ("difficulty-select-box-text-2")
+                    && key != ("difficulty-select-box-text-3")
+                    && key != ("difficulty-select-box-text-4"))
                     text->SetColor(vec3(1.0f));
+                else
+                    text->SetColor(vec3(0.0f));
             }
             mTransitioningLight = false;
             mAllLight = true;
@@ -191,15 +265,15 @@ void Game::GetCurrentChartDifficulties()
         return;
     }
 
-    std::string chartDirectory = "charts/" + mCurrentlyPreviewedCharts[3];
-    std::filesystem::path chartDirPath(chartDirectory);
+        std::string chartDirectory = "charts/" + mCurrentlyPreviewedCharts[3];
+        std::filesystem::path chartDirPath(chartDirectory);
 
-    // Ensure the directory exists
-    if (!std::filesystem::exists(chartDirPath) || !std::filesystem::is_directory(chartDirPath))
-    {
-        std::cerr << "Chart directory does not exist: " << chartDirectory << std::endl;
-        return;
-    }
+        // Ensure the directory exists
+        if (!std::filesystem::exists(chartDirPath) || !std::filesystem::is_directory(chartDirPath))
+        {
+            std::cerr << "Chart directory does not exist: " << chartDirectory << std::endl;
+            return;
+        }
 
     // Step 3: Iterate through .txt files in the directory
     mAllCurrentChartDifficulties.clear();
@@ -447,7 +521,7 @@ void Game::PlayCurrentlySelectedChartAudio()
         std::filesystem::path fullAudioPath = std::filesystem::current_path() / audioPath;
 
         mSoundEngine->stopAllSounds();
-        mSoundEngine->play2D(fullAudioPath.string().c_str(), false); // Play the new audio, non-looping
+        mSoundEngine->play2D(fullAudioPath.string().c_str(),true); // Play the new audio
     }
     else
     {
@@ -511,8 +585,41 @@ void Game::CreateNewChart()
         std::string copiedAudioPath = chartFolderPath + "\\" + std::filesystem::path(audioPath).filename().string();
         std::string copiedImagePath = chartFolderPath + "\\" + std::filesystem::path(imagePath).filename().string();
 
-        std::filesystem::copy_file(audioPath.substr(8), copiedAudioPath, std::filesystem::copy_options::overwrite_existing);
-        std::filesystem::copy_file(imagePath.substr(8), copiedImagePath, std::filesystem::copy_options::overwrite_existing);
+        // Check if the audio file already exists in the directory
+        if (!std::filesystem::exists(copiedAudioPath))
+        {
+            try
+            {
+                std::filesystem::copy_file(audioPath, copiedAudioPath, std::filesystem::copy_options::overwrite_existing);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                std::cerr << "Error copying audio file: " << e.what() << std::endl;
+                // Handle the error if necessary (e.g., display a message or log it)
+            }
+        }
+        else
+        {
+            std::cout << "Audio file already exists. Skipping copy: " << copiedAudioPath << std::endl;
+        }
+
+        // Check if the image file already exists in the directory
+        if (!std::filesystem::exists(copiedImagePath))
+        {
+            try
+            {
+                std::filesystem::copy_file(imagePath, copiedImagePath, std::filesystem::copy_options::overwrite_existing);
+            }
+            catch (const std::filesystem::filesystem_error& e)
+            {
+                std::cerr << "Error copying image file: " << e.what() << std::endl;
+                // Handle the error if necessary (e.g., display a message or log it)
+            }
+        }
+        else
+        {
+            std::cout << "Image file already exists. Skipping copy: " << copiedImagePath << std::endl;
+        }
 
         // Step 5: Create and write to the chart text file
         std::string chartFilePath = chartFolderPath + "\\" + difficultyName + ".txt";

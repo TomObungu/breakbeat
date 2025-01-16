@@ -457,7 +457,7 @@ void Game::InitializeSprites()
         ResourceManager::GetShader("default"),
         false
     );
-        
+
     mSpriteRenderer.CreateSprite(
         GameState::CHART_EDITOR_SELECTION_MENU,
         "chart-selection-difficulty-select-box-1",
@@ -512,6 +512,42 @@ void Game::InitializeSprites()
         ResourceManager::GetTexture("chart-editor-menu-difficulty-new-difficulty-button"),
         vec2(199.012, 836.959),
         vec2(425.283, 75.853),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "z-chart-editor-new-difficullty-user-interface-box",
+        ResourceManager::GetTexture("chart-editor-new-difficullty-user-interface-box"),
+        vec2(556.138, 275.083),
+        vec2(807.725, 465.429),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "zz-chart-editor-new-difficulty-user-interface-box-new-image",
+        ResourceManager::GetTexture("chart-editor-new-chart-user-interface-box-new-image"),
+        vec2(1127.000, 410.447),
+        vec2(136.391, 142.929),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR_SELECTION_MENU,
+        "zz-chart-editor-new-difficulty-create-button",
+        ResourceManager::GetTexture("chart-editor-new-chart-create-button"),
+        vec2(800.957, 625.448),
+        vec2(318.086, 92.036),
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),
