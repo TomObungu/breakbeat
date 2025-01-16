@@ -2,5 +2,5 @@ Artist : DETRO
 Song Name : Volcanic
 Difficulty : 30.12
 BPM : 191
-Background Image : charts/DETRO-Volcanic\Volcanic.jpg
-Audio : charts/DETRO-Volcanic\audio.mp3
+Background Image : charts\DETRO-Volcanic\Volcanic.jpg
+Audio : charts\DETRO-Volcanic\audio.mp3

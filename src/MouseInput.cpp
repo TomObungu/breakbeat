@@ -207,6 +207,10 @@ void Game::HandleMouseInput(SDL_Event& event)
                         mShowNewChartScreen = false; // Do not show the screen if no file is selected
                     }
                 }
+                else if (collidingSprite == GetSprite(mCurrentGameState, "chart-editor-menu-difficulty-new-difficulty-button") && !mShowNewDifficultyScreen)
+                {
+                    mShowNewDifficultyScreen = true;
+                }
                 else if (mNewChartSpritesOnScreen)
                 {
                     if (collidingSprite != GetSprite(mCurrentGameState, "z-chart-editor-new-chart-user-interface") &&
@@ -214,13 +218,14 @@ void Game::HandleMouseInput(SDL_Event& event)
                         collidingSprite != GetSprite(mCurrentGameState, "zz-chart-editor-new-chart-user-interface-box-new-image"))
                     {
                         mShowNewChartScreen = false;
+                        removingSprites = true; 
                     }
                     else if(collidingSprite == GetSprite(mCurrentGameState, "zz-chart-editor-new-chart-user-interface-box-new-image"))
                     {
                         // Open file dialog to select the image
                         const char* filterPatterns[] = {"*.png", "*.jpg", "*.jpeg", "*.bmp"};
                         const char* imagePath = tinyfd_openFileDialog(
-                            "Select Image File",                  // Title of the dialog
+                            "Select Image File",                 // Title of the dialog
                             "",                                  // Default path
                             4,                                   // Number of filter patterns
                             filterPatterns,                      // Image file extensions
@@ -275,8 +280,130 @@ void Game::HandleMouseInput(SDL_Event& event)
                         mNewChartArtistName = GetText(mCurrentGameState, "new-chart-screen-artist-name-text-box")->GetText();
                         mNewChartDifficultyName = GetText(mCurrentGameState, "new-chart-screen-difficulty-name-text-box")->GetText();
                         mNewChartBPM = GetText(mCurrentGameState, "new-chart-screen-song-bpm-text-box")->GetText();
-                        mNewChartImagePath = GetText(mCurrentGameState, "new-chart-screen-chart-image-text")->GetText();
-                        mNewChartAudioPath = GetText(mCurrentGameState, "new-chart-screen-chart-audio-text")->GetText();
+                        mNewChartImagePath = GetText(mCurrentGameState, "new-chart-screen-chart-image-text")->GetText().substr(8);
+                        mNewChartAudioPath = GetText(mCurrentGameState, "new-chart-screen-chart-audio-text")->GetText().substr(8);
+
+                        CreateNewChart();
+                    }
+                }
+                else if (mNewDifficultySpritesOnScreen)
+                {
+                    if (collidingSprite != GetSprite(mCurrentGameState, "z-chart-editor-new-difficullty-user-interface-box") &&
+                        collidingSprite != GetSprite(mCurrentGameState, "zz-chart-editor-new-difficulty-create-button") &&
+                        collidingSprite != GetSprite(mCurrentGameState, "zz-chart-editor-new-difficulty-user-interface-box-new-image"))
+                    {
+                        mShowNewDifficultyScreen = false;
+                        removingSprites = true;
+                    }
+                    if (collidingText == GetText(mCurrentGameState, "new-difficulty-screen-difficulty-name-text"))
+                    {
+                        if (!mTypingMode)
+                        {
+                            mCurrentTextBox = GetText(mCurrentGameState, "new-difficulty-screen-difficulty-name-text-box");
+                            mTypingMode = true;
+                        }
+                    }
+                    else if (collidingSprite == GetSprite(mCurrentGameState, "zz-chart-editor-new-difficulty-user-interface-box-new-image"))
+                    {
+                        // Open file dialog to select the image
+                        const char* filterPatterns[] = { "*.png", "*.jpg", "*.jpeg", "*.bmp" };
+                        const char* imagePath = tinyfd_openFileDialog(
+                            "Select Image File",                 // Title of the dialog
+                            "",                                  // Default path
+                            4,                                   // Number of filter patterns
+                            filterPatterns,                      // Image file extensions
+                            "Image Files (*.png, *.jpg, *.jpeg, *.bmp)", // Description of filters
+                            0                                    // Single selection mode
+                        );
+                        if (imagePath) // If a file was selected
+                        {
+                            mNewChartImagePath = std::string(imagePath);
+                            GetText(mCurrentGameState, "new-difficulty-screen-chart-image-text")->UpdateText("Image : " + mNewChartImagePath);
+                        }
+                        else
+                        {
+                            mNewChartImagePath = ""; // If no file was selected, leave it empty
+                        }
+                    }
+                    else if (collidingSprite == GetSprite(mCurrentGameState, "zz-chart-editor-new-difficulty-create-button"))
+                    {
+                        // Get the directory of the currently selected chart
+                        std::string chartDirectory = "charts\\" + mCurrentlyPreviewedCharts[3];
+                        std::filesystem::path chartDirPath(chartDirectory);
+
+                        // Ensure the directory exists
+                        if (!std::filesystem::exists(chartDirPath) || !std::filesystem::is_directory(chartDirPath))
+                        {
+                            cerr << "Chart directory does not exist: " + chartDirectory + '\n';
+                            return;
+                        }
+
+                        // Path to the chart difficulty file (assuming a consistent file naming convention)
+                        std::string fileName = chartDirectory + "\\" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+
+                        // Open and read the chart difficulty file
+                        std::ifstream difficultyFile(fileName);
+                        if (!difficultyFile.is_open())
+                        {
+                            cerr << "Failed to open difficulty file: " + fileName + '\n';
+                            return;
+                        }
+
+                        // Regex patterns for extracting chart details
+                        std::regex songNameRegex(R"(Song Name\s*:\s*(.+))");
+                        std::regex artistNameRegex(R"(Artist\s*:\s*(.+))");
+                        std::regex bpmRegex(R"(BPM\s*:\s*(.+))");
+                        std::regex audioPathRegex(R"(Audio\s*:\s*(.+))");
+                        std::regex imagePathRegex(R"(Background Image\s*:\s*(.+))");
+
+                        // Variables to store extracted data
+                        std::string songName, artistName, bpm, audioPath, imagePath;
+
+                        std::string line;
+                        while (std::getline(difficultyFile, line))
+                        {
+                            std::smatch match;
+
+                            if (std::regex_search(line, match, songNameRegex) && match.size() == 2)
+                            {
+                                songName = match[1].str();
+                            }
+                            else if (std::regex_search(line, match, artistNameRegex) && match.size() == 2)
+                            {
+                                artistName = match[1].str();
+                            }
+                            else if (std::regex_search(line, match, bpmRegex) && match.size() == 2)
+                            {
+                                bpm = match[1].str();
+                            }
+                            else if (std::regex_search(line, match, audioPathRegex) && match.size() == 2)
+                            {
+                                audioPath = match[1].str();
+                            }
+                            else if (std::regex_search(line, match, imagePathRegex) && match.size() == 2)
+                            {
+                                imagePath = match[1].str();
+                            }
+                        }
+                        difficultyFile.close();
+                        
+                        // Get user input for new difficulty and image
+                        std::string newDifficultyName = GetText(mCurrentGameState, "new-difficulty-screen-difficulty-name-text-box")->GetText();
+                        std::string newImagePath = GetText(mCurrentGameState, "new-difficulty-screen-chart-image-text")->GetText().substr(8);
+
+                        if (newDifficultyName.empty())
+                        {
+                        std:cerr << "New difficulty name cannot be empty" << '\n';
+                            return;
+                        }
+
+                        // Set default values for the new chart
+                        mNewChartSongName = songName;
+                        mNewChartArtistName = artistName;
+                        mNewChartBPM = bpm;
+                        mNewChartAudioPath = audioPath;
+                        mNewChartImagePath = newImagePath.empty() ? imagePath : newImagePath;
+                        mNewChartDifficultyName = newDifficultyName;
 
                         CreateNewChart();
                     }
@@ -306,12 +433,29 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
     else if (gameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
         // Reorder relevantSprites to prioritize specific sprites
-        relevantSprites = {
-            "zz-chart-editor-new-chart-user-interface-box-new-image",
-            "zz-chart-editor-new-chart-create-button",
-            "z-chart-editor-new-chart-user-interface",
-            "chart-editor-new-chart-button",
-            "chart-editor-selection-menu-ua"};
+        if(mShowNewChartScreen)
+            relevantSprites = {
+                "zz-chart-editor-new-chart-user-interface-box-new-image",
+                "zz-chart-editor-new-chart-create-button",
+                "z-chart-editor-new-chart-user-interface",
+                "chart-editor-new-chart-button",
+                "chart-editor-selection-menu-ua"
+            };
+        else if(mShowNewDifficultyScreen)
+            relevantSprites = {
+                "zz-chart-editor-new-difficulty-user-interface-box-new-image",
+                "zz-chart-editor-new-difficulty-create-button",
+                "z-chart-editor-new-difficullty-user-interface-box",
+                "chart-editor-new-chart-button",
+                "chart-editor-selection-menu-ua"
+            };
+        else
+            relevantSprites = {
+                "chart-editor-new-chart-button",
+                "chart-editor-menu-difficulty-new-difficulty-button"
+            };
+
+
     }
 
     // Collect colliding sprites
@@ -326,6 +470,7 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
 
             bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
                             (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
+
 
             if (CollisionX && CollisionY)
             {
@@ -359,7 +504,8 @@ Text* Game::CheckCollidingText(GameState gameState)
             "new-chart-screen-song-name-text",
             "new-chart-screen-artist-name-text",
             "new-chart-screen-song-bpm-text",
-            "new-chart-screen-difficulty-name-text"
+            "new-chart-screen-difficulty-name-text",
+            "new-difficulty-screen-difficulty-name-text"
         };
     }
 

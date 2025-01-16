@@ -51,7 +51,7 @@ void Window::Initialize()
     // Query the display's usable display bounds
     SDL_DisplayMode displayMode;
 
-    if (SDL_GetDesktopDisplayMode(0, &displayMode) != 0) 
+    if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0) 
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Could not get display mode: %s", SDL_GetError());
     }

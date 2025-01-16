@@ -35,8 +35,13 @@ void Game::ProcessEvents()
             {
                 HandleChartScrolling(event);
                 HandleDifficultyScrolling(event);
-            }
-                
+
+                if (!mNewChartSpritesOnScreen && event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    TransitionToGameState(GameState::MAIN_MENU);
+                    mSoundEngine->stopAllSounds();
+                }
+            }    
         }
         if (event.type == SDL_MOUSEMOTION)
         {
@@ -141,9 +146,9 @@ void Game::Update()
     {
         if(mFirstFrame)
         {
-            GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.2,10);
-            GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetScale(true,1.05,0.2);
-            GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetColor(vec3(1.0f,1.0f,0.0f));
+            //GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetRotation(true,vec3(0,0,1),0.2,10);
+            //GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetScale(true,1.05,0.2);
+            //GetMenu(mCurrentGameState, "main-menu")->GetCurrentMenuOption()->SetColor(vec3(1.0f,1.0f,0.0f));
             mFirstFrame = false;
         }
     }
@@ -166,6 +171,7 @@ void Game::Update()
         {
             InitializeChartSelection();
             mFirstFrame = false;
+            removingSprites = true;
         }
             
     }
@@ -286,6 +292,7 @@ void Game::Transition(GameState newGameState)
         LoadDefaultSprites(newGameState);
         mTextRenderer.LoadTexts(newGameState);
         mCurrentGameState = newGameState;
+        mFirstFrame = true;
         // std::cout << "Loading new sprites and setting them to color 0!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
@@ -331,7 +338,6 @@ void Game::Transition(GameState newGameState)
         mTransitioningGameState = GameState::NOT_TRANSITIONING;
         mHasTransitioned = true;
         mFirstTransitionFrame = true;
-        mFirstFrame = true;
     }
 }
 

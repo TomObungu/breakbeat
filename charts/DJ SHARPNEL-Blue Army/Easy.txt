@@ -1,6 +1,6 @@
 Artist : DJ SHARPNEL
 Song Name : Blue Army
-Difficulty : 10.7
+Difficulty : 0
 BPM : 182
 Background Image : charts\DJ SHARPNEL-Blue Army\bg.jpg
 Audio : charts\DJ SHARPNEL-Blue Army\bluearmy.mp3

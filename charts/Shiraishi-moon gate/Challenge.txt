@@ -2,5 +2,5 @@ Artist : Shiraishi
 Song Name : moon-gate
 Difficulty : 19.03
 BPM : 170
-Background Image : charts/Shiraishi-moon-gate/moongate.jpg
-Audio : charts/Shiraishi-moon gate/audio.mp3
+Background Image : charts\Shiraishi-moon-gate\moongate.jpg
+Audio : charts\Shiraishi-moon gate\audio.mp3

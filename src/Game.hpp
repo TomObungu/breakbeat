@@ -145,7 +145,10 @@ private:
     bool mFirstTransitionFrame = true;
 
     bool mShowNewChartScreen = false;
+    bool mShowNewDifficultyScreen = false;
     bool mNewChartSpritesOnScreen = false;
+    bool mNewDifficultySpritesOnScreen = false;
+    bool removingSprites = true;
 
     string mNewChartAudioPath;
     string mNewChartImagePath;
