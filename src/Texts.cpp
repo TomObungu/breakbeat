@@ -449,6 +449,128 @@ void Game::InitializeTexts()
         vec3(0.0f),
         "default-18", 
         1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-song-name",
+        "Song#1",
+        vec2(602.227, 8.904),
+        vec3(1.0f),
+        "default-24", 
+        1.0f,
+        24
+    );   
+
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-time-elapsed",
+        "Time Elapsed - 0:00",
+        vec2(957.778, 8.904),
+        vec3(1.0f),
+        "default-24", 
+        1.0f
+    );   
+     
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-current-grade",
+        "Current Grade : S",
+        vec2(80.997, 290.392),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );   
+
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-score",
+        "Score : 0000000 ",
+        vec2(82.166, 346.949),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-accuracy",
+        "Accuracy : 0.00%",
+        vec2(79.965, 399.658),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-flawless-count",
+        "Flawless : 0",
+        vec2(83.828, 470.535),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-perfect-count",
+        "Perfect : 0",
+        vec2(83.828, 532.199),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-great-count",
+        "Great : 0",
+        vec2(82.508, 595.828),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-good-count",
+        "Good : 0",
+        vec2(83.510, 655.785),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-bad-count",
+        "Bad : 0",
+        vec2(86.042, 717.450),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::MAIN_GAMEPLAY,
+        "gameplay-miss-count",
+        "Miss : 0",
+        vec2(83.828, 774.264),
+        vec3(1.0f),
+        "default-48", 
+        1.0f
     );
 }
 

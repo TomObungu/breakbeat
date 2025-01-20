@@ -554,6 +554,125 @@ void Game::InitializeSprites()
         false
     );
 
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-background-image",
+        ResourceManager::GetTexture(""),
+        vec2(0.000, 0.000), // Position to be filled out manually
+        vec2(1920.0, 1080.000), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-gameplay-vsrg-column",
+        ResourceManager::GetTexture("main-gameplay-gameplay-vsrg-column"),
+        vec2(579.121, 0.000), // Position to be filled out manually
+        vec2(755.998, 1080.000), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-life-bar",
+        ResourceManager::GetTexture("main-gameplay-life-bar"),
+        vec2(1335.119, 485.290), // Position to be filled out manually
+        vec2(17.158, 594.710), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-life-bar-handle",
+        ResourceManager::GetTexture("main-gameplay-life-bar-handle"),
+        vec2(1331.319, 477.547), // Position to be filled out manually
+        vec2(28.137, 606.253), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-right-note-receptor",
+        ResourceManager::GetTexture("main-gameplay-right-note-receptor"),
+        vec2(1138.061, 887.794), // Position to be filled out manually
+        vec2(200.455, 197.710), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-up-note-receptor",
+        ResourceManager::GetTexture("main-gameplay-up-note-receptor"),
+        vec2(949.361, 887.794), // Position to be filled out manually
+        vec2(200.455, 197.710), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "z-main-gameplay-down-note-receptor",
+        ResourceManager::GetTexture("main-gameplay-down-note-receptor"),
+        vec2(765.423, 887.794), // Position to be filled out manually
+        vec2(200.455, 197.710), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-left-note-receptor",
+        ResourceManager::GetTexture("main-gameplay-left-note-receptor"),
+        vec2(581.936, 887.435), // Position to be filled out manually
+        vec2(200.455, 197.710), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-gameplay-statistics-box",
+        ResourceManager::GetTexture("main-gameplay-gameplay-statistics-box"),
+        vec2(39.028, 263.182), // Position to be filled out manually
+        vec2(527.348, 581.139), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::MAIN_GAMEPLAY,
+        "main-gameplay-judgement-text",
+        ResourceManager::GetTexture("transparent-texture"),
+        vec2(830.136, 581.407),
+        vec2(257.365, 37.546),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
 }
 
 Sprite* Game::GetSprite(GameState gameState, string name)

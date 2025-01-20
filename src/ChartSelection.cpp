@@ -162,14 +162,7 @@ void Game::CheckNewChartButton()
 
 
             // Reload the charts from the directory
-            const std::string chartDirectory = "charts";
-            for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
-            {
-                if (entry.is_directory())
-                {
-                    mAllCharts.push_back(entry.path().filename().string());
-                }
-            }
+            GetCurrentChartDirectories();
 
             // Update the chart selection to reflect the current state
             UpdateChartSelection();
@@ -521,7 +514,7 @@ void Game::PlayCurrentlySelectedChartAudio()
         std::filesystem::path fullAudioPath = std::filesystem::current_path() / audioPath;
 
         mSoundEngine->stopAllSounds();
-        mSoundEngine->play2D(fullAudioPath.string().c_str(),true); // Play the new audio
+        mSoundEngine->play2D(fullAudioPath.string().c_str(), true); // Play the new audio
     }
     else
     {
@@ -534,15 +527,7 @@ void Game::InitializeChartSelection()
     // Clear previous chart data
     mAllCharts.clear();
 
-    // Iterate through the charts folder and store chart folder names
-    const std::string chartDirectory = "charts";
-    for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
-    {
-        if (entry.is_directory())
-        {
-            mAllCharts.push_back(entry.path().filename().string());
-        }
-    } 
+    GetCurrentChartDirectories();
 
     // Ensure mCurrentlyPreviewedCharts is updated
 
@@ -647,5 +632,18 @@ void Game::CreateNewChart()
     catch (const std::exception& e)
     {
         std::cerr << "Error creating chart: " << e.what() << std::endl;
+    }
+}
+
+void Game::GetCurrentChartDirectories()
+{
+    // Iterate through the charts folder and store chart folder names
+    const std::string chartDirectory = "charts";
+    for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
+    {
+        if (entry.is_directory())
+        {
+            mAllCharts.push_back(entry.path().filename().string());
+        }
     }
 }

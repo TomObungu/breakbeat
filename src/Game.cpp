@@ -42,6 +42,10 @@ void Game::ProcessEvents()
                     mSoundEngine->stopAllSounds();
                 }
             }    
+            if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
+            {
+                HandleHitRegistration(event);
+            }
         }
         if (event.type == SDL_MOUSEMOTION)
         {
@@ -82,6 +86,7 @@ void Game::Initialize()
     
     InitializeTextures();
 
+
     for (auto& [key, texture] : ResourceManager::Textures) 
     {
     std::cout << "Texture Name: " << key 
@@ -96,7 +101,7 @@ void Game::Initialize()
     // Initialize sprites
     InitializeSprites();
 
-    mSpriteRenderer.LoadDefaultSprites(GameState::START_MENU);
+    mSpriteRenderer.LoadDefaultSprites(GameState::MAIN_GAMEPLAY);
 
     mTextRenderer.Initialize();
 
@@ -106,7 +111,9 @@ void Game::Initialize()
 
     InitializeTexts();
 
-    mTextRenderer.LoadTexts(GameState::START_MENU);
+    mTextRenderer.LoadTexts(GameState::MAIN_GAMEPLAY);
+
+    LoadBackgroundImage();
 
     // Initialize menus;
     InitializeMenus();
@@ -115,6 +122,8 @@ void Game::Initialize()
     mMouse->InitializeMouse();
 
     mSoundEngine = createIrrKlangDevice();
+
+    UpdateSettings();
 
     mFirstFrame = true;
     mTransitioningDark = false;
@@ -130,7 +139,8 @@ void Game::CalculateDeltaTime()
 
 void Game::Update()
 {
-    GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 / (1000 / mDeltaTime)));
+    if(GetSprite(mCurrentGameState, "background")!=nullptr)
+        GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 / (1000 / mDeltaTime)));
 
     if(mCurrentGameState == GameState::START_MENU)
     {
@@ -176,6 +186,18 @@ void Game::Update()
             
     }
 
+    if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
+    {
+		if (mFirstFrame)
+		{
+			mSoundEngine->play2D("C:\\Users\\deeza\\OneDrive\\breakbeat\\charts\\Sharkey & Architech-Quadraphinix\\25 Quadraphinix.mp3", false);
+            InitializeMainGameplay();
+			mFirstFrame = false;
+		}
+
+		HandleMainGameplay();
+    }
+
     CheckForTransitionState();
 
     UpdateSprites(mCurrentGameState);
@@ -194,6 +216,7 @@ void Game::Render()
     mSpriteRenderer.DrawSprites(mCurrentGameState);
     mTextRenderer.DrawTexts(mCurrentGameState);
     mMouse->DrawMouse();
+
 }
 
 void Game::HandleWindowEvent(SDL_Event& event)
@@ -228,6 +251,11 @@ void Game::Run()
 void Game::UpdateSprites(GameState gameState)
 {
     for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
+    {
+        if(sprite != nullptr)
+            sprite->Update(mDeltaTime);
+    }     
+    for (auto& [key, sprite] : mSpriteRenderer.mNoteBuffer[gameState])
     {
         if(sprite != nullptr)
             sprite->Update(mDeltaTime);

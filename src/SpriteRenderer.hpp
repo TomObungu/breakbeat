@@ -13,13 +13,13 @@
 #include <utility> 
 #include <unordered_map>
 #include <map>
-#include <memory>
 
 using namespace glm;
 
 using std::map;
 using std::unordered_map;   
 using std::string;
+using std::vector;
 
 class SpriteRenderer 
 {
@@ -30,7 +30,7 @@ public:
 
     void Initialize();
     Sprite* CreateSprite(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective, vec2 texturePositon = vec2(0,0), float textureScale = 1);
-
+    void CreateNote(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePositon = vec2(0, 0), float textureScale = 1);
     void DrawSprites(GameState gameState);
     void LoadDefaultSprites(GameState gameState);
 
@@ -38,6 +38,8 @@ public:
     // Hash table to store the sprites currently in use in the render loop
     unordered_map<GameState, map<string, Sprite*>> mCurrentlyRenderedSprites;
     unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
+    unordered_map<GameState, map<string, Sprite*>> mNoteBuffer;
+
 private:
     GLuint mVertexArrayObject;
     GLuint mVertexArrayObject3D;

@@ -4,6 +4,7 @@
 enum class GameState {
     START_MENU,
     MAIN_GAMEPLAY,
+    GRADE_SCREEN,
     MAIN_MENU,
     SETTINGS,
     CHART_SELECTION_MENU,

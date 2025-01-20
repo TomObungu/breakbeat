@@ -14,8 +14,6 @@ public:
     // Remove the default arguments for previous parameters
     Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePosition = vec2(0,0), float textureScale = 1);
 
-    Sprite(const Sprite& other);
-
     GLuint mVertexArrayObject;
     
 
@@ -25,6 +23,7 @@ public:
     // Utility functions
 
     void Move(vec2 pixels);
+    void MovePerSecond(float pixelsPerSecond);
     void Rotate(vec3 orientation, float angle);
     void MoveTextureCoordinate(vec2 pixels);
     vec2 ScreenToWorldSpace(vec2 screenCoord, mat4 view);
@@ -33,6 +32,7 @@ public:
     // Setters for the sprite attributes
     void SetPosition(const vec2& position);
     void SetSize(const vec2& size);
+    void SetTexture(const Texture);
     void SetRotation(float rotate);
     void SetColor(const vec3& color);
     void SetShader(Shader& shader);
@@ -85,6 +85,9 @@ private:
 
     // Universal update vairable to handle sprite state updates
     bool mHasUpdated;
+    float mMoveTime = 1.0f;
+    float mCurrentSpeed;
+    float mMoveStartTime= 0.0f;
 
     float mCurrentTime;
     float mTotalTime;

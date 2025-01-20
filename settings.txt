@@ -1,4 +1,4 @@
-Scroll speed : 100
+Scroll speed : 2000
 Receptor size : 100
 Scroll direction : Down
 Left keybind : Z
