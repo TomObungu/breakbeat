@@ -107,6 +107,26 @@ void Sprite::Move(vec2 pixels)
     mPosition += pixels;
 }
 
+void Sprite::MovePerSecond(float pixelsPerSecond)
+{
+    // Calculate the time elapsed since the last movement update
+    float timeElapsed = SDL_GetTicks() - mMoveStartTime;
+
+    // If the sprite was already moving, calculate the distance it moved so far
+    if (timeElapsed > 0)
+    {
+        float progress = timeElapsed / (mMoveTime * 1000); // Normalize time into a percentage
+        float distanceMoved = mCurrentSpeed * progress; // Calculate distance moved
+        mPosition.y += distanceMoved; // Update position
+    }
+
+    // Update speed and movement time for the new rate
+    mCurrentSpeed = pixelsPerSecond; // Set the new speed
+    mMoveTime = 1.0f;                // Reset move time (1 second for consistency)
+    mMoveStartTime = SDL_GetTicks(); // Reset the start time for the new movement rate
+}
+
+
 // More complex rotation function that considers perspective rotation
 void Sprite::Rotate(vec3 orientation, float angle) {
     mat4 model = mat4(1.0f);
@@ -127,6 +147,11 @@ void Sprite::SetTextureScale(float scale)
 {
     // Get the current texture position if stored, or initialize to zero
    this->mTextureScale = scale;
+}
+
+void Sprite::SetTexture(const Texture texture)
+{
+    this->mTexture = texture;
 }
 
 void Sprite::Scale(float scale)

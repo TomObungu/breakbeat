@@ -393,7 +393,7 @@ void Game::HandleMouseInput(SDL_Event& event)
 
                         if (newDifficultyName.empty())
                         {
-                        std:cerr << "New difficulty name cannot be empty" << '\n';
+                        std::cerr << "New difficulty name cannot be empty" << '\n';
                             return;
                         }
 

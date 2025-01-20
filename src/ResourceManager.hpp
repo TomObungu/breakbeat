@@ -33,6 +33,8 @@ public:
     static Texture& LoadTexture(const char *file, bool alpha, string name);
     // retrieves a stored texture
     static Texture& GetTexture(string name);
+    // loads a single texture from file
+    static Texture loadTextureFromFile(const char* file, bool alpha);
     // properly de-allocates all loaded resources
     static void Clear();
 private:
@@ -40,8 +42,6 @@ private:
     ResourceManager() { }
     // loads and generates a shader from file
     static Shader loadShaderFromFile(const char *vertexShaderFile, const char *fShaderFile);
-    // loads a single texture from file
-    static Texture loadTextureFromFile(const char *file, bool alpha);
 };
 
 #endif

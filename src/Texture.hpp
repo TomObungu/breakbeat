@@ -9,7 +9,7 @@ class Texture
 {
 public:
     // holds the ID of the texture object, used for all texture operations to reference to this particular texture
-    unsigned int ID;
+    GLuint ID;
     GLuint64 handle; // Bindless texture handle
     // texture image dimensions
     unsigned int width, height; // width and height of loaded image in pixels
