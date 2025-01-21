@@ -11,39 +11,53 @@ void Game::InitializeMainGameplay()
     // Load the background image
     LoadBackgroundImage();
 
+    vec2 receptorSize = vec2(192.000 * (mReceptorSize / 100.0f), 180 * (mReceptorSize / 100.0f));
+
+    GetSprite(mCurrentGameState, "main-gameplay-left-note-receptor")->SetSize(receptorSize);
+    GetSprite(mCurrentGameState, "main-gameplay-left-note-receptor")->SetPosition(vec2(581.936, ((mReceptorSize / 100.0f) * -192.565) + 1080));
+    GetSprite(mCurrentGameState, "z-main-gameplay-down-note-receptor")->SetSize(receptorSize);
+	GetSprite(mCurrentGameState, "z-main-gameplay-down-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 183.487 + 765.423, ((mReceptorSize / 100) * -192.565) +1080));
+    GetSprite(mCurrentGameState, "main-gameplay-up-note-receptor")->SetSize(receptorSize);
+    GetSprite(mCurrentGameState, "main-gameplay-up-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 366.974 + 949.361, ((mReceptorSize / 100) * -192.565) +1080));
+    GetSprite(mCurrentGameState, "main-gameplay-right-note-receptor")->SetSize(receptorSize);
+    GetSprite(mCurrentGameState, "main-gameplay-right-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 550.461 + 1138.061, ((mReceptorSize / 100) * -192.565) +1080));
+    GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->SetSize(vec2(755.998 * (mReceptorSize / 100), 1080));
+
     // Reset song start time
-    mSongStartTime = SDL_GetTicks();
-
-    float totalDistance = 1080.0f; // Adjusted for note height and receptor size
+   
+    float totalDistance = 180 * (mReceptorSize / 100) + ((mReceptorSize / 100.0f) * -192.565) + 1080; // Adjusted for note height and receptor size
     float timeTakenToFall = (totalDistance / mScrollSpeed) * 1000; // Convert to milliseconds
-
+     
     for (auto& time : firstColumnNoteHitTimes)
     {
         firstColumnNoteRenderTimes.push_back(time - timeTakenToFall);
-    }    
+        // time -= (192.535 * (mReceptorSize / 100) / mScrollSpeed) * 1000;
+    }
     for (auto& time : secondColumnNoteHitTimes)
     {
         secondColumnNoteRenderTimes.push_back(time - timeTakenToFall);
-    }    
+        // time -= (192.565 * (mReceptorSize / 100) / mScrollSpeed) * 1000;
+    }
     for (auto& time : thirdColumnNoteHitTimes)
     {
         thirdColumnNoteRenderTimes.push_back(time - timeTakenToFall);
-    }    
+        // time -= (192.565 * (mReceptorSize / 100) / mScrollSpeed) * 1000;
+    }
     for (auto& time : fourthColumnNoteHitTimes)
     {
         fourthColumnNoteRenderTimes.push_back(time - timeTakenToFall);
+        // time -= (192.565 * (mReceptorSize / 100) / mScrollSpeed) * 1000;
     }
 
     // Initialize the note rendering system
-    HandleMainGameplay();
 }
 
 void Game::HandleMainGameplay()
 {
-    // Update the time elapsed
-    mTimeElapsed = SDL_GetTicks() - mSongStartTime;
 
     GetText(mCurrentGameState, "gameplay-time-elapsed")->UpdateText(to_string(mTimeElapsed));
+
+    // Update the time elapsed
 
     // Render notes
     RenderNotes();
@@ -54,6 +68,17 @@ void Game::HandleMainGameplay()
 
 void Game::RenderNotes()
 {
+
+    if (!mSongPlaying)
+    {
+        mSoundEngine->play2D("C:\\Users\\deeza\\AppData\\Local\\osu!\\Songs\\828129 Sharkey & Arkitech - Quadraphinix\\Quadraphinix_0 0.750x.mp3", false);
+        mSongStartTime = SDL_GetTicks();
+        mSongPlaying = true;
+    }
+
+    if (mSongPlaying)
+        mTimeElapsed = SDL_GetTicks() - mSongStartTime;
+
     // Calculate the time it takes for a note to fall from the top to the receptor
 
     if (firstColumnNextNoteRenderIndex < firstColumnNoteRenderTimes.size() &&
@@ -83,7 +108,7 @@ void Game::RenderNotes()
             GameState::MAIN_GAMEPLAY,
             noteName,
             ResourceManager::GetTexture("main-gameplay-down-note"),
-            vec2(765.423, -180 * (mReceptorSize / 100)), // Start position at the top
+            vec2(((mReceptorSize / 100.0f) - 1) * 183.487 + 765.423, -180 * (mReceptorSize / 100)), // Start position at the top
             vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
             0.0f,
             vec3(1.0f),
@@ -102,7 +127,7 @@ void Game::RenderNotes()
             GameState::MAIN_GAMEPLAY,
             noteName,
             ResourceManager::GetTexture("main-gameplay-up-note"),
-            vec2(949.361, -180 * (mReceptorSize / 100)), // Start position at the top
+            vec2(((mReceptorSize / 100.0f) - 1) * 366.974 + 949.361, -180 * (mReceptorSize / 100)), // Start position at the top
             vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
             0.0f,
             vec3(1.0f),
@@ -121,7 +146,7 @@ void Game::RenderNotes()
             GameState::MAIN_GAMEPLAY,
             noteName,
             ResourceManager::GetTexture("main-gameplay-right-note"),
-            vec2(1138.061, -180 * (mReceptorSize / 100)), // Start position at the top
+            vec2(((mReceptorSize / 100.0f) - 1) * 550.461 + 1138.061, -180 * (mReceptorSize / 100)), // Start position at the top
             vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
             0.0f,
             vec3(1.0f),
@@ -150,7 +175,8 @@ void Game::HandleHitRegistration(SDL_Event& event)
     if (SDL_GetKeyName(event.key.keysym.sym) == mLeftKeybind)
     {
         firstColumnHitTime = mTimeElapsed;
-        firstColumnHitDifference = abs(firstColumnNoteHitTimes[firstColumnNextNoteTimeIndex] - firstColumnHitTime);
+        firstColumnHitDifference = abs(firstColumnHitTime - firstColumnNoteHitTimes[firstColumnNextNoteTimeIndex]);
+		std::cout << "The note time is : " << firstColumnHitTime << " The hit difference is : " << firstColumnHitDifference << '\n';
         if (firstColumnHitDifference <= 180)
         {
             HitNoteInFirstColumn = true;
@@ -184,7 +210,8 @@ void Game::HandleHitRegistration(SDL_Event& event)
     if (SDL_GetKeyName(event.key.keysym.sym) == mDownKeybind)
     {
         secondColumnHitTime = mTimeElapsed;
-        secondColumnHitDifference = abs(secondColumnNoteHitTimes[secondColumnNextNoteTimeIndex] - secondColumnHitTime);
+        secondColumnHitDifference = abs(secondColumnHitTime - secondColumnNoteHitTimes[secondColumnNextNoteTimeIndex]);
+        std::cout << "The note time is : " << firstColumnHitTime << " The hit difference is : " << firstColumnHitDifference << '\n';
         if (secondColumnHitDifference <= 180)
         {
             HitNoteInSecondColumn = true;
@@ -218,7 +245,8 @@ void Game::HandleHitRegistration(SDL_Event& event)
     if (SDL_GetKeyName(event.key.keysym.sym) == mUpKeybind)
     {
         thirdColumnHitTime = mTimeElapsed;
-        thirdColumnHitDifference = abs(thirdColumnNoteHitTimes[thirdColumnNextNoteTimeIndex] - thirdColumnHitTime);
+        thirdColumnHitDifference = abs(thirdColumnHitTime - thirdColumnNoteHitTimes[thirdColumnNextNoteTimeIndex]);
+        std::cout << "The note time is : " << firstColumnHitTime << " The hit difference is : " << firstColumnHitDifference << '\n';
         if (thirdColumnHitDifference <= 180)
         {
             HitNoteInFirstColumn = true;
@@ -252,7 +280,8 @@ void Game::HandleHitRegistration(SDL_Event& event)
     if (SDL_GetKeyName(event.key.keysym.sym) == mRightKeybind)
     {
         fourthColumnHitTime = mTimeElapsed;
-        fourthColumnHitDifference = abs(fourthColumnNoteHitTimes[fourthColumnNextNoteTimeIndex] - fourthColumnHitTime);
+        fourthColumnHitDifference = abs(fourthColumnHitTime - fourthColumnNoteHitTimes[fourthColumnNextNoteTimeIndex]);
+        std::cout << "The note time is : " << firstColumnHitTime << " The hit difference is : " << firstColumnHitDifference << '\n';
         if (fourthColumnHitDifference <= 180)
         {
             HitNoteInSecondColumn = true;
