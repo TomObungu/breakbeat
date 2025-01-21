@@ -607,7 +607,7 @@ void Game::InitializeSprites()
         "main-gameplay-right-note-receptor",
         ResourceManager::GetTexture("main-gameplay-right-note-receptor"),
         vec2(1138.061, 887.794), // Position to be filled out manually
-        vec2(200.455, 197.710), // Size to be filled out manually
+        vec2(192.000, 180), // Size to be filled out manually
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),
@@ -619,7 +619,7 @@ void Game::InitializeSprites()
         "main-gameplay-up-note-receptor",
         ResourceManager::GetTexture("main-gameplay-up-note-receptor"),
         vec2(949.361, 887.794), // Position to be filled out manually
-        vec2(200.455, 197.710), // Size to be filled out manually
+        vec2(192.000, 180), // Size to be filled out manually
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),
@@ -631,7 +631,7 @@ void Game::InitializeSprites()
         "z-main-gameplay-down-note-receptor",
         ResourceManager::GetTexture("main-gameplay-down-note-receptor"),
         vec2(765.423, 887.794), // Position to be filled out manually
-        vec2(200.455, 197.710), // Size to be filled out manually
+        vec2(192.000, 180), // Size to be filled out manually
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),
@@ -643,7 +643,7 @@ void Game::InitializeSprites()
         "main-gameplay-left-note-receptor",
         ResourceManager::GetTexture("main-gameplay-left-note-receptor"),
         vec2(581.936, 887.435), // Position to be filled out manually
-        vec2(200.455, 197.710), // Size to be filled out manually
+        vec2(192.000, 180), // Size to be filled out manually
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),

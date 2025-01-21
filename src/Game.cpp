@@ -190,7 +190,6 @@ void Game::Update()
     {
 		if (mFirstFrame)
 		{
-			mSoundEngine->play2D("C:\\Users\\deeza\\OneDrive\\breakbeat\\charts\\Sharkey & Architech-Quadraphinix\\25 Quadraphinix.mp3", false);
             InitializeMainGameplay();
 			mFirstFrame = false;
 		}
