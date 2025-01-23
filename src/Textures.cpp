@@ -61,6 +61,7 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\perfect.png", true, "perfect-judgement-text");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\bad.png", true, "bad-judgement-text");
     ResourceManager::LoadTexture("\\assets\\png\\transparent - texture.png", true, "transparent-texture");
+    ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\main-gameplay-hold-note-body.png", true, "main-gameplay-hold-note-body");
 
     /* CHART EDITOR */
     ResourceManager::LoadTexture("\\assets\\png\\chart editing\\breakbeat-chart-editing-scroll-bar-background.png", true, "chart-editing-scroll-bar-background");
