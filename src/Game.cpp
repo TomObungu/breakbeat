@@ -192,7 +192,7 @@ void Game::Update()
 		{
             InitializeMainGameplay();
 			mFirstFrame = false;
-		}
+        }
 
 		HandleMainGameplay();
     }
