@@ -22,7 +22,7 @@ void Game::ProcessEvents()
             HandleWindowEvent(event);
         }
         // Check for key inputs
-        else if (event.type == SDL_KEYDOWN)
+        if (event.type == SDL_KEYDOWN)
         {
             if (event.key.keysym.sym == SDLK_F11)
             {
@@ -41,10 +41,17 @@ void Game::ProcessEvents()
                     TransitionToGameState(GameState::MAIN_MENU);
                     mSoundEngine->stopAllSounds();
                 }
-            }    
+            }  
             if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
             {
                 HandleHitRegistration(event);
+            }
+        }
+        if (event.type == SDL_KEYUP)
+        {
+            if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
+            {
+                HandleHitRelease(event);
             }
         }
         if (event.type == SDL_MOUSEMOTION)
@@ -195,6 +202,14 @@ void Game::Update()
         }
 
 		HandleMainGameplay();
+
+        if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
+        {
+            for (auto& noteColumn : mNoteColumns)
+            {
+                UpdateLongNoteState(noteColumn);
+            }
+        }
     }
 
     CheckForTransitionState();

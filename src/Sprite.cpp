@@ -1,16 +1,17 @@
 #include "Sprite.hpp"
 
 // Constructor that initializes sprite properties
-Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective,  vec2 texturePosition, float textureScale)
+Sprite::Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePosition, float textureScale, bool isMoving)
     : mTexture(texture),
-      mTexturePosition(texturePosition),
-      mTextureScale(textureScale),
-      mPosition(position),
-      mSize(size),
-      mRotation(rotate),
-      mColor(color),
-      mShader(shader),
-      mPerspective(perspective)
+    mTexturePosition(texturePosition),
+    mTextureScale(textureScale),
+    mPosition(position),
+    mSize(size),
+    mRotation(rotate),
+    mColor(color),
+    mShader(shader),
+    mPerspective(perspective),
+    mIsMoving(isMoving)
 {
     mHasUpdated = true;
     mOriginalColor = color;
@@ -254,6 +255,15 @@ void Sprite::SetBrighten(bool enable, float brightenTime)
     }
 }
 
+void Sprite::SetVelocity(bool enable, float velocity)
+{
+    if(!mIsMoving && enable)
+    {
+        mVelocity = velocity;
+        mIsMoving = enable;
+    }
+}
+
 void Sprite::Brighten()
 {
     float timeElapsed = SDL_GetTicks() - mBrightenStartTime;
@@ -328,6 +338,11 @@ void Sprite::Update(float deltaTime)
     {
         mHasUpdated == true;
     }
+
+  /*  if (mIsMoving)
+    {
+        Move(vec2(0,mVelocity));
+    }*/
 
     if (mIsScaling)
     {

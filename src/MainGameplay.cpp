@@ -23,43 +23,20 @@ void Game::InitializeMainGameplay()
     GetSprite(mCurrentGameState, "main-gameplay-right-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 550.461 + 1138.061, ((mReceptorSize / 100) * -180) + 1080));
     GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->SetSize(vec2(755.998 * (mReceptorSize / 100), 1080));
 
-    // Reset song start time
-   
-    combineAndSortHitTimes(firstColumnCombinedHitTimes, firstColumnNoteHitTimes, firstColumnLongNoteHitTimes);
-    combineAndSortHitTimes(secondColumnCombinedHitTimes, secondColumnNoteHitTimes, secondColumnLongNoteHitTimes);
-    combineAndSortHitTimes(thirdColumnCombinedHitTimes, thirdColumnNoteHitTimes, thirdColumnLongNoteHitTimes);
-    combineAndSortHitTimes(fourthColumnCombinedHitTimes, fourthColumnNoteHitTimes, fourthColumnLongNoteHitTimes);   
-
-    float totalDistance = 1080; // Adjusted for note height and receptor size
-    float timeTakenToFall = (totalDistance / mScrollSpeed) * 1000; // Convert to milliseconds
     
-    // Calculate render times based on the sorted hit times
-    for (auto& time : firstColumnCombinedHitTimes) {
-        firstColumnNoteRenderTimes.push_back((time - timeTakenToFall));
+    mTimeTakenToFall = (1080 / mScrollSpeed) * 1000; // Time taken to fall in milliseconds
+        
+    for (unsigned i = 0; i < 4; i++)
+    {
+        mNoteColumns[i].xPos = i > 0 ? 581.936 + (i * 183.944) + ((mReceptorSize / 100.0f) - 1) * (i * 183.487) : 581.936;
     }
-    for (auto& time : secondColumnCombinedHitTimes) {
-        secondColumnNoteRenderTimes.push_back((time - timeTakenToFall));
+    for (unsigned i = 0; i < 4; i++)
+    {
+        for (auto& time : mNoteColumns[i].hitTimes)
+        {
+			mNoteColumns[i].renderTimes.push_back(time - mTimeTakenToFall);
+        }
     }
-    for (auto& time : thirdColumnCombinedHitTimes) {
-        thirdColumnNoteRenderTimes.push_back((time - timeTakenToFall));
-    }
-    for (auto& time : fourthColumnCombinedHitTimes) {
-        fourthColumnNoteRenderTimes.push_back((time - timeTakenToFall));
-    }  
-
-    for (auto& time : firstColumnLongNoteHitTimes) {
-        firstColumnLongNoteRenderTimes.push_back((time - timeTakenToFall));
-    }
-    for (auto& time : secondColumnLongNoteHitTimes) {
-        secondColumnLongNoteRenderTimes.push_back((time - timeTakenToFall));
-    }
-    for (auto& time : thirdColumnLongNoteHitTimes) {
-        thirdColumnLongNoteRenderTimes.push_back((time - timeTakenToFall));
-    }
-    for (auto& time : fourthColumnLongNoteHitTimes) {
-        fourthColumnLongNoteRenderTimes.push_back((time - timeTakenToFall));
-    }
-    // Initialize the note rendering system
 
     mSoundEngine->play2D("C:\\Users\\deeza\\AppData\\Local\\osu!\\Songs\\828129 Sharkey & Arkitech - Quadraphinix\\Quadraphinix_0 0.750x.mp3", false);
     mSongStartTime = SDL_GetTicks();
@@ -71,7 +48,7 @@ void Game::HandleMainGameplay()
     // Update the time elapsed
     mTimeElapsed = SDL_GetTicks() - mSongStartTime;
 
-    GetText(mCurrentGameState, "gameplay-time-elapsed")->UpdateText(to_string(mTimeElapsed));
+    GetText(mCurrentGameState, "gameplay-time-elapsed")->UpdateText("Time Elapsed : " + to_string(mTimeElapsed));
 
     // Render notes
     RenderNotes();
@@ -79,229 +56,312 @@ void Game::HandleMainGameplay()
     HandleMissedHitRegistration();
 }
 
-// Function to combine and sort hit times
-void Game::combineAndSortHitTimes(std::vector<float>& combinedHitTimes, const std::vector<float>& noteHitTimes, const std::vector<float>& longNoteHitTimes)
-{
-    // Combine the hit times
-    combinedHitTimes.insert(combinedHitTimes.end(), noteHitTimes.begin(), noteHitTimes.end());
-    combinedHitTimes.insert(combinedHitTimes.end(), longNoteHitTimes.begin(), longNoteHitTimes.end());
-
-    // Sort the combined hit times
-    std::sort(combinedHitTimes.begin(), combinedHitTimes.end());
-}
-
 // Main logic
 
 void Game::RenderNotes()
 {
     // Calculate the time it takes for a note to fall from the top to the receptor
-
-
-    if (firstColumnNextNoteRenderIndex < firstColumnNoteRenderTimes.size() &&
-        mTimeElapsed >= (firstColumnNoteRenderTimes[firstColumnNextNoteRenderIndex]))
+    for (auto& noteColumn : mNoteColumns)
     {
-        string noteName = "main-gameplay-left-note-" + to_string(firstColumnNextNoteRenderIndex);
-        mSpriteRenderer.CreateNote(
-            GameState::MAIN_GAMEPLAY,
-            noteName,
-            ResourceManager::GetTexture("main-gameplay-left-note"),
-            vec2(581.936, -180 * (mReceptorSize / 100)), // Start position at the top
-            vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
-            0.0f,
-            vec3(1.0f),
-            ResourceManager::GetShader("default"),
-            false
-        );
-
-        firstColumnNextNoteRenderIndex++;
-	}  
-
-    if (secondColumnNextLongNoteRenderIndex < secondColumnLongNoteRenderTimes.size() &&
-        mTimeElapsed >= (secondColumnLongNoteRenderTimes[secondColumnNextLongNoteRenderIndex]))
-    {
-        const string& noteName = "main-gameplay-down-long-note-body-" + to_string(secondColumnNextLongNoteRenderIndex);
-        const float& offset = ((secondColumnNoteReleaseTimes[secondColumnNextReleaseTimeIndex] -
-            secondColumnLongNoteRenderTimes[secondColumnNextLongNoteRenderIndex]) * mScrollSpeed / 1000);
-
-        mSpriteRenderer.CreateNote(
-            GameState::MAIN_GAMEPLAY,
-            noteName,
-            ResourceManager::GetTexture("main-gameplay-hold-note-body"),
-            vec2(((mReceptorSize / 100.0f) - 1) * 183.487 + 765.423, -180 * (mReceptorSize / 100)), // Start position at the top
-            vec2(192.000 * (mReceptorSize / 100), (secondColumnNoteReleaseTimes[secondColumnNextReleaseTimeIndex] -
-                secondColumnLongNoteRenderTimes[secondColumnNextLongNoteRenderIndex] * mScrollSpeed / 1000)),
-            0.0f,
-            vec3(1.0f),
-            ResourceManager::GetShader("default"),
-            false
-        );
-
-        secondColumnNextLongNoteRenderIndex++;
-        secondColumnNextReleaseTimeIndex++;
-
+        RenderNote(noteColumn);
     }
-    
-    if (secondColumnNextNoteRenderIndex < secondColumnNoteRenderTimes.size() &&
-        mTimeElapsed >= (secondColumnNoteRenderTimes[secondColumnNextNoteRenderIndex]))
-    {
-        string noteName = "main-gameplay-down-note-" + to_string(secondColumnNextNoteRenderIndex);
-        mSpriteRenderer.CreateNote(
-            GameState::MAIN_GAMEPLAY,
-            noteName,
-            ResourceManager::GetTexture("main-gameplay-down-note"),
-            vec2(((mReceptorSize / 100.0f) - 1) * 183.487 + 765.423, -180 * (mReceptorSize / 100)), // Start position at the top
-            vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
-            0.0f,
-            vec3(1.0f),
-            ResourceManager::GetShader("default"),
-            false
-        );
-
-        secondColumnNextNoteRenderIndex++;
-    }  
-
-    if (thirdColumnNextNoteRenderIndex < thirdColumnNoteRenderTimes.size() &&
-        mTimeElapsed >= (thirdColumnNoteRenderTimes[thirdColumnNextNoteRenderIndex])) 
-    {
-        string noteName = "main-gameplay-up-note-" + to_string(thirdColumnNextNoteRenderIndex);
-        mSpriteRenderer.CreateNote(
-            GameState::MAIN_GAMEPLAY,
-            noteName,
-            ResourceManager::GetTexture("main-gameplay-up-note"),
-            vec2(((mReceptorSize / 100.0f) - 1) * 366.974 + 949.361, -180 * (mReceptorSize / 100)), // Start position at the top
-            vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
-            0.0f,
-            vec3(1.0f),
-            ResourceManager::GetShader("default"),
-            false
-        );
-
-        thirdColumnNextNoteRenderIndex++;
-    }  
-
-    if (fourthColumnNextNoteRenderIndex < fourthColumnNoteRenderTimes.size() &&
-        mTimeElapsed >= (fourthColumnNoteRenderTimes[fourthColumnNextNoteRenderIndex]))
-    {
-        string noteName = "main-gameplay-right-note-" + to_string(fourthColumnNextNoteRenderIndex);
-        mSpriteRenderer.CreateNote(
-            GameState::MAIN_GAMEPLAY,
-            noteName,
-            ResourceManager::GetTexture("main-gameplay-right-note"),
-            vec2(((mReceptorSize / 100.0f) - 1) * 550.461 + 1138.061, -180 * (mReceptorSize / 100)), // Start position at the top
-            vec2(192.000 * (mReceptorSize / 100), 180 * (mReceptorSize / 100)),
-            0.0f,
-            vec3(1.0f),
-            ResourceManager::GetShader("default"),
-            false
-        );
-
-        fourthColumnNextNoteRenderIndex++;
-    }    
-    
-
 
     // Move all notes based on scroll speed and delta time
     for (auto& [key, note] : mSpriteRenderer.mNoteBuffer[mCurrentGameState])
     {
-        if (note != nullptr)
-        {
-            // Calculate how far the note moves this frame
-            note->Move(vec2(0, mScrollSpeed * (mDeltaTime / 1000.0f)));
-
-        }
+        if (note->mIsMoving)
+            note->Move(vec2(0,mScrollSpeed * mDeltaTime / 1000.f));
     }
 }
 
-void Game::RegisterHit(const vector<float>& noteHitTimes, float& hitTime, float& hitDifference, float& noteIndex, bool& hitNoteBoolean, const string& noteName)
+void Game::RenderNote(NoteColumn& noteColumn)
 {
-    hitTime = mTimeElapsed;
-    hitDifference = abs(hitTime - noteHitTimes[noteIndex]);
-    if (hitDifference <= 180)
+    float totalDistance = 1080; // Adjusted for note height and receptor size
+    float mTimeTakenToFall = (totalDistance / mScrollSpeed) * 1000; // Time taken to fall in milliseconds
+    if (noteColumn.renderTimeIndex < noteColumn.renderTimes.size() &&  
+            mTimeElapsed >= (noteColumn.renderTimes[noteColumn.renderTimeIndex]))
     {
-        hitNoteBoolean = true;
-        mSpriteRenderer.mNoteBuffer[mCurrentGameState].erase(noteName + to_string(noteIndex));
-        if (noteIndex < noteHitTimes.size())
-            noteIndex++;
-        if (hitDifference >= 0 && hitDifference <= 18.9)
+        mSpriteRenderer.CreateNote(
+            mCurrentGameState,
+            noteColumn.noteName + '-' + to_string(noteColumn.renderTimeIndex),
+            ResourceManager::GetTexture(noteColumn.noteName),
+            vec2(noteColumn.xPos, -180 * (mReceptorSize / 100)), // Start position at the top
+            vec2(192.000 * (mReceptorSize / 100.0f), 180 * (mReceptorSize / 100.0f)),
+            0.0f,
+            vec3(1.0f),
+            ResourceManager::GetShader("default"),
+            false
+        );
+        noteColumn.renderTimeIndex++;
+    }
+
+    // Check if it's time to create the long note head (hit time)
+    if (noteColumn.longNoteRenderTimeIndex < noteColumn.longNoteHitTimes.size() && 
+            mTimeElapsed >= (noteColumn.longNoteHitTimes[noteColumn.longNoteRenderTimeIndex] - mTimeTakenToFall)) {
+        mSpriteRenderer.CreateNote(
+            mCurrentGameState,
+            noteColumn.noteName + "-long-note-head-" + to_string(noteColumn.longNoteRenderTimeIndex),
+            ResourceManager::GetTexture(noteColumn.noteName),
+            vec2(noteColumn.xPos, -180 * (mReceptorSize / 100)), // Start position at the top
+            vec2(192.000 * (mReceptorSize / 100.0f), 180 * (mReceptorSize / 100.0f)),
+            0.0f,
+            vec3(1.0f),
+            ResourceManager::GetShader("default"),
+            false
+        );
+
+        float timeDifference = noteColumn.releaseTimes[noteColumn.releaseTimeRenderTimeIndex] -
+            noteColumn.longNoteHitTimes[noteColumn.longNoteRenderTimeIndex];
+
+        // Avoid negative or zero body size for very short long notes
+        float bodyHeight = abs(timeDifference * mScrollSpeed / 1000.0f);
+
+        mSpriteRenderer.CreateNote(
+            GameState::MAIN_GAMEPLAY,
+            noteColumn.noteName + "-long-note-body-" + to_string(noteColumn.longNoteRenderTimeIndex),
+            ResourceManager::GetTexture("main-gameplay-hold-note-body"),
+            vec2(noteColumn.xPos, -90 * (mReceptorSize / 100)), // Start position at the top
+            vec2(192 * (mReceptorSize / 100), -bodyHeight),
+            0.0f,
+            vec3(1.0f),
+            ResourceManager::GetShader("default"),
+            false
+        );
+        
+        noteColumn.releaseTimeRenderTimeIndex++;
+        noteColumn.longNoteRenderTimeIndex++;
+    }
+}
+
+void Game::RegisterHit(NoteColumn& noteColumn)
+{
+    if (noteColumn.noteTimeIndex < noteColumn.hitTimes.size())
+    {
+        noteColumn.hitTime = mTimeElapsed;
+        noteColumn.hitDifference = abs(noteColumn.hitTime - noteColumn.hitTimes[noteColumn.noteTimeIndex]);
+        if (noteColumn.hitDifference <= 180)
         {
-            GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("flawless-judgement-text"));
+            noteColumn.hitNote = true;
+            // std::cout << "You hit " << noteColumn.noteName + '-' + to_string(noteColumn.noteTimeIndex) << " at " << mTimeElapsed << " and a hit difference of " << noteColumn.hitDifference << " but the time supposed to be hit is " << noteColumn.hitTimes[noteColumn.noteTimeIndex] << '\n';
+            mSpriteRenderer.mNoteBuffer[mCurrentGameState].erase(noteColumn.noteName + '-' + to_string(noteColumn.noteTimeIndex));
+            if (noteColumn.noteTimeIndex < noteColumn.hitTimes.size())
+                noteColumn.noteTimeIndex++;
+            if (noteColumn.hitDifference >= 0 && noteColumn.hitDifference <= 18.9)
+            {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("flawless-judgement-text"));
+            }
+            else if (noteColumn.hitDifference > 18.9 && noteColumn.hitDifference <= 37.8)
+            {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("perfect-judgement-text"));
+            }
+            else if (noteColumn.hitDifference > 37.8 && noteColumn.hitDifference <= 75.6)
+            {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("great-judgement-text"));
+            }
+            else if (noteColumn.hitDifference > 75.6 && noteColumn.hitDifference <= 113.4)
+            {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("good-judgement-text"));
+            }
+            else
+            {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("bad-judgement-text"));
+            }
         }
-        else if (hitDifference > 18.9 && hitDifference <= 37.8)
-        {
-            GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("perfect-judgement-text"));
-        }
-        else if (hitDifference > 37.8 && hitDifference<= 75.6)
-        {
-            GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("great-judgement-text"));
-        }
-        if (hitDifference > 75.6 && hitDifference <= 113.4)
-        {
-            GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("good-judgement-text"));
-        }
-        if (hitDifference > 113.4 && hitDifference <= 180)
-        {
-            GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("bad-judgement-text"));
-        }
+    }
+    if (noteColumn.longNoteTimeIndex < noteColumn.longNoteHitTimes.size())
+    {
+        noteColumn.longNoteHitTime = mTimeElapsed;
+        noteColumn.hitDifference = abs(noteColumn.longNoteHitTime - noteColumn.longNoteHitTimes[noteColumn.longNoteTimeIndex]);
+
+        if (noteColumn.hitDifference <= 180) { // Within hit window
+   
+            // Stop the long note movement
+            mSpriteRenderer.mNoteBuffer[mCurrentGameState].erase(
+                noteColumn.noteName + "-long-note-head-" + to_string(noteColumn.longNoteTimeIndex)
+            );
+
+            // Start shrinking logic
+            auto& note = mSpriteRenderer.mNoteBuffer[mCurrentGameState][
+                noteColumn.noteName + "-long-note-body-" + to_string(noteColumn.releaseTimeIndex)
+            ];
+
+            noteColumn.longNoteOriginalHeight = note->GetSize().y;
+            noteColumn.shrinkDuration = noteColumn.releaseTimes[noteColumn.releaseTimeIndex] -
+                noteColumn.longNoteHitTimes[noteColumn.longNoteTimeIndex];
+            noteColumn.shrinkStartTime = mTimeElapsed;
+            noteColumn.longNoteTimeIndex++;
+            note->mIsMoving = false;
+            note->SetPosition(vec2(noteColumn.xPos, 1080 - 90 * (mReceptorSize / 100)));
+            noteColumn.isKeyHeld = true; // Indicates the note is being held
+            if (noteColumn.hitDifference >= 0 && noteColumn.hitDifference <= 18.9) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("flawless-judgement-text"));
+            }
+            else if (noteColumn.hitDifference > 18.9 && noteColumn.hitDifference <= 37.8) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("perfect-judgement-text"));
+            }
+            else if (noteColumn.hitDifference > 37.8 && noteColumn.hitDifference <= 75.6) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("great-judgement-text"));
+            }
+            else if (noteColumn.hitDifference > 75.6 && noteColumn.hitDifference <= 113.4) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("good-judgement-text"));
+            }
+            else {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("bad-judgement-text"));
+            }
+       }
+    }
+}
+
+void Game::UpdateLongNoteState(NoteColumn& noteColumn) {
+    if (noteColumn.isKeyHeld) {
+        // Access the note body from the renderer
+        auto& note = mSpriteRenderer.mNoteBuffer[mCurrentGameState][
+            noteColumn.noteName + "-long-note-body-" + to_string(noteColumn.releaseTimeIndex)
+        ];
+        float elapsedTimeSinceHit = mTimeElapsed - noteColumn.shrinkStartTime;
+        float shrinkProgress = elapsedTimeSinceHit / noteColumn.shrinkDuration;
+
+        shrinkProgress = std::clamp(shrinkProgress, 0.0f, 1.0f);
+
+        // Calculate new height based on shrink progress
+        float originalHeight = noteColumn.longNoteOriginalHeight;
+        float newHeight = originalHeight * (1.0f - shrinkProgress);
+
+        // Update the size of the note body
+        if(note!=nullptr)
+            note->SetSize(vec2(note->GetSize().x, newHeight));
     }
 }
 
 
 void Game::HandleHitRegistration(SDL_Event& event)
 {
-    HitNoteInFirstColumn = false;
     if (SDL_GetKeyName(event.key.keysym.sym) == mLeftKeybind)
     {
-		RegisterHit(firstColumnCombinedHitTimes, firstColumnHitTime, firstColumnHitDifference, firstColumnNextNoteTimeIndex, HitNoteInFirstColumn, "main-gameplay-left-note-");
+        RegisterHit(mNoteColumns[0]);
     }
-    HitNoteInSecondColumn = false;
-	if (SDL_GetKeyName(event.key.keysym.sym) == mDownKeybind)
-	{
-		RegisterHit(secondColumnCombinedHitTimes, secondColumnHitTime, secondColumnHitDifference, secondColumnNextNoteTimeIndex, HitNoteInSecondColumn, "main-gameplay-down-note-");
-	}
-    HitNoteInThirdColumn = false;
-	if (SDL_GetKeyName(event.key.keysym.sym) == mUpKeybind)
-	{
-		RegisterHit(thirdColumnCombinedHitTimes, thirdColumnHitTime, thirdColumnHitDifference, thirdColumnNextNoteTimeIndex, HitNoteInThirdColumn, "main-gameplay-up-note-");
+    if (SDL_GetKeyName(event.key.keysym.sym) == mDownKeybind)
+    {	
+        RegisterHit(mNoteColumns[1]);
     }
-    HitNoteInFourthColumn = false;
-	if (SDL_GetKeyName(event.key.keysym.sym) == mRightKeybind)
-	{
-		RegisterHit(fourthColumnCombinedHitTimes, fourthColumnHitTime, fourthColumnHitDifference, fourthColumnNextNoteTimeIndex, HitNoteInFourthColumn, "main-gameplay-right-note-");
-	}
+    if (SDL_GetKeyName(event.key.keysym.sym) == mUpKeybind)
+    {
+        RegisterHit(mNoteColumns[2]);
+    }
+    if (SDL_GetKeyName(event.key.keysym.sym) == mRightKeybind)
+    {
+        RegisterHit(mNoteColumns[3]);
+    }
+}
+
+void Game::HandleHitRelease(SDL_Event& event)
+{
+    if (SDL_GetKeyName(event.key.keysym.sym) == mLeftKeybind)
+    {
+        HandleLongNoteRelease(mNoteColumns[0]);
+    }
+    if (SDL_GetKeyName(event.key.keysym.sym) == mDownKeybind)
+    {
+        HandleLongNoteRelease(mNoteColumns[1]);
+    }
+    if (SDL_GetKeyName(event.key.keysym.sym) == mUpKeybind)
+    {
+        HandleLongNoteRelease(mNoteColumns[2]);
+    }
+    if (SDL_GetKeyName(event.key.keysym.sym) == mRightKeybind)
+    {
+        HandleLongNoteRelease(mNoteColumns[3]);
+    }
+}
+
+void Game::HandleLongNoteRelease(NoteColumn& noteColumn)
+{
+    if (noteColumn.isKeyHeld && noteColumn.releaseTimeIndex < noteColumn.releaseTimes.size())
+    {
+        noteColumn.isKeyHeld = false;
+        noteColumn.releaseTime = mTimeElapsed;
+        noteColumn.releaseDifference = noteColumn.releaseTime -
+            noteColumn.releaseTimes[noteColumn.releaseTimeIndex];
+        if ( noteColumn.releaseDifference <= 0)
+        {
+            mSpriteRenderer.mNoteBuffer[mCurrentGameState].erase(
+                noteColumn.noteName + "-long-note-body-" + to_string(noteColumn.releaseTimeIndex));
+            noteColumn.releaseTimeIndex++;
+            if (noteColumn.releaseDifference <= 0 && noteColumn.hitDifference >= -18.9) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("flawless-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference < -18.9 && noteColumn.releaseDifference >= -37.8) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("perfect-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference < -37.8 && noteColumn.releaseDifference >= -75.6) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("great-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference < -75.6 && noteColumn.releaseDifference >= -113.4) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("good-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference < -113.4) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("bad-judgement-text"));
+            }
+        }
+        else if (noteColumn.releaseDifference >= 0)
+        {
+            mSpriteRenderer.mNoteBuffer[mCurrentGameState].erase(
+                noteColumn.noteName + "-long-note-body-" + to_string(noteColumn.releaseTimeIndex));
+            noteColumn.releaseTimeIndex++;
+            if (noteColumn.releaseDifference >= 0 && noteColumn.hitDifference <= 18.9) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("flawless-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference > 18.9 && noteColumn.releaseDifference <= -37.8) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("perfect-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference > 37.8 && noteColumn.releaseDifference <= 75.6) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("great-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference > 75.6 && noteColumn.releaseDifference <= 113.4) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("good-judgement-text"));
+            }
+            else if (noteColumn.releaseDifference > 113.4) {
+                GetSprite(mCurrentGameState, "main-gameplay-judgement-text")
+                    ->SetTexture(ResourceManager::GetTexture("bad-judgement-text"));
+            }
+        }
+    }
 }
 
 void Game::HandleMissedHitRegistration()
 {
-
-    if (firstColumnNextNoteTimeIndex < firstColumnCombinedHitTimes.size())
+    for (auto& noteColumn : mNoteColumns)
     {
-        if (mTimeElapsed > firstColumnCombinedHitTimes[firstColumnNextNoteTimeIndex] + 180)
+        if (noteColumn.noteTimeIndex < noteColumn.hitTimes.size() &&
+            mTimeElapsed > noteColumn.hitTimes[noteColumn.noteTimeIndex] + 180)
         {
-            firstColumnNextNoteTimeIndex++;
+            noteColumn.noteTimeIndex++;
             GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("miss-judgement-text"));
         }
-    }    
-    if (secondColumnNextNoteTimeIndex < secondColumnCombinedHitTimes.size())
-    {
-        if (mTimeElapsed > secondColumnCombinedHitTimes[secondColumnNextNoteTimeIndex] + 180)
+        if (noteColumn.longNoteTimeIndex < noteColumn.longNoteHitTimes.size() &&
+            mTimeElapsed > noteColumn.longNoteHitTimes[noteColumn.longNoteTimeIndex] + 180)
         {
-            secondColumnNextNoteTimeIndex++;
+            noteColumn.longNoteTimeIndex++;
             GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("miss-judgement-text"));
-        }
-    }    
-    if (thirdColumnNextNoteTimeIndex < thirdColumnCombinedHitTimes.size())
-    {
-        if (mTimeElapsed > thirdColumnCombinedHitTimes[thirdColumnNextNoteTimeIndex] + 180)
+        } 
+        if (noteColumn.releaseTimeIndex < noteColumn.releaseTimes.size() && 
+            mTimeElapsed > noteColumn.releaseTimes[noteColumn.releaseTimeIndex] + 180)
         {
-            thirdColumnNextNoteTimeIndex++;
-            GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("miss-judgement-text"));
-        }
-    }    
-    if (fourthColumnNextNoteTimeIndex < fourthColumnCombinedHitTimes.size())
-    {
-        if (mTimeElapsed > fourthColumnCombinedHitTimes[fourthColumnNextNoteTimeIndex] + 180)
-        {
-            fourthColumnNextNoteTimeIndex++;
+            noteColumn.releaseTimeIndex++;
             GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("miss-judgement-text"));
         }
     }
