@@ -12,9 +12,11 @@ class Sprite
 public:
     // Constructor
     // Remove the default arguments for previous parameters
-    Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePosition = vec2(0,0), float textureScale = 1);
+    Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePosition = vec2(0,0), float textureScale = 1, bool isMoving = false);
 
     GLuint mVertexArrayObject;
+    float mCurrentSpeed = 1;
+    bool mIsMoving;
     
 
     //  Draw method
@@ -54,6 +56,8 @@ public:
     void SetRotation(bool enable, vec3 orientation = vec3(0,0,1), float rotatingTime = 1.0f, float angle = 180, bool looping = false);
     void SetScale(bool enable, float targetScale, float scaleTime = 1.0f, bool looping = false);
 
+    void SetVelocity(bool enable, float velocity);
+
     // Getters for the sprite attributes
     vec2 GetPosition() const;
     vec2 GetSize() const;
@@ -86,7 +90,6 @@ private:
     // Universal update vairable to handle sprite state updates
     bool mHasUpdated;
     float mMoveTime = 1.0f;
-    float mCurrentSpeed;
     float mMoveStartTime= 0.0f;
 
     float mCurrentTime;
@@ -102,6 +105,8 @@ private:
 
     // Animation state for MoveTo()
     bool mIsMovingTo;
+    float mVelocity;
+    
 
     // Animation state for Rotating the sprite
     bool mIsRotating = false;

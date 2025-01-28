@@ -103,7 +103,7 @@ void SpriteRenderer::CreateNote(GameState gameState, string name, Texture& textu
 
     // Determine whether the VAO is going to used 3D or 2D based on the mPersepctive parameter
     sprite->mVertexArrayObject = perspective ? this->mVertexArrayObject3D : this->mVertexArrayObject;
-
+    sprite->mIsMoving = true;
     // Store the sprite in the appropriate hash table
     mNoteBuffer[gameState][name] = sprite;
 }
@@ -119,7 +119,8 @@ void SpriteRenderer::DrawSprites(GameState gameState)
 
     for (const auto& [key, note] : mNoteBuffer[gameState])
     {
-        note->Draw();
+        if(note!=nullptr)
+            note->Draw();
     }
     
 }
