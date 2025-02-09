@@ -63,7 +63,7 @@ void processLine(const string& line,
 
 int main() {
     // File path to the .osu file
-    string filePath = "xi - Blue Zenith (riunosk) [#0000FF].osu";
+    string filePath = "Sharkey & Arkitech - Quadraphinix (Xay) [Challenge].osu";
 
     // Vectors for hit times, release times, and long note hit times for each column
     vector<float> firstColumnNoteHitTimes, secondColumnNoteHitTimes, thirdColumnNoteHitTimes, fourthColumnNoteHitTimes;
@@ -101,7 +101,7 @@ int main() {
 
     // Output the results in noteColumn format
     cout << "NoteColumn firstColumn = {" << endl;
-    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0" << endl;
+    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0," << endl;
     cout << "\"main-gameplay-left-note\"," << endl;
     cout << "581.936, 0," << endl;
     cout << "{ ";
@@ -128,7 +128,7 @@ int main() {
     // Repeat for other columns
     // Second column
     cout << "NoteColumn secondColumn = {" << endl;
-    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0" << endl;
+    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0," << endl;
     cout << "\"main-gameplay-down-note\"," << endl;
     cout << "765.423, 0," << endl;
     cout << "{ ";
@@ -154,7 +154,7 @@ int main() {
     
     // Third column
     cout << "NoteColumn thirdColumn = {" << endl;
-    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0" << endl;
+    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0," << endl;
     cout << "\"main-gameplay-up-note\"," << endl;
     cout << "949.361, 0," << endl;
     cout << "{ ";
@@ -180,7 +180,7 @@ int main() {
     
     // Fourth column
     cout << "NoteColumn fourthColumn = {" << endl;
-    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0" << endl;
+    cout << "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0," << endl;
     cout << "\"main-gameplay-right-note\"," << endl;
     cout << "1138.061, 0," << endl;
     cout << "{ ";

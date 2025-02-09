@@ -135,6 +135,7 @@ void TextRenderer::DrawTexts(GameState gameState)
 
 void TextRenderer::LoadTexts(GameState gameState)
 {
+    mCurrentlyRenderedTexts[gameState].clear();
     // Iterate through each text and copy it to the text hash table
     for (auto& [key, text] : mDefaultTexts[gameState])
     {

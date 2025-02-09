@@ -1,6 +1,0 @@
-Artist : DragonForce
-Song Name : Breakdown
-Difficulty : 0
-BPM : 200
-Background Image : charts\DragonForce-Breakdown\body-bg.png
-Audio : charts\DragonForce-Breakdown\DragonForce - 05 - Body Breakdown.mp3

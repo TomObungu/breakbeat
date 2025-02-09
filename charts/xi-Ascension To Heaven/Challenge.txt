@@ -1,6 +1,0 @@
-Artist : xi
-Song Name : Ascension To Heaven
-Difficulty : 0
-BPM : 200
-Background Image : charts\xi-Ascension To Heaven\ATH-BG.jpg
-Audio : charts\xi-Ascension To Heaven\xi_ascension_to_heaven.mp3

@@ -41,12 +41,17 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-editor-menu-difficulty-new-difficulty-button.png",true, "chart-editor-menu-difficulty-new-difficulty-button");
     ResourceManager::LoadTexture("\\assets\\png\\chart editor menu\\breakbeat-chart-selection-difficulty-select-box-highlighted.png",true, "chart-selection-difficulty-select-box-highlighted");
 
+    /* CHART SELECTION */
+    ResourceManager::LoadTexture("\\assets\\png\\chart selection menu\\breakbeat-chart-selection-menu-user-navigation-assist-new.png", true, "chart-selection-menu-ua");
+    ResourceManager::LoadTexture("\\assets\\png\\chart selection menu\\breakbeat-chart-selection-song-cover-frame.png", true, "song-cover-frame");
+    ResourceManager::LoadTexture("\\assets\\png\\chart selection menu\\breakbeat-chart-selection-song-cover-texture.png", true, "song-cover");
+
     /* MAIN GAMEPLAY */
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-gameplay-vsrg-column.png",true,"main-gameplay-gameplay-vsrg-column");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-left-note.png",true,"main-gameplay-left-note");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-left-note-receptor.png",true,"main-gameplay-left-note-receptor" );
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-life-bar.png",true,"main-gameplay-life-bar");
-    ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-m6ain-gameplay-life-bar-handle.png",true,"main-gameplay-life-bar-handle");
+    ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-life-bar-handle.png",true,"main-gameplay-life-bar-handle");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-right-note.png",true,"main-gameplay-right-note");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-right-note-receptor.png",true,"main-gameplay-right-note-receptor");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-up-note.png",true,"main-gameplay-up-note");
@@ -60,7 +65,7 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\miss.png", true, "miss-judgement-text");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\perfect.png", true, "perfect-judgement-text");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\bad.png", true, "bad-judgement-text");
-    ResourceManager::LoadTexture("\\assets\\png\\transparent - texture.png", true, "transparent-texture");
+    ResourceManager::LoadTexture("\\assets\\png\\transparent-texture.png", true, "transparent-texture");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\main-gameplay-hold-note-body.png", true, "main-gameplay-hold-note-body");
 
     /* CHART EDITOR */

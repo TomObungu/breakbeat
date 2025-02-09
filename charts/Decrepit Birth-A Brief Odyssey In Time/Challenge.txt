@@ -1,6 +1,0 @@
-Artist : Decrepit Birth
-Song Name : A Brief Odyssey In Time
-Difficulty : 0
-BPM : 220
-Background Image : charts\Decrepit Birth-A Brief Odyssey In Time\ABOIT-BG.jpg
-Audio : charts\Decrepit Birth-A Brief Odyssey In Time\07 A Brief Odyssey In Time.mp3

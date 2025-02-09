@@ -118,6 +118,12 @@ void Game::HandleMouseInput(SDL_Event& event)
                     currentMenu->SetCurrentMenuOption(collidingSprite);
                     currentMenu->PlaySelectionAnimation();
                     TransitionToGameState(GameState::CHART_EDITOR_SELECTION_MENU);
+                }                
+                else if (collidingSprite == GetSprite(mCurrentGameState, "main-menu-chart-selection-button"))
+                {
+                    currentMenu->SetCurrentMenuOption(collidingSprite);
+                    currentMenu->PlaySelectionAnimation();
+                    TransitionToGameState(GameState::CHART_SELECTION_MENU);
                 }
             }
             else if( mCurrentGameState == GameState::SETTINGS)

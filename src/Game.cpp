@@ -42,16 +42,39 @@ void Game::ProcessEvents()
                     mSoundEngine->stopAllSounds();
                 }
             }  
+            if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+            {
+                HandleChartScrolling(event);
+                HandleDifficultyScrolling(event);
+
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    TransitionToGameState(GameState::MAIN_MENU);
+                    mSoundEngine->stopAllSounds();
+                }
+            }  
             if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
             {
-                HandleHitRegistration(event);
+                if (mSongPlaying)
+                {
+                    HandleHitRegistration(event);
+                }
+
+                // Handle exiting gameplay when Escape is pressed
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    mSoundEngine->stopAllSounds(); // Stop any playing sounds
+                    // Transition back to Chart Selection
+                    TransitionToGameState(GameState::CHART_SELECTION_MENU);
+                }
             }
         }
         if (event.type == SDL_KEYUP)
         {
             if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
             {
-                HandleHitRelease(event);
+                if(mSongPlaying)
+                    HandleHitRelease(event);
             }
         }
         if (event.type == SDL_MOUSEMOTION)
@@ -108,7 +131,7 @@ void Game::Initialize()
     // Initialize sprites
     InitializeSprites();
 
-    mSpriteRenderer.LoadDefaultSprites(GameState::MAIN_GAMEPLAY);
+    mSpriteRenderer.LoadDefaultSprites(mCurrentGameState);
 
     mTextRenderer.Initialize();
 
@@ -118,9 +141,7 @@ void Game::Initialize()
 
     InitializeTexts();
 
-    mTextRenderer.LoadTexts(GameState::MAIN_GAMEPLAY);
-
-    LoadBackgroundImage();
+    mTextRenderer.LoadTexts(mCurrentGameState);
 
     // Initialize menus;
     InitializeMenus();
@@ -146,6 +167,13 @@ void Game::CalculateDeltaTime()
 
 void Game::Update()
 {
+
+    CheckForTransitionState();
+
+    UpdateSprites(mCurrentGameState);
+
+    UpdateTexts(mCurrentGameState);
+
     if(GetSprite(mCurrentGameState, "background")!=nullptr)
         GetSprite(mCurrentGameState, "background")->MoveTextureCoordinate(vec2(0, -0.1 / (1000 / mDeltaTime)));
 
@@ -192,31 +220,38 @@ void Game::Update()
         }
             
     }
+    if(mCurrentGameState == GameState::CHART_SELECTION_MENU)
+    {
+        
+        if(mFirstFrame)
+        {
+            InitializeChartSelection();
+            mFirstFrame = false;
+            removingSprites = true;
+        }
+            
+    }
 
     if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
     {
-		if (mFirstFrame)
-		{
-            InitializeMainGameplay();
-			mFirstFrame = false;
-        }
-
-		HandleMainGameplay();
-
-        if (mCurrentGameState == GameState::MAIN_GAMEPLAY)
+        if(!mGameActive)
         {
-            for (auto& noteColumn : mNoteColumns)
+            if (mWaitingForGameplayStart)
             {
-                UpdateLongNoteState(noteColumn);
+                // Wait for a short delay before initializing gameplay
+                if (SDL_GetTicks() - mGameplayStartTime >= mGameplayDelay)
+                {
+                    InitializeMainGameplay();
+                    mWaitingForGameplayStart = false; // Now ready to start gameplay
+                }
             }
+        mGameActive = true;
+        }
+        else
+        {
+            HandleMainGameplay();
         }
     }
-
-    CheckForTransitionState();
-
-    UpdateSprites(mCurrentGameState);
-
-    UpdateTexts(mCurrentGameState);
 
 }
 
@@ -297,12 +332,13 @@ void Game::Transition(GameState newGameState)
         // std::cout << "Darkening sprites!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
-            sprite->SetDarken(true);
+            if(sprite!=nullptr)
+                sprite->SetDarken(true);
         }
         for (auto& [key, text] : mTextRenderer.mCurrentlyRenderedTexts[mCurrentGameState])
         {
             text->SetDarken(true);
-        }
+        }        
         mTransitioningDark = true;
         mFirstTransitionFrame = false;
     }
@@ -317,9 +353,14 @@ void Game::Transition(GameState newGameState)
 
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
-            if(sprite->GetDarkenState() != true)
-                mAllDark = false;
-            return;
+            if (sprite != nullptr)
+            {
+                if (sprite->GetDarkenState() != true)
+                {
+                    mAllDark = false;
+                    return;
+                }
+            }
         }
     }
 
@@ -331,9 +372,10 @@ void Game::Transition(GameState newGameState)
         // std::cout << "Loading new sprites!\n";
         mTransitioningDark = false;
         mTransitioningLight = true;
+        mCurrentGameState = newGameState;
+        mSpriteRenderer.mNoteBuffer[mCurrentGameState].clear();
         LoadDefaultSprites(newGameState);
         mTextRenderer.LoadTexts(newGameState);
-        mCurrentGameState = newGameState;
         mFirstFrame = true;
         // std::cout << "Loading new sprites and setting them to color 0!\n";
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
@@ -364,9 +406,14 @@ void Game::Transition(GameState newGameState)
 
         for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
         {
-            if(sprite->GetBrightenState() != true)
-                mAllLight = false;
-            return;
+            if (sprite != nullptr)
+            {
+                if (sprite->GetBrightenState() != true)
+                {
+                    mAllLight = false;
+                    return;
+                }
+            }
         }
     }
 
@@ -374,12 +421,76 @@ void Game::Transition(GameState newGameState)
     {
         // std::cout << "Finished transition!\n";
         mAllDark = false;
-        mAllLight = true;
         mTransitioningDark = false;
         mTransitioningLight = false;
         mTransitioningGameState = GameState::NOT_TRANSITIONING;
         mHasTransitioned = true;
         mFirstTransitionFrame = true;
+        if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+        {
+            mGameActive = false;
+            mSongPlaying = false;
+            
+            firstColumn = {
+             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+             "main-gameplay-left-note",
+             581.936, 0,
+             {},
+             {},
+             {},
+             {}, {}, {}, false, false, false, 0, 0 };
+            secondColumn = {
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            "main-gameplay-down-note",
+            765.423, 0,
+            {},
+            {},
+            {},
+            {}, {}, {}, false, false, false, 0, 0 };
+            thirdColumn = {
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            "main-gameplay-up-note",
+            949.361, 0,
+            {},
+            {},
+            {},
+            {}, {}, {},false, false, false, 0, 0 };
+            fourthColumn = {
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            "main-gameplay-right-note",
+            1138.061, 0,
+            {},
+            {},
+            {},
+            {}, {}, {},false, false, false, 0, 0 };
+
+            // Clear note columns
+            for (auto& noteColumn : mNoteColumns)
+            {
+                noteColumn = {};
+            }
+
+            mSongStartTime = 0;
+            mTimeElapsed = 0;
+            mDelayStartTime = 0;
+            mNegativeOffset = 0;
+            mTimeTakenToFall = 0;
+
+            mAccuracy = 0;
+            mScore = 0;
+            mMaximumPossibleScore = 0;
+            mHealth = 100;
+
+            mFlawlessCount = 0;
+            mPerfectCount = 0;
+            mGreatCount = 0;
+            mGoodCount = 0;
+            mBadCount = 0;
+            mMissCount = 0;
+
+            mWaitingForGameplayStart = true;
+            mGameplayStartTime = SDL_GetTicks();
+        }
     }
 }
 

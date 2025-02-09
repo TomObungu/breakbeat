@@ -287,7 +287,7 @@ void Game::InitializeSprites()
         ResourceManager::GetShader("default"),
         false
     );
-
+     /* CHART EDITOR SELECTION */
     mSpriteRenderer.CreateSprite(
         GameState::CHART_EDITOR_SELECTION_MENU,
         "background",
@@ -554,6 +554,205 @@ void Game::InitializeSprites()
         false
     );
 
+    
+
+    /* CHART SELECTION*/
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "background",
+        ResourceManager::GetTexture("background"),
+        vec2(0, 0),
+        glm::vec2(1960.178, 1033.901),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false,
+        vec2(0, 0),
+        2
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "background-dots",
+        ResourceManager::GetTexture("background-dots"),
+        vec2(0, 0),
+        vec2(1920, 994.167),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-highlight-1",
+        ResourceManager::GetTexture("chart-editor-selection-menu-highlight"),
+        vec2(946.962f, 421.652),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ui-3",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1006.986, 137.932),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ui-2",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(977.394, 278.654),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ui-4",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1052.574, 0.726),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ui-5",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(977.294, 567.628),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ui-6",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1006.986, 710.910),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ui-7",
+        ResourceManager::GetTexture("chart-editor-selection-menu-ui"),
+        vec2(1045.369, 848.019),
+        vec2(795.886, 150.255),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-menu-ua",
+        ResourceManager::GetTexture("chart-selection-menu-ua"),
+        vec2(-12.240, 992.500),
+        vec2(1944.480, 97.468),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-difficulty-select-box-1",
+        ResourceManager::GetTexture("chart-selection-difficulty-select-box"),
+        vec2(199.012, 527.797),
+        vec2(425.283, 75.853),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-difficulty-select-box-2",
+        ResourceManager::GetTexture("chart-selection-difficulty-select-box"),
+        vec2(199.012, 605.088),
+        vec2(425.283, 75.853),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-difficulty-select-box-3",
+        ResourceManager::GetTexture("chart-selection-difficulty-select-box-highlighted"),
+        vec2(199.012, 682.378),
+        vec2(425.283, 75.853),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "chart-selection-difficulty-select-box-4",
+        ResourceManager::GetTexture("chart-selection-difficulty-select-box"),
+        vec2(199.012, 759.668),
+        vec2(425.283, 75.853),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "song-cover-frame",
+        ResourceManager::GetTexture("song-cover-frame"),
+        vec2(114.081, 82.455),
+        vec2(608.351, 391.100),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );    
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_SELECTION_MENU,
+        "song-cover",
+        ResourceManager::GetTexture("song-cover"),
+        vec2(130.257, 98.631),
+        vec2(576.000, 358.749),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+     
+    /* MAIN GAMEPLAY */
+
     mSpriteRenderer.CreateSprite(
         GameState::MAIN_GAMEPLAY,
         "main-gameplay-background-image",
@@ -565,6 +764,7 @@ void Game::InitializeSprites()
         ResourceManager::GetShader("default"),
         false
     );
+
 
     mSpriteRenderer.CreateSprite(
         GameState::MAIN_GAMEPLAY,
@@ -582,8 +782,8 @@ void Game::InitializeSprites()
         GameState::MAIN_GAMEPLAY,
         "main-gameplay-life-bar",
         ResourceManager::GetTexture("main-gameplay-life-bar"),
-        vec2(1335.119, 485.290), // Position to be filled out manually
-        vec2(17.158, 594.710), // Size to be filled out manually
+        vec2(1080, 485.290), // Position to be filled out manually
+        vec2(17.158, -594.710), // Size to be filled out manually
         0.0f,
         vec3(1.0f),
         ResourceManager::GetShader("default"),

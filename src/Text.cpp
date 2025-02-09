@@ -23,7 +23,7 @@ void Text::Draw()
     {
         Character ch = mCharacters[c];
         float xpos = x + ch.Bearing.x;
-        float ypos = mPosition.y + (this->mCharacters['H'].Bearing.y - ch.Bearing.y);
+            float ypos = mPosition.y + (this->mCharacters['H'].Bearing.y - ch.Bearing.y);
         float w = ch.Size.x * mScale;
         float h = ch.Size.y * mScale;
 
@@ -53,6 +53,11 @@ void Text::Draw()
 const string& Text::GetText()
 {
     return mText;
+}
+
+void Text::SetPosition(vec2 position)
+{
+    this->mPosition = position;
 }
 
 void Text::UpdateText(const std::string& newText) {
@@ -174,21 +179,6 @@ void Text::Update(float deltaTime)
 
 }
 
-vec2 Text::GetPosition()
-{
-    return mPosition;
-}
-
-vec2 Text::GetSize()
-{
-    return mSize;
-}
-
-void Text::SetStartIndex(unsigned startIndex) 
-{ 
-    mStartIndex = startIndex; 
-}
-
 void Text::UpdateVisibleText()
 {
     // Ensure the startIndex is within valid bounds
@@ -196,7 +186,7 @@ void Text::UpdateVisibleText()
     {
         mStartIndex = 0;
     }
-    else if(mScrollableText)
+    else if (mScrollableText)
     {
         float currentTicks = SDL_GetTicks();
 
@@ -213,14 +203,30 @@ void Text::UpdateVisibleText()
 
             mLastScrollTime = currentTicks;
         }
-    } else 
+    }
+    else
     {
-        mStartIndex = mText.size() > mWindowSize ? mText.size()-mWindowSize : 0;
+        mStartIndex = mText.size() > mWindowSize ? mText.size() - mWindowSize : 0;
     }
 
     mVisibleText = mText.substr(mStartIndex, mWindowSize);
 }
 
+
+vec2 Text::GetPosition()
+{
+    return mPosition;
+}
+
+vec2 Text::GetSize()
+{
+    return mSize;
+}
+
+void Text::SetStartIndex(unsigned startIndex) 
+{ 
+    mStartIndex = startIndex; 
+}
 
 // Getter for the current start index
 unsigned Text::GetStartIndex()

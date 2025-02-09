@@ -1,6 +1,0 @@
-Artist : Fleshgod Apocalypse
-Song Name : Abyssal
-Difficulty : 0
-BPM : 280
-Background Image : charts\Fleshgod Apocalypse-Abyssal\BG.jpg
-Audio : charts\Fleshgod Apocalypse-Abyssal\02 Abyssal.mp3

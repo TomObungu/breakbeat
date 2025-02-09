@@ -95,6 +95,11 @@ Texture ResourceManager::loadTextureFromFile(const char *file, bool alpha)
     if (!data) {
     std::cerr << "Failed to load texture from " << file << std::endl;
     }
+    GLenum format = GL_RGB;
+    if (nrChannels == 4) format = GL_RGBA; // PNGs might have an alpha channel
+
+    // Store texture format for later use
+    texture.imageFormat = format;
     texture.Generate(width, height, data);
     // and finally free image data
     stbi_image_free(data);

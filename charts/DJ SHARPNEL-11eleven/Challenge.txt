@@ -1,6 +1,0 @@
-Artist : DJ SHARPNEL
-Song Name : 11eleven
-Difficulty : 0
-BPM : 203
-Background Image : charts\DJ SHARPNEL-11eleven\11eleven-BG.jpg
-Audio : charts\DJ SHARPNEL-11eleven\01_11ELEVEN(DJ Sharpnel).mp3

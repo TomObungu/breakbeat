@@ -13,7 +13,6 @@ public:
     // Constructor
     // Remove the default arguments for previous parameters
     Sprite(Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective = false,  vec2 texturePosition = vec2(0,0), float textureScale = 1, bool isMoving = false);
-
     GLuint mVertexArrayObject;
     float mCurrentSpeed = 1;
     bool mIsMoving;

@@ -36,6 +36,7 @@ public:
     void SetColor(const glm::vec3& color);
     void SetScale(float scale);
     void SetDarken(bool enable, float darkenTime = 1.0f);  // New method to start/stop darkening
+    void SetPosition(vec2);
     
     void Darken();  // Existing method to handle darkening process
     // Procedure to brighten the sprutes color from the darkened sate over time

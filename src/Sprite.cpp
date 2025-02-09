@@ -246,7 +246,7 @@ void Sprite::Darken()
 // Start or stop the Brightening process
 void Sprite::SetBrighten(bool enable, float brightenTime)
 {
-    if(!mBrightened || mDarkened && !mBrightening)
+    if(!mBrightened)
     {
         mBrightenTime = brightenTime;
         mDarkenedColor = mColor;
@@ -270,7 +270,7 @@ void Sprite::Brighten()
     float progress =  timeElapsed / (mBrightenTime * 1000);
     mColor = mDarkenedColor + progress;
     if( 
-     timeElapsed >= 1000
+     timeElapsed >= mBrightenTime && progress >=1
      )
     {
         mColor = mOriginalColor;
@@ -310,12 +310,7 @@ void Sprite::SetScale(bool enable, float targetScale, float scaleTime, bool loop
 
 // The Update method will call Darken and Brighten as needed
 void Sprite::Update(float deltaTime) 
-{
-    if (mIsMovingTo) 
-    {
-
-    }
-    
+{    
     // If the sprite is in the darkening state it will call the darken function
     if (mDarkening)
         Darken();

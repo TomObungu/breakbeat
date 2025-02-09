@@ -168,7 +168,6 @@ void Game::CheckNewChartButton()
             UpdateChartSelection();
             removingSprites = true;
         }
-
         if(!mTransitioningLight && !mAllLight) 
         {
             mTransitioningLight = true;
@@ -204,8 +203,8 @@ void Game::UpdateChartSelection()
         mCurrentlyPreviewedCharts.fill("");
         for (unsigned i = 0; i < 7; ++i)
         {
-            GetText(mCurrentGameState, "artist-text-" + std::to_string(i + 1))->UpdateText("NO SONG");
-            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("NO ARTIST");
+            GetText(mCurrentGameState, "artist-text-" + to_string(i + 1))->UpdateText("NO SONG");
+            GetText(mCurrentGameState, "song-text-" + to_string(i + 1))->UpdateText("NO ARTIST");
         }
         return;
     }
@@ -220,62 +219,63 @@ void Game::UpdateChartSelection()
         mCurrentlyPreviewedCharts[i] = mAllCharts[currentIndex];
     }
 
+    regex chartName(R"(\s*-\s*(.+))");
     // Update the UI with artist and song names
     for (unsigned i = 0; i < 7; ++i)
     {
-        const std::string& chartName = mCurrentlyPreviewedCharts[i];
-        size_t lastDelimiterPos = chartName.rfind('-'); // Find the last dash
+        const string& chartName = mCurrentlyPreviewedCharts[i];
+        unsigned lastDelimiterPos = chartName.rfind('-'); // Find the last dash
 
-        if (lastDelimiterPos != std::string::npos)
+        if (lastDelimiterPos != string::npos)
         {
-            std::string artistName = chartName.substr(0, lastDelimiterPos);
-            std::string songName = chartName.substr(lastDelimiterPos + 1);
+            string artistName = chartName.substr(0, lastDelimiterPos);
+            string songName = chartName.substr(lastDelimiterPos + 1);
 
             // Update the respective text objects
-            GetText(mCurrentGameState, "artist-text-" + std::to_string(i + 1))->UpdateText(artistName);
-            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText(songName);
+            GetText(mCurrentGameState, "artist-text-" + to_string(i + 1))->UpdateText(artistName);
+            GetText(mCurrentGameState, "song-text-" + to_string(i + 1))->UpdateText(songName);
         }
         else
         {
             // Clear the text for invalid chart name formats
-            GetText(mCurrentGameState, "artist-text-" + std::to_string(i + 1))->UpdateText("");
-            GetText(mCurrentGameState, "song-text-" + std::to_string(i + 1))->UpdateText("");
+            GetText(mCurrentGameState, "artist-text-" + to_string(i + 1))->UpdateText("");
+            GetText(mCurrentGameState, "song-text-" + to_string(i + 1))->UpdateText("");
         }
     }
 }
 
 void Game::GetCurrentChartDifficulties()
 {
-    // Step 1: Get the currently selected chart directory
+    // Get the currently selected chart directory
     if (mCurrentlyPreviewedCharts.empty() || mCurrentlyPreviewedCharts[3].empty())
     {
         // Clear mAllCurrentChartDifficulties and UI if no valid chart
         mAllCurrentChartDifficulties.clear();
-        for (size_t i = 0; i < 4; ++i)
+        for (unsigned i = 0; i < 4; ++i)
         {
-            GetText(mCurrentGameState, "difficulty-select-box-text-" + std::to_string(i + 1))->UpdateText("NO DIFFICULTIES");
+            GetText(mCurrentGameState, "difficulty-select-box-text-" + to_string(i + 1))->UpdateText("NO DIFFICULTIES");
         }
         return;
     }
 
-        std::string chartDirectory = "charts/" + mCurrentlyPreviewedCharts[3];
-        std::filesystem::path chartDirPath(chartDirectory);
+    string chartDirectory = "charts/" + mCurrentlyPreviewedCharts[3];
+    std::filesystem::path chartDirPath(chartDirectory);
 
-        // Ensure the directory exists
-        if (!std::filesystem::exists(chartDirPath) || !std::filesystem::is_directory(chartDirPath))
-        {
-            std::cerr << "Chart directory does not exist: " << chartDirectory << std::endl;
-            return;
-        }
+    // Ensure the directory exists
+    if (!std::filesystem::exists(chartDirPath) || !std::filesystem::is_directory(chartDirPath))
+    {
+        cerr << "Chart directory does not exist: " << chartDirectory << '\n';
+        return;
+    }
 
-    // Step 3: Iterate through .txt files in the directory
+    // Iterate through .txt files in the directory
     mAllCurrentChartDifficulties.clear();
 
     for (const auto& entry : std::filesystem::directory_iterator(chartDirPath))
     {
         if (entry.is_regular_file() && entry.path().extension() == ".txt")
         {
-            std::string difficultyName = entry.path().stem().string(); // File name without extension
+            string difficultyName = entry.path().stem().string(); // File name without extension
             mAllCurrentChartDifficulties.push_back(difficultyName);
         }
     }
@@ -283,54 +283,55 @@ void Game::GetCurrentChartDifficulties()
 
 void Game::UpdateCurrentChartDifficulties()
 {
-    // Step 1: Ensure there are difficulties to preview
+    // Ensure there are difficulties to preview
     if (mAllCurrentChartDifficulties.empty())
     {
         mCurrentlyPreviewedDifficulties.fill("");
-        for (size_t i = 0; i < 4; ++i)
+        for (unsigned i = 0; i < 4; ++i)
         {
-            GetText(mCurrentGameState, "difficulty-select-box-text-" + std::to_string(i + 1))->UpdateText("NO DIFFICULTIES");
+            GetText(mCurrentGameState, "difficulty-select-box-text-" + to_string(i + 1))->UpdateText("NO DIFFICULTIES");
         }
         return;
     }
 
-    // Step 2: Update mCurrentlyPreviewedDifficulties based on circular queue logic
-    size_t totalDifficulties = mAllCurrentChartDifficulties.size();
-    for (size_t i = 0; i < 4; ++i)
+    // Update mCurrentlyPreviewedDifficulties based on circular queue logic
+    unsigned totalDifficulties = mAllCurrentChartDifficulties.size();
+    for (unsigned i = 0; i < 4; ++i)
     {
-        size_t currentIndex = (mChartDifficultyPreviewStartIndex + i) % totalDifficulties;
+        unsigned currentIndex = (mChartDifficultyPreviewStartIndex + i) % totalDifficulties;
         mCurrentlyPreviewedDifficulties[i] = mAllCurrentChartDifficulties[currentIndex];
     }
 
-    // Step 3: Read difficulty values from the corresponding files and update UI
-    std::regex difficultyRegex(R"(Difficulty\s*:\s*([\d.,]+))"); // Regex to match difficulty value
-    for (size_t i = 0; i < 4; ++i)
+
+    // Read difficulty values from the corresponding files and update UI
+    regex difficultyRegex(R"(Difficulty\s*:\s*([\d.,]+))"); // Regex to match difficulty value
+    for (unsigned i = 0; i < 4; ++i)
     {
-        const std::string& difficultyName = mCurrentlyPreviewedDifficulties[i];
+        const string& difficultyName = mCurrentlyPreviewedDifficulties[i];
         if (difficultyName.empty())
         {
-            GetText(mCurrentGameState, "difficulty-select-box-text-" + std::to_string(i + 1))->UpdateText("NO DIFFICULTIES");
+            GetText(mCurrentGameState, "difficulty-select-box-text-" + to_string(i + 1))->UpdateText("NO DIFFICULTIES");
             continue;
         }
 
         // Build the file path for the difficulty file
-        std::string fileName = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + difficultyName + ".txt";
+        string fileName = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + difficultyName + ".txt";
 
         // Read the difficulty value from the file
-        std::ifstream difficultyFile(fileName);
+        ifstream difficultyFile(fileName);
         if (!difficultyFile.is_open())
         {
-            std::cerr << "Failed to open difficulty file: " << fileName << std::endl;
-            GetText(mCurrentGameState, "difficulty-select-box-text-" + std::to_string(i + 1))->UpdateText(difficultyName + " : ERROR");
+            cerr << "Failed to open difficulty file: " << fileName << '\n';
+            GetText(mCurrentGameState, "difficulty-select-box-text-" + to_string(i + 1))->UpdateText(difficultyName + " : ERROR");
             continue;
         }
 
-        std::string line;
-        std::string difficultyValue = "N/A"; // Default if no difficulty line found
-        while (std::getline(difficultyFile, line))
+        string line;
+        string difficultyValue = "N/A"; // Default if no difficulty line found
+        while (getline(difficultyFile, line))
         {
-            std::smatch match;
-            if (std::regex_search(line, match, difficultyRegex) && match.size() == 2)
+            smatch match;
+            if (regex_search(line, match, difficultyRegex) && match.size() == 2)
             {
                 difficultyValue = match[1].str();
                 break; // Found the difficulty value, stop reading
@@ -340,9 +341,11 @@ void Game::UpdateCurrentChartDifficulties()
         difficultyFile.close();
 
         // Update the text for the corresponding difficulty box
-        std::string displayText = difficultyName + " : " + difficultyValue;
-        GetText(mCurrentGameState, "difficulty-select-box-text-" + std::to_string(i + 1))->UpdateText(displayText);
+        string displayText = difficultyName + " : " + difficultyValue;
+        GetText(mCurrentGameState, "difficulty-select-box-text-" + to_string(i + 1))->UpdateText(displayText);
     }
+
+    mCurrentSongDifficulty = mCurrentlyPreviewedDifficulties[2];
 }
 
 void Game::HandleChartScrolling(SDL_Event& event)
@@ -371,8 +374,14 @@ void Game::HandleChartScrolling(SDL_Event& event)
 
                 UpdateCurrentChartDifficulties();
 
-                // Play the corresponding chart audio
                 PlayCurrentlySelectedChartAudio();
+                if(mCurrentGameState==GameState::CHART_SELECTION_MENU)
+                    UpdateChartSelectionImage();
+
+                mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+
+                // Play the corresponding chart audio
+                
                 break;
             }
         case SDLK_LEFT:
@@ -394,11 +403,25 @@ void Game::HandleChartScrolling(SDL_Event& event)
 
                 UpdateCurrentChartDifficulties();
 
-                // Play the corresponding chart audio
                 PlayCurrentlySelectedChartAudio();
+                
+                if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+                    UpdateChartSelectionImage();
+
+                mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+   
+                // Play the corresponding chart audio
                 break;
             }
-
+        case SDLK_RETURN:
+            if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+            {
+                mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+                TransitionToGameState(GameState::MAIN_GAMEPLAY);
+                mSoundEngine->stopAllSounds();
+            }
+               
+            break;
         default:
             // Do nothing for other keys
             return;
@@ -411,7 +434,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
     if (event.type != SDL_KEYDOWN)
         return;
 
-    size_t totalDifficulties = mAllCurrentChartDifficulties.size();
+    unsigned totalDifficulties = mAllCurrentChartDifficulties.size();
     if (totalDifficulties == 0)
         return;
 
@@ -432,6 +455,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             // Update the displayed difficulties
             GetCurrentChartDifficulties();
             UpdateCurrentChartDifficulties();
+            mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
             break;
         }
 
@@ -448,6 +472,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             // Update the displayed difficulties;
             GetCurrentChartDifficulties();
             UpdateCurrentChartDifficulties();
+            mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
             break;
         }
 
@@ -461,34 +486,34 @@ void Game::PlayCurrentlySelectedChartAudio()
     // Ensure there are charts and difficulties available
     if (mCurrentlyPreviewedCharts.empty() || mCurrentlyPreviewedDifficulties.empty())
     {
-        std::cerr << "No charts or difficulties available to preview audio." << std::endl;
+        cerr << "No charts or difficulties available to preview audio." << '\n';
         return;
     }
 
     // Get the chart folder name for the 4th index (0-based, index 3)
-    std::string chartFolderName = mCurrentlyPreviewedCharts[3]; // 4th chart in preview
+    string chartFolderName = mCurrentlyPreviewedCharts[3]; // 4th chart in preview
 
     // Get the selected difficulty file path
-    std::string selectedDifficulty = mCurrentlyPreviewedDifficulties[2]; 
-    std::string difficultyFilePath = "charts/" + chartFolderName + "/" + selectedDifficulty + ".txt";
+    string selectedDifficulty = mCurrentlyPreviewedDifficulties[2]; 
+    string difficultyFilePath = "charts/" + chartFolderName + "/" + selectedDifficulty + ".txt";
 
     // Open the difficulty file
-    std::ifstream difficultyFile(difficultyFilePath);
+    ifstream difficultyFile(difficultyFilePath);
     if (!difficultyFile.is_open())
     {
-        std::cerr << "Failed to open difficulty file: " << difficultyFilePath << std::endl;
+        cerr << "Failed to open difficulty file: " << difficultyFilePath << '\n';
         return;
     }
 
     // Read the file line by line to find the "Audio : " line
-    std::string line;
-    std::string audioPath;
-    std::regex audioRegex(R"(Audio\s*:\s*(.+))");
+    string line;
+    string audioPath;
+    regex audioRegex(R"(Audio\s*:\s*(.+))");
 
-    while (std::getline(difficultyFile, line))
+    while (getline(difficultyFile, line))
     {
-        std::smatch match;
-        if (std::regex_match(line, match, audioRegex))
+        smatch match;
+        if (regex_match(line, match, audioRegex))
         {
             if (match.size() == 2) // Ensure the match captures the path
             {
@@ -498,12 +523,14 @@ void Game::PlayCurrentlySelectedChartAudio()
         }
     }
 
+    mCurrentChartAudioFile = audioPath;
+
     difficultyFile.close();
 
     // Ensure an audio path was found
     if (audioPath.empty())
     {
-        std::cerr << "No audio path found in difficulty file: " << difficultyFilePath << std::endl;
+        std::cerr << "No audio path found in difficulty file: " << difficultyFilePath << '\n';
         return;
     }
 
@@ -514,11 +541,12 @@ void Game::PlayCurrentlySelectedChartAudio()
         std::filesystem::path fullAudioPath = std::filesystem::current_path() / audioPath;
 
         mSoundEngine->stopAllSounds();
-        mSoundEngine->play2D(fullAudioPath.string().c_str(), true); // Play the new audio
+        mSoundEngine->play2D(fullAudioPath.string().c_str(), true);// Play the new audio
+        mCurrentSongDuration = mSoundEngine->getSoundSource(fullAudioPath.string().c_str())->getPlayLength();
     }
     else
     {
-        std::cerr << "Sound engine is not initialized." << std::endl;
+        cerr << "Sound engine is not initialized." << '\n';
     }
 }
 
@@ -540,7 +568,61 @@ void Game::InitializeChartSelection()
     UpdateCurrentChartDifficulties();
 
     PlayCurrentlySelectedChartAudio();
+
+    if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+        UpdateChartSelectionImage();
+
+    mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
 }
+
+
+void Game::UpdateChartSelectionImage()
+{
+    mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+    mCurrentSongName = mCurrentlyPreviewedCharts[3];
+    std::ifstream difficultyFile(mCurrentChartFile);
+
+    std::string line;
+    std::string imagePath;
+    std::regex imageRegex(R"(Background Image\s*:\s*(.+))");
+    std::regex bPMRegex(R"(BPM\s*:\s*(.+))");
+
+    while (std::getline(difficultyFile, line))
+    {
+        std::smatch match;
+        if (std::regex_match(line, match, imageRegex))
+        {
+            if (match.size() == 2) // Ensure the match captures the path
+            {
+                mCurrentChartImageFile = match[1].str();
+            }
+        } 
+        if (std::regex_match(line, match, bPMRegex))
+        {
+            if (match.size() == 2) // Ensure the match captures the path
+            {
+                mCurrentSongBPM = match[1].str();
+            }
+        }
+    }
+
+    GetText(mCurrentGameState, "song-bpm-text")->UpdateText("BPM : "+mCurrentSongBPM);
+    int minutes = static_cast<int>(mCurrentSongDuration / 60000); // Convert ms to minutes
+    int seconds = (static_cast<int>(mCurrentSongDuration / 1000)) % 60; // Convert ms to seconds (mod 60)
+    GetText(mCurrentGameState, "song-length-text")
+        ->UpdateText("Length : " + to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + to_string(seconds));
+
+    // Convert file extension to lowercase for case-insensitive comparison
+    std::string extension = fs::path(mCurrentChartImageFile).extension().string();
+    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+
+    // Check if the file is PNG or JPG and enable alpha accordingly
+    bool useAlpha = extension == ".png";
+
+    Texture bgImage = ResourceManager::loadTextureFromFile((fs::current_path().string() + "\\" + mCurrentChartImageFile).c_str(), useAlpha);
+    GetSprite(mCurrentGameState, "song-cover")->SetTexture(bgImage);
+}
+
 
 void Game::CreateNewChart()
 {
@@ -638,7 +720,7 @@ void Game::CreateNewChart()
 void Game::GetCurrentChartDirectories()
 {
     // Iterate through the charts folder and store chart folder names
-    const std::string chartDirectory = "charts";
+    const string chartDirectory = "charts";
     for (const auto& entry : std::filesystem::directory_iterator(chartDirectory))
     {
         if (entry.is_directory())

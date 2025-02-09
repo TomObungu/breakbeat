@@ -14,7 +14,6 @@ Texture::Texture()
     textureFilteringMinimum(GL_LINEAR), 
     textureFilteringMaximum(GL_LINEAR)
 {
-    glGenTextures(1, &this->ID);
 }
 
 void Texture::Generate(unsigned int width, unsigned int height, unsigned char* data)
@@ -22,6 +21,7 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned char* d
     this->width = width;
     this->height = height;
     // create Texture
+    glGenTextures(1, &this->ID);
     glBindTexture(GL_TEXTURE_2D, this->ID);
     glTexImage2D(GL_TEXTURE_2D, 0, this->textureFormat, width, height, 0, this->imageFormat, GL_UNSIGNED_BYTE, data);
     // set Texture wrap and filter modes
