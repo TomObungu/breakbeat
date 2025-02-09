@@ -220,6 +220,7 @@ void Game::Update()
         }
             
     }
+    
     if(mCurrentGameState == GameState::CHART_SELECTION_MENU)
     {
         
@@ -251,6 +252,17 @@ void Game::Update()
         {
             HandleMainGameplay();
         }
+    }
+
+    if (mCurrentGameState == GameState::CHART_EDITOR)
+    {
+        if (mFirstFrame)
+        {
+            InitializeChartEditor();
+            mFirstFrame = false;
+        }
+
+        HandleChartEditor();
     }
 
 }

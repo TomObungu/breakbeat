@@ -72,6 +72,7 @@ void Game::InitializeTextures()
     ResourceManager::LoadTexture("\\assets\\png\\chart editing\\breakbeat-chart-editing-scroll-bar-background.png", true, "chart-editing-scroll-bar-background");
     ResourceManager::LoadTexture("\\assets\\png\\chart editing\\breakbeat-chart-editing-beat-snap-bar.png", true, "chart-editing-beat-snap-bar");
     ResourceManager::LoadTexture("\\assets\\png\\chart editing\\breakbeat-chart-editing-scroll-bar.png", true, "chart-editing-scroll-bar");
+    ResourceManager::LoadTexture("\\assets\\png\\chart editing\\breakbeat-chart-editing-scroll-bar-handle.png", true, "breakbeat-chart-editing-scroll-bar-handle");
 
     /* GRADE SCREEN */
     ResourceManager::LoadTexture("\\assets\\png\\grade screen\\breakbeat-main-gameplay-grade-screen-box.png", true, "main-gameplay-grade-screen-box");

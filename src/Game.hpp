@@ -184,6 +184,12 @@ public:
 
     void UpdateChartSelectionImage();
 
+    void InitializeChartEditor();
+
+    void GetChartMetadata();
+
+    void HandleChartEditor();
+
     void InitializeSprites();   
 
     void InitializeMenus();

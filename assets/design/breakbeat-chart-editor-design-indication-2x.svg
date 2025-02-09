@@ -7,7 +7,7 @@
    viewBox="0 0 1920 1080"
    version="1.1"
    id="svg1"
-   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    sodipodi:docname="breakbeat-chart-editor-design-indication-2x.svg"
    inkscape:export-filename="breakbeat-chart-editor-design-indication-2x.png"
    inkscape:export-xdpi="96"
@@ -27,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     inkscape:zoom="0.1275"
-     inkscape:cx="3360.7843"
-     inkscape:cy="1407.8431"
+     inkscape:zoom="0.18031223"
+     inkscape:cx="1067.5926"
+     inkscape:cy="1683.1914"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -463,7 +463,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect19-6);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="460.81836"
          y="2265.064"
-         id="tspan28">Score : 0</tspan></text>
+         id="tspan1">Score : 0</tspan></text>
     <rect
        style="font-variation-settings:'wdth' 75, 'wght' 800;fill:#446dd5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:7.0336;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;paint-order:stroke markers fill"
        id="rect4-0"
@@ -478,19 +478,16 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=300';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 300;white-space:pre;shape-inside:url(#rect10);display:inline;fill:#696969;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10.7717;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="1148.7539"
          y="1479.5914"
-         id="tspan29">SONG BACKGROUND / THUMBNAIL #1</tspan></text>
+         id="tspan2">SONG BACKGROUND / THUMBNAIL #1</tspan></text>
   </g>
   <g
      id="g36"
      transform="translate(66.296082)"
      style="font-variation-settings:'wght' 800">
-    <rect
-       style="font-variation-settings:'wght' 800;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:60.1234;stroke-linecap:square;stroke-miterlimit:5.4;stroke-opacity:1;paint-order:stroke markers fill"
+    <path
        id="rect20"
-       width="761.75897"
-       height="1080"
-       x="1091.9449"
-       y="0"
+       style="fill-rule:evenodd;stroke-width:60.1234;stroke-linecap:square;stroke-miterlimit:5.4;paint-order:stroke markers fill"
+       d="m 1091.9449,0 h 761.759 v 1080 h -761.759 z"
        inkscape:export-filename="..\png\chart editing\brealbeat-chart-editing-scroll-bar-background.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
@@ -596,7 +593,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect34);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan30">Jumpstream : </tspan></text>
+         id="tspan3">Jumpstream : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1452.3921,9.295622)"
@@ -604,7 +601,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect35);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan31">Stream : </tspan></text>
+         id="tspan4">Stream : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1452.3921,143.60997)"
@@ -612,7 +609,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect36);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan32">Handstream : </tspan></text>
+         id="tspan5">Handstream : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1452.3921,205.98858)"
@@ -620,7 +617,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect38);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan33">Jackhammer : </tspan></text>
+         id="tspan6">Jackhammer : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1452.3921,279.69506)"
@@ -628,7 +625,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect39);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan34">Chordjack : </tspan></text>
+         id="tspan7">Chordjack : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1452.3921,351.6308)"
@@ -636,29 +633,20 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect41);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan35">Beat Snap : </tspan></text>
+         id="tspan8">Beat Snap : </tspan></text>
   </g>
-  <rect
-     style="font-variation-settings:'wght' 800;fill:#bcbcbc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:115.465;stroke-linecap:square;stroke-miterlimit:5.4;paint-order:stroke markers fill"
+  <path
      id="rect42"
-     width="25"
-     height="71.504547"
-     x="1133.2411"
-     y="118.90627"
-     ry="9.5976305"
-     rx="9.5976295"
-     inkscape:export-filename="..\svg\chart editing\brealbeat-chart-editing-scroll-bar.png"
+     style="font-variation-settings:'wght' 800;fill:#bcbcbc;fill-rule:evenodd;stroke-width:115.465;stroke-linecap:square;stroke-miterlimit:5.4;paint-order:stroke markers fill"
+     d="m 1142.8387,118.90627 h 5.8048 c 5.317,0 9.5976,4.28055 9.5976,9.59763 v 52.30929 c 0,5.31709 -4.2806,9.59763 -9.5976,9.59763 h -5.8048 c -5.3171,0 -9.5976,-4.28054 -9.5976,-9.59763 V 128.5039 c 0,-5.31708 4.2805,-9.59763 9.5976,-9.59763 z"
+     inkscape:export-filename="..\png\chart editing\brealbeat-chart-editing-scroll-bar.png"
      inkscape:export-xdpi="96"
      inkscape:export-ydpi="96" />
-  <rect
-     style="font-variation-settings:'wght' 800;fill:#3a3a3a;fill-opacity:0.501908;fill-rule:evenodd;stroke:none;stroke-width:53.1656;stroke-linecap:square;stroke-miterlimit:5.4;paint-order:stroke markers fill"
+  <path
      id="rect43"
-     width="25"
-     height="1080"
-     x="1133.2411"
-     y="0"
-     ry="9.5976305"
-     inkscape:export-filename="..\svg\chart editing\brealbeat-chart-editing-scroll-bar-background.png"
+     style="font-variation-settings:'wght' 800;fill:#3a3a3a;fill-opacity:0.501908;fill-rule:evenodd;stroke-width:53.1656;stroke-linecap:square;stroke-miterlimit:5.4;paint-order:stroke markers fill"
+     d="m 1142.8387,0 h 5.8048 c 5.317,0 9.5976,4.2805432 9.5976,9.5976305 V 1070.4024 c 0,5.3171 -4.2806,9.5976 -9.5976,9.5976 h -5.8048 c -5.3171,0 -9.5976,-4.2805 -9.5976,-9.5976 V 9.5976305 C 1133.2411,4.2805432 1137.5216,0 1142.8387,0 Z"
+     inkscape:export-filename="..\png\chart editing\brealbeat-chart-editing-scroll-bar-handle.png"
      inkscape:export-xdpi="96"
      inkscape:export-ydpi="96" />
   <g
@@ -673,7 +661,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect11-4);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan36">Jumps :  </tspan></text>
+         id="tspan9">Jumps :  </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1444.8357,693.15791)"
@@ -681,7 +669,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect16-7);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan37">Average Strain : </tspan></text>
+         id="tspan10">Average Strain : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1447.9049,120.89295)"
@@ -689,7 +677,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect28);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan38">Holds : </tspan></text>
+         id="tspan11">Holds : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1447.9049,292.33229)"
@@ -697,7 +685,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect3);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan39">Hands : </tspan></text>
+         id="tspan12">Hands : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1445.7235,350.27921)"
@@ -705,7 +693,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect4);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan40">Trills : </tspan></text>
+         id="tspan13">Trills : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1444.8357,749.50388)"
@@ -713,7 +701,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect5);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan41">Average Interval : </tspan></text>
+         id="tspan14">Average Interval : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1444.8357,636.01146)"
@@ -721,7 +709,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect7);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan42">Average Density : </tspan></text>
+         id="tspan15">Average Density : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1441.6651,407.42566)"
@@ -729,7 +717,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect14);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan43">Jumptrills : </tspan></text>
+         id="tspan16">Jumptrills : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1447.9049,520.91809)"
@@ -737,7 +725,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect15);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan44">Rolls : </tspan></text>
+         id="tspan17">Rolls : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1446.8649,235.18584)"
@@ -745,7 +733,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect17);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan45">Chords : </tspan></text>
+         id="tspan18">Chords : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080846,0,0,0.24893562,-1441.6839,578.07705)"
@@ -753,7 +741,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.37px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect18);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.71037"
-         id="tspan46">Jackhammers : </tspan></text>
+         id="tspan19">Jackhammers : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1445.7235,61.466369)"
@@ -761,7 +749,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect19);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan47">Taps : </tspan></text>
+         id="tspan20">Taps : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1445.7235,6.6000495)"
@@ -769,7 +757,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect76);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan48">Total Notes : </tspan></text>
+         id="tspan21">Total Notes : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1446.2815,807.4508)"
@@ -777,7 +765,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect11);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan49">Song preview : </tspan></text>
+         id="tspan22">Song preview : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1446.2815,862.02604)"
@@ -785,7 +773,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect21);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan50">Song BPM : </tspan></text>
+         id="tspan23">Song BPM : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1446.2815,921.7437)"
@@ -793,7 +781,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect30);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan51">Song Artist : </tspan></text>
+         id="tspan24">Song Artist : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1446.2815,978.08968)"
@@ -801,7 +789,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect31);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan52">Song Length :  </tspan></text>
+         id="tspan25">Song Length :  </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1447.9049,1036.0366)"
@@ -809,7 +797,7 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect32);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan53">Difficulty : </tspan></text>
+         id="tspan26">Difficulty : </tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26080503,0,0,0.2494086,-1446.2815,464.57211)"
@@ -817,6 +805,6 @@
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:199.182px;line-height:0;font-family:'Open Sans';-inkscape-font-specification:'Open Sans, @wght=800';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wght' 800;white-space:pre;shape-inside:url(#rect12);display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:23.0551;stroke-linecap:square;stroke-miterlimit:5.4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"><tspan
          x="5568.8809"
          y="136.65682"
-         id="tspan54">Splitrills : </tspan></text>
+         id="tspan27">Splitrills : </tspan></text>
   </g>
 </svg>

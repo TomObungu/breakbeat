@@ -375,10 +375,11 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 UpdateCurrentChartDifficulties();
 
                 PlayCurrentlySelectedChartAudio();
-                if(mCurrentGameState==GameState::CHART_SELECTION_MENU)
-                    UpdateChartSelectionImage();
 
-                mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+                if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+                    UpdateChartSelectionImage();
+                else
+                    GetChartMetadata();
 
                 // Play the corresponding chart audio
                 
@@ -407,17 +408,23 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 
                 if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
                     UpdateChartSelectionImage();
+                else
+                    GetChartMetadata();
 
-                mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
-   
                 // Play the corresponding chart audio
                 break;
             }
         case SDLK_RETURN:
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
             {
-                mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+                GetChartMetadata();
                 TransitionToGameState(GameState::MAIN_GAMEPLAY);
+                mSoundEngine->stopAllSounds();
+            }
+            else if (mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
+            {
+                GetChartMetadata();
+                TransitionToGameState(GameState::CHART_EDITOR);
                 mSoundEngine->stopAllSounds();
             }
                
@@ -455,7 +462,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             // Update the displayed difficulties
             GetCurrentChartDifficulties();
             UpdateCurrentChartDifficulties();
-            mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+            GetChartMetadata();
             break;
         }
 
@@ -472,7 +479,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             // Update the displayed difficulties;
             GetCurrentChartDifficulties();
             UpdateCurrentChartDifficulties();
-            mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+            GetChartMetadata();
             break;
         }
 
@@ -576,7 +583,7 @@ void Game::InitializeChartSelection()
 }
 
 
-void Game::UpdateChartSelectionImage()
+void Game::GetChartMetadata()
 {
     mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
     mCurrentSongName = mCurrentlyPreviewedCharts[3];
@@ -596,7 +603,7 @@ void Game::UpdateChartSelectionImage()
             {
                 mCurrentChartImageFile = match[1].str();
             }
-        } 
+        }
         if (std::regex_match(line, match, bPMRegex))
         {
             if (match.size() == 2) // Ensure the match captures the path
@@ -605,6 +612,11 @@ void Game::UpdateChartSelectionImage()
             }
         }
     }
+}
+
+void Game::UpdateChartSelectionImage()
+{
+    GetChartMetadata();
 
     GetText(mCurrentGameState, "song-bpm-text")->UpdateText("BPM : "+mCurrentSongBPM);
     int minutes = static_cast<int>(mCurrentSongDuration / 60000); // Convert ms to minutes

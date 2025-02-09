@@ -873,6 +873,56 @@ void Game::InitializeSprites()
         ResourceManager::GetShader("default"),
         false
     );
+
+    /* CHART EDITOR */
+
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR,
+        "main-gameplay-background-image",
+        ResourceManager::GetTexture("main-gameplay-background-image"),
+        vec2(0.000, 0.000), // Position to be filled out manually
+        vec2(1920.0, 1080.000), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );    
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR,
+        "z-chart-editing-scroll-bar-background",
+        ResourceManager::GetTexture("chart-editing-scroll-bar-background"),
+        vec2(1158.241, 0.000), // Position to be filled out manually
+        vec2(761.759, 1080.00), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );    
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR,
+        "z-breakbeat-chart-editing-scroll-bar-handle",
+        ResourceManager::GetTexture("breakbeat-chart-editing-scroll-bar-handle"),
+        vec2(1133.241, 0.000), // Position to be filled out manually
+        vec2(25.000, 1080.00), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );    
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::CHART_EDITOR,
+        "zz-chart-editing-scroll-bar",
+        ResourceManager::GetTexture("breakbeat-chart-editing-scroll-bar-handle"),
+        vec2(1133.2411, 0.000), // Position to be filled out manually
+        vec2(25.000, 71.505), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
 }
 
 Sprite* Game::GetSprite(GameState gameState, string name)

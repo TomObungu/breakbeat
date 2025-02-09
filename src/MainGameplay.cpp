@@ -15,25 +15,29 @@ void Game::LoadBackgroundImage()
 
 bool Game::ParseDifficultyFile() 
 {
-    std::ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
+    // Open difficulty file
+    ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
     if (!difficultyFile.is_open()) {
-        std::cerr << "Error: Unable to open difficulty file: " << mCurrentChartFile << std::endl;
+        cerr << "Error: Unable to open difficulty file: " << mCurrentChartFile << '\n';
         return false;
     }
 
-    std::string line;
-    std::regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
-    std::regex numberRegex(R"(\d+)");
+    // Store the line of the file being as a string object
+    string line;
+    // The regular expression for the column and the column type
+    regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
+    // The timing regular expression
+    regex numberRegex(R"(\d+)");
 
     int currentColumn = -1; // Tracks which column is being processed
-    std::string currentType; // Tracks the type: "Hit", "Long Note", "Release"
+    string currentType; // Tracks the type: "Hit", "Long Note", "Release"
 
-    while (std::getline(difficultyFile, line)) {
-        std::smatch match;
+    while (getline(difficultyFile, line)) {
+        smatch match;
 
         // Check if the line starts a new note type (Hit, Long Note, Release) for a column
-        if (std::regex_search(line, match, columnRegex)) {
-            currentColumn = std::stoi(match[1]); // Extract the column number (0, 1, 2, 3)
+        if (regex_search(line, match, columnRegex)) {
+            currentColumn = stoi(match[1]); // Extract the column number (0, 1, 2, 3)
             currentType = match[2]; // "Hit", "Long Note", "Release"
             continue; // Move to the next line
         }
@@ -43,7 +47,7 @@ bool Game::ParseDifficultyFile()
             std::sregex_iterator it(line.begin(), line.end(), numberRegex);
             std::sregex_iterator end;
 
-            std::vector<float>* targetVector = nullptr;
+            vector<float>* targetVector = nullptr;
 
             // Determine which vector to update based on type
             if (currentType == "Hit") {
@@ -80,34 +84,42 @@ bool Game::ParseDifficultyFile()
 
 void Game::InitializeMainGameplay()
 {
-    // Load the background image#
+    // Load the background image
+    // Stop all the sounds (assuming transitioning from the chart selection)
     mSoundEngine->stopAllSounds();
     LoadBackgroundImage();
     GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetTexture(ResourceManager::GetTexture("nil"));
+    // Determine the size of the receptor based on the user's receptor size preference
     vec2 receptorSize = vec2(192.000 * (mReceptorSize / 100.0f), 180 * (mReceptorSize / 100.0f));
 
-
+    // Ensure each sprite is fully brightened
     for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[mCurrentGameState])
     {
         if (sprite != nullptr)
             sprite->SetColor(vec3(1));
     }
 
+    // Determine the size of the left most receptor 
     GetSprite(mCurrentGameState, "main-gameplay-left-note-receptor")->SetSize(receptorSize);
+    // Offset the position of the receptor to the right based on the size of the receptor
     GetSprite(mCurrentGameState, "main-gameplay-left-note-receptor")->SetPosition(vec2(581.936, ((mReceptorSize / 100.0f) * -180) + 1080));
     GetSprite(mCurrentGameState, "z-main-gameplay-down-note-receptor")->SetSize(receptorSize);
+    // OFfset the position of the rectpor to right plus an additional extra offest based on the spacing between each receptor
     GetSprite(mCurrentGameState, "z-main-gameplay-down-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 183.487 + 765.423, ((mReceptorSize / 100) * -180) + 1080));
     GetSprite(mCurrentGameState, "main-gameplay-up-note-receptor")->SetSize(receptorSize);
     GetSprite(mCurrentGameState, "main-gameplay-up-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 366.974 + 949.361, ((mReceptorSize / 100) * -180) + 1080));
     GetSprite(mCurrentGameState, "main-gameplay-right-note-receptor")->SetSize(receptorSize);
     GetSprite(mCurrentGameState, "main-gameplay-right-note-receptor")->SetPosition(vec2(((mReceptorSize / 100.0f) - 1) * 550.461 + 1138.061, ((mReceptorSize / 100) * -180) + 1080));
+    // Multipy the size of the notefield based on the size of the receptors
     GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->SetSize(vec2(755.998 * (mReceptorSize / 100.0f), 1080));
+    // Set the position of the life bar to the right based on the size of the notefield
     GetSprite(mCurrentGameState, "main-gameplay-life-bar-handle")->SetPosition(vec2(575.321 + GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->GetSize().x, 477.547));
     GetSprite(mCurrentGameState, "main-gameplay-life-bar")->SetSize(vec2(17.158, -594.710));
     GetSprite(mCurrentGameState, "main-gameplay-life-bar")->SetPosition(vec2(579.121 + GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->GetSize().x, 1080));
+    // Set the position of the judgement text to the center of the notefield.
     GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->SetPosition(vec2(579.121 + (GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->GetSize().x / 2.0f) -
         (GetSprite(mCurrentGameState, "main-gameplay-judgement-text")->GetSize().x / 2), 481.407));
-
+    // Set the position song name and time elapsed text to the either side of the top of the notefield
     GetText(mCurrentGameState, "gameplay-song-name")->UpdateText(mCurrentSongName + format("[{}]", mCurrentSongDifficulty));
     GetText(mCurrentGameState, "gameplay-time-elapsed")->SetPosition(vec2(579.121 + GetSprite(mCurrentGameState, "main-gameplay-gameplay-vsrg-column")->GetSize().x * .70, 8.904));
     
@@ -120,7 +132,22 @@ void Game::InitializeMainGameplay()
     for (unsigned i = 0; i < 4; i++)
     {
         mNoteColumns[i].xPos = i > 0 ? 581.936 + (i * 183.944) + ((mReceptorSize / 100.0f) - 1) * (i * 183.487) : 581.936;
-    }   
+    } 
+    for (unsigned i = 0; i < 4; i++)
+    {
+        for (auto& time : mNoteColumns[i].hitTimes)
+        {
+            time += 100 / mReceptorSize * 180 / mScrollSpeed * 1000;
+        }
+        for (auto& time : mNoteColumns[i].longNoteHitTimes)
+        {
+            time += 100 / mReceptorSize * 180 / mScrollSpeed * 1000;
+        }
+        for (auto& time : mNoteColumns[i].releaseTimes)
+        {
+            time += 100 / mReceptorSize * 180 / mScrollSpeed * 1000;
+        }
+    }
     for (unsigned i = 0; i < 4; i++)
     {
         for (auto& time : mNoteColumns[i].hitTimes)
