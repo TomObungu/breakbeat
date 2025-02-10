@@ -39,6 +39,8 @@ public:
     unordered_map<GameState, map<string, Sprite*>> mCurrentlyRenderedSprites;
     unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
     unordered_map<GameState, map<string, Sprite*>> mNoteBuffer;
+    unordered_map<GameState, map<string, Sprite*>> mNotePreviewBuffer;
+
 
 private:
     GLuint mVertexArrayObject;

@@ -116,13 +116,22 @@ void SpriteRenderer::DrawSprites(GameState gameState)
         if(sprite != nullptr)
             sprite->Draw(); // Use sprite directly
     }
-
-    for (const auto& [key, note] : mNoteBuffer[gameState])
+    if(gameState == GameState::MAIN_GAMEPLAY)
     {
-        if(note!=nullptr)
-            note->Draw();
+        for (const auto& [key, note] : mNoteBuffer[gameState])
+        {
+            if (note != nullptr)
+                note->Draw();
+        }
+    }    
+    else if(gameState == GameState::CHART_EDITOR)
+    {
+        for (const auto& [key, note] : mNotePreviewBuffer[gameState])
+        {
+            if (note != nullptr)
+                note->Draw();
+        }
     }
-    
 }
 
 void SpriteRenderer::LoadDefaultSprites(GameState gameState)

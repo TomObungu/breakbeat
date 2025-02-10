@@ -144,6 +144,8 @@ public:
 
     void RenderNote(NoteColumn&);
 
+    void RenderNote(NoteColumn& noteColumn, float yOffset);
+
     void RegisterHit(NoteColumn& noteColumn);
 
     void HandleHitRegistration(SDL_Event& event);
@@ -163,6 +165,8 @@ public:
     void UpdateGameplayStatisticsText();
 
     void UpdateScore(NoteColumn& noteColumn);
+
+    void RenderChartEditor();
 
     void StartSongWithAdjustedTiming();
     
@@ -188,7 +192,11 @@ public:
 
     void GetChartMetadata();
 
-    void HandleChartEditor();
+    float FindEarliestNoteTime();
+
+    void UpdateNotePreviewBuffer();
+
+    void UpdateNotePositions();
 
     void InitializeSprites();   
 
@@ -281,6 +289,7 @@ private:
     float mAccuracy = 0;
     float mScore = 0;
     float mMaximumPossibleScore = 0;
+    float mPreviewWindowSize = 0;
     
     int mFlawlessCount = 0;
     int mPerfectCount = 0;
@@ -334,7 +343,11 @@ private:
     float mAudioStartTime = 0;
     float mAudioDelay = 50;
 
-
+    float mBeatSnap = 16;
+    float mTimelinePreview;
+    float mTimelineZoom = 2500;
+    float mBeatInterval = 0;
+    float mFirstBeatTime = -1;
 
 	bool mSongPlaying = false;
     bool mSongStarted = false;

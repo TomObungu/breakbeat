@@ -83,6 +83,25 @@ void Game::ProcessEvents()
         }
         if(mHasTransitioned)
             HandleMouseInput(event);
+        if (event.type == SDL_MOUSEWHEEL)
+        {
+            if (mCurrentGameState == GameState::CHART_EDITOR)
+            {
+                // Scroll the timeline preview
+                if (event.wheel.y > 0) // Scroll up
+                {
+                    mTimelinePreview += mBeatInterval;
+                }
+                else if (event.wheel.y < 0) // Scroll down
+                {
+                    mTimelinePreview -= mBeatInterval;
+                }
+                if (mTimelinePreview < mFirstBeatTime)
+                    mTimelinePreview = mFirstBeatTime;
+                UpdateNotePreviewBuffer();
+                UpdateNotePositions();
+            }
+        }
     }
 }
 
@@ -261,8 +280,6 @@ void Game::Update()
             InitializeChartEditor();
             mFirstFrame = false;
         }
-
-        HandleChartEditor();
     }
 
 }

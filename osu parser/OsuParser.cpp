@@ -63,7 +63,7 @@ void processLine(const string& line,
 
 int main() {
     // File path to the .osu file
-    string filePath = "Sharkey & Arkitech - Quadraphinix (Xay) [Challenge 0.75x (135bpm) OD8].osu";
+    string filePath = "DETRO - hurricanic -short size- (stupud man) [Challenge].osu";
 
     // Vectors for hit times, release times, and long note hit times for each column
     vector<float> firstColumnNoteHitTimes, secondColumnNoteHitTimes, thirdColumnNoteHitTimes, fourthColumnNoteHitTimes;
