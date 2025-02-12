@@ -192,6 +192,8 @@ public:
 
     void UpdateChartSelectionImage();
 
+    bool EditDifficultyFile();
+
     void InitializeChartEditor();
 
     void GetChartMetadata();
@@ -364,6 +366,7 @@ private:
     bool mAddingSprites = false;
     bool mPlayHoverAnimation = false;
 
+    bool mIsPlayingChart = true;
     
 };
     

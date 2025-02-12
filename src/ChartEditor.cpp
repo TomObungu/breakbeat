@@ -13,6 +13,7 @@ void Game::InitializeChartEditor()
     RenderChartEditor();
     UpdateNotePreviewBuffer();
     UpdateBeatSnapBars();
+    PreloadAudio();
 }
 
 void Game::RenderChartEditor()
@@ -176,6 +177,116 @@ void Game::UpdateBeatSnapBars()
     }
 }
 
+bool Game::EditDifficultyFile() 
+{
+    // Open the difficulty file
+    std::ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
+    if (!difficultyFile.is_open()) {
+        std::cerr << "Error: Unable to open difficulty file for editing." << std::endl;
+        return false;
+    }
+
+    // Data structure to hold parsed chart data
+    struct ChartData {
+        std::vector<float> hitTimes;
+        std::vector<float> longNoteHitTimes;
+        std::vector<float> releaseTimes;
+    };
+
+    ChartData columnData[4]; // One for each column (0-3)
+
+    // Regular expressions for parsing
+    std::string line;
+    std::regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
+    std::regex numberRegex(R"(\d+)");
+
+    int currentColumn = -1; // Tracks which column is being processed
+    std::string currentType; // Tracks the type: "Hit", "Long Note", "Release"
+
+    // Read and parse the difficulty file
+    while (std::getline(difficultyFile, line)) {
+        std::smatch match;
+
+        // Check if the line starts a new note type (Hit, Long Note, Release) for a column
+        if (std::regex_search(line, match, columnRegex)) {
+            currentColumn = std::stoi(match[1]) - 1; // Convert column to 0-based index
+            currentType = match[2]; // "Hit", "Long Note", "Release"
+            continue;
+        }
+
+        // If we are processing a known column, extract timing values
+        if (currentColumn >= 0 && currentColumn < 4) {
+            std::sregex_iterator it(line.begin(), line.end(), numberRegex);
+            std::sregex_iterator end;
+
+            // Populate the appropriate vector based on currentType
+            if (currentType == "Hit") {
+                for (; it != end; ++it) {
+                    columnData[currentColumn].hitTimes.push_back(std::stof(it->str()));
+                }
+            }
+            else if (currentType == "Long Note") {
+                for (; it != end; ++it) {
+                    columnData[currentColumn].longNoteHitTimes.push_back(std::stof(it->str()));
+                }
+            }
+            else if (currentType == "Release") {
+                for (; it != end; ++it) {
+                    columnData[currentColumn].releaseTimes.push_back(std::stof(it->str()));
+                }
+            }
+        }
+    }
+
+    difficultyFile.close(); // Close the input file
+
+    // Update the chart data with the current state of mNoteColumns
+    for (int col = 0; col < 4; ++col) {
+        columnData[col].hitTimes = mNoteColumns[col].hitTimes;
+        // You can similarly update longNoteHitTimes and releaseTimes if those are edited
+    }
+
+    // Write the updated chart data back to the difficulty file
+    std::ofstream outputDifficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile, std::ios::trunc);
+    if (!outputDifficultyFile.is_open()) {
+        std::cerr << "Error: Unable to open difficulty file for writing." << std::endl;
+        return false;
+    }
+
+    for (int col = 0; col < 4; ++col) {
+        // Write Hit Times
+        if (!columnData[col].hitTimes.empty()) {
+            outputDifficultyFile << (col + 1) << " Column Hit Times: ";
+            for (float time : columnData[col].hitTimes) {
+                outputDifficultyFile << static_cast<int>(time) << ",\n";
+            }
+            outputDifficultyFile << "\n";
+        }
+
+        // Write Long Note Hit Times
+        if (!columnData[col].longNoteHitTimes.empty()) {
+            outputDifficultyFile << (col + 1) << " Column Long Note Times: ";
+            for (float time : columnData[col].longNoteHitTimes) {
+                outputDifficultyFile << static_cast<int>(time) << ",\n";
+            }
+            outputDifficultyFile << "\n";
+        }
+
+        // Write Release Times
+        if (!columnData[col].releaseTimes.empty()) {
+            outputDifficultyFile << (col + 1) << " Column Release Times: ";
+            for (float time : columnData[col].releaseTimes) {
+                outputDifficultyFile << static_cast<int>(time) << ",\n";
+            }
+            outputDifficultyFile << "\n";
+        }
+    }
+
+    outputDifficultyFile.close();
+    std::cout << "Successfully updated the difficulty file!" << std::endl;
+
+    return true;
+}
 
 
 

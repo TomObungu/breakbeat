@@ -1,14 +1,4 @@
-Artist : Kurokotei
-Song Name : Galaxy Collapse
-Difficulty : 0
-BPM : 270
-Background Image : charts\Kurokotei-Galaxy Collapse\gallaxy collapse.jpg
-Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
-
-1 Column Hit Times:
-124,
-457,
-790,
+1 Column Hit Times: 790,
 1457,
 1790,
 2346,
@@ -1411,14 +1401,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 400318,
 401255,
 
-1 Column Long Note Times:
-14346,
-14679,
-15012,
-15679,
-16012,
-16568,
-16790,
+1 Column Long Note Times: 16790,
 17346,
 17790,
 18124,
@@ -1525,14 +1508,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 396849,
 398349,
 
-1 Column Release Times:
-14457,
-14790,
-15124,
-15790,
-16124,
-16679,
-16901,
+1 Column Release Times: 16901,
 17457,
 17901,
 18235,
@@ -1639,9 +1615,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 397130,
 398630,
 
-2 Column Hit Times:
-235,
-1012,
+2 Column Hit Times: 1012,
 1235,
 1568,
 2124,
@@ -2944,14 +2918,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 400505,
 401068,
 
-2 Column Long Note Times:
-14457,
-15235,
-15457,
-15790,
-16346,
-16679,
-17012,
+2 Column Long Note Times: 17012,
 17568,
 18012,
 18346,
@@ -3062,14 +3029,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 395818,
 397318,
 
-2 Column Release Times:
-14568,
-15346,
-15568,
-15901,
-16457,
-16790,
-17124,
+2 Column Release Times: 17124,
 17679,
 18124,
 18457,
@@ -3180,9 +3140,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 396849,
 398349,
 
-3 Column Hit Times:
-679,
-1124,
+3 Column Hit Times: 1124,
 1679,
 2012,
 2901,
@@ -4495,14 +4453,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 401068,
 401443,
 
-3 Column Long Note Times:
-14901,
-15346,
-15901,
-16235,
-17124,
-17457,
-17679,
+3 Column Long Note Times: 17679,
 18457,
 18790,
 19457,
@@ -4615,14 +4566,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 397130,
 398818,
 
-3 Column Release Times:
-15012,
-15457,
-16012,
-16346,
-17235,
-17568,
-17790,
+3 Column Release Times: 17790,
 18568,
 18901,
 19568,
@@ -4735,11 +4679,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 397318,
 400130,
 
-4 Column Hit Times:
-13,
-346,
-568,
-901,
+4 Column Hit Times: 901,
 1346,
 1901,
 2235,
@@ -6138,14 +6078,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 400130,
 400880,
 
-4 Column Long Note Times:
-14235,
-14568,
-14790,
-15124,
-15568,
-16124,
-16457,
+4 Column Long Note Times: 16457,
 16901,
 17235,
 17901,
@@ -6264,14 +6197,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 398630,
 401630,
 
-4 Column Release Times:
-14346,
-14679,
-14901,
-15235,
-15679,
-16235,
-16568,
+4 Column Release Times: 16568,
 17012,
 17346,
 18012,
@@ -6389,5 +6315,4 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 395630,
 398818,
 405005,
-
 
