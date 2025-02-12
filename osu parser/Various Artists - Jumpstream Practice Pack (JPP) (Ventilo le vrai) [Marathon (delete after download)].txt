@@ -1,0 +1,15 @@
+Artist : Various Artists
+Song Name : Jumpstream Practice Pack (JPP)
+Difficulty : 0
+BPM : 190
+Background Image : charts\Various Artists-Jumpstream Practice Pack (JPP)\triggeredjpp.png
+Audio : charts\Various Artists-Jumpstream Practice Pack (JPP)\ e.mp3
+
+1 Column Hit Times:
+14,
+600614,
+
+1 Column Long Note Times:
+
+1 Column Release Times:
+

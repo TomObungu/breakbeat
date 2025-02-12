@@ -87,7 +87,7 @@ void Game::ProcessEvents()
         {
             if (mCurrentGameState == GameState::CHART_EDITOR)
             {
-                // Scroll the timeline preview
+                // Scroll the timeline preview  
                 if (event.wheel.y > 0) // Scroll up
                 {
                     mTimelinePreview += mBeatInterval;

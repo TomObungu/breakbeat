@@ -462,6 +462,11 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             // Update the displayed difficulties
             GetCurrentChartDifficulties();
             UpdateCurrentChartDifficulties();
+            PlayCurrentlySelectedChartAudio();
+            if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+                UpdateChartSelectionImage();
+            else
+                GetChartMetadata();
             GetChartMetadata();
             break;
         }
@@ -479,6 +484,11 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             // Update the displayed difficulties;
             GetCurrentChartDifficulties();
             UpdateCurrentChartDifficulties();
+            PlayCurrentlySelectedChartAudio();
+            if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+                UpdateChartSelectionImage();
+            else
+                GetChartMetadata();
             GetChartMetadata();
             break;
         }
@@ -579,7 +589,7 @@ void Game::InitializeChartSelection()
     if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
         UpdateChartSelectionImage();
 
-    mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
+    GetChartMetadata();
 }
 
 

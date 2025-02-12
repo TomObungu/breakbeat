@@ -168,6 +168,10 @@ public:
 
     void RenderChartEditor();
 
+    void RefreshChartEditorNoteBuffer();
+
+    void HandleNoteClick();
+
     void StartSongWithAdjustedTiming();
     
     void UpdateGameplayState();
@@ -207,6 +211,8 @@ public:
     void InitializeTexts();
 
     void InitializeFonts();
+
+    void UpdateBeatSnapBars();
 
     Game();
 private:

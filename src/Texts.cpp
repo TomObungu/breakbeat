@@ -630,7 +630,8 @@ void Game::InitializeTexts()
         vec2(239.282, 559.974),
         vec3(0.0f),
         "default-18",
-        1.0f
+        1.0f,
+        36
     );
 
     mTextRenderer.CreateText
@@ -641,7 +642,7 @@ void Game::InitializeTexts()
         vec2(239.282, 631.911),
         vec3(0.0f),
         "default-18",
-        1.0f
+        1.0f,36
     );
 
     mTextRenderer.CreateText
@@ -652,7 +653,8 @@ void Game::InitializeTexts()
         vec2(239.282, 709.260),
         vec3(0.0f),
         "default-18",
-        1.0f
+        1.0f,
+        36
     );
 
     mTextRenderer.CreateText
@@ -663,7 +665,8 @@ void Game::InitializeTexts()
         vec2(239.282, 789.195),
         vec3(0.0f),
         "default-18",
-        1.0f
+        1.0f,
+        36
     );    
     
     mTextRenderer.CreateText

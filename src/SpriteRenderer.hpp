@@ -31,6 +31,7 @@ public:
     void Initialize();
     Sprite* CreateSprite(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color,Shader& shader, bool perspective, vec2 texturePositon = vec2(0,0), float textureScale = 1);
     void CreateNote(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePositon = vec2(0, 0), float textureScale = 1);
+    void CreateBar(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePosition = vec2(0,0), float textureScale = 1);
     void DrawSprites(GameState gameState);
     void LoadDefaultSprites(GameState gameState);
 
@@ -40,6 +41,7 @@ public:
     unordered_map<GameState, map<string, Sprite*>> mDefaultSprites;
     unordered_map<GameState, map<string, Sprite*>> mNoteBuffer;
     unordered_map<GameState, map<string, Sprite*>> mNotePreviewBuffer;
+    unordered_map<GameState, map<string, Sprite*>> mBarBuffer;
 
 
 private:

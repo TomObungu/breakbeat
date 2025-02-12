@@ -415,8 +415,59 @@ void Game::HandleMouseInput(SDL_Event& event)
                     }
                 }
             }
+            else if (mCurrentGameState == GameState::CHART_EDITOR)
+            {
+                // Get the mouse coordinates
+                float mouseX = mMouse->GetMouseCoordinate().x;
+                float mouseY = mMouse->GetMouseCoordinate().y;
+
+                // Constants for calculating column and row
+                const float notefieldWidth = 1158.241f;  // Width of the notefield
+                const float columnWidth = 180.0f;       // Width of each column
+                const float rowHeight = 192.0f;         // Height of each row
+                const int baseYPosition = 1080;         // Reference y-position of the notefield
+
+                // Calculate column index
+                int columnIndex = static_cast<int>((mouseX - notefieldWidth) / columnWidth);
+                if (columnIndex < 0 || columnIndex >= 4) {
+                    return; // Out of bounds
+                }
+
+                // Calculate row index
+                int rowIndex = static_cast<int>(((baseYPosition - mouseY) / (mBeatInterval / 1000 * mTimelineZoom)));
+
+                // Calculate the time value
+                int timeValue = static_cast<int>(mTimelinePreview + ((rowIndex - 2) * mBeatInterval));
+
+                // Reference the relevant note column
+                auto& noteColumn = mNoteColumns[columnIndex].hitTimes;
+
+                // Check if the time already exists in the note column
+                auto it = std::find(noteColumn.begin(), noteColumn.end(), static_cast<int>(timeValue));
+
+                if (it != noteColumn.end()) {
+                    // If the time exists, delete the note
+                    noteColumn.erase(it);
+                    std::cout << "Deleted note at time: " << timeValue << " in column: " << columnIndex << '\n';
+                }
+                else {
+                    // If the time doesn't exist, add a new note
+                    noteColumn.push_back(timeValue);
+                    std::sort(noteColumn.begin(), noteColumn.end()); // Ensure the times are sorted
+                    std::cout << "Added note at time: " << timeValue << " in column: " << columnIndex << '\n';
+                }
+
+                // Refresh the note buffer
+                RefreshChartEditorNoteBuffer();
+
+                // Update the note preview buffer
+                UpdateNotePreviewBuffer();
+
+                UpdateNotePositions();
+            }
         }
     }
+
 }
 
 Sprite* Game::CheckCollidingSprite(GameState gameState)
@@ -460,38 +511,111 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
                 "chart-editor-new-chart-button",
                 "chart-editor-menu-difficulty-new-difficulty-button"
             };
-
-
     }
-
-    // Collect colliding sprites
-    std::vector<std::string> collidingSprites;
-
-    for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
+    else if (gameState == GameState::CHART_EDITOR)
     {
-        if (std::find(relevantSprites.begin(), relevantSprites.end(), key) != relevantSprites.end())
+        // Collect all keys (note IDs) from mNotePreviewBuffer for the current game state
+        for (const auto& [key, sprite] : mSpriteRenderer.mNotePreviewBuffer[mCurrentGameState])
         {
-            bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
-                            (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
+            relevantSprites.push_back(key); // Add the note IDs to the relevantSprites list
+        }        
+        for (const auto& [key, sprite] : mSpriteRenderer.mBarBuffer[mCurrentGameState])
+        {
+            relevantSprites.push_back(key); // Add the note IDs to the relevantSprites list
+        }
+    }
+    if (gameState == GameState::CHART_EDITOR)
+    {
+        // Collect colliding sprites
+        std::vector<std::string> collidingSprites;
 
-            bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
-                            (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
-
-
-            if (CollisionX && CollisionY)
+        for (auto& [key, sprite] : mSpriteRenderer.mNotePreviewBuffer[gameState])
+        {
+            if (std::find(relevantSprites.begin(), relevantSprites.end(), key) != relevantSprites.end())
             {
-                collidingSprites.push_back(key);
+                bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
+                    (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
+
+                bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
+                    (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
+
+
+                if (CollisionX && CollisionY)
+                {
+                    collidingSprites.push_back(key);
+                }
+            }
+        }
+
+        // Determine which sprite to return based on priority
+        for (const auto& relevantKey : relevantSprites)
+        {
+            auto it = std::find(collidingSprites.begin(), collidingSprites.end(), relevantKey);
+            if (it != collidingSprites.end())
+            {
+                return mSpriteRenderer.mNotePreviewBuffer[mCurrentGameState][relevantKey];
+            }
+        }
+
+        for (auto& [key, sprite] : mSpriteRenderer.mBarBuffer[gameState])
+        {
+            if (std::find(relevantSprites.begin(), relevantSprites.end(), key) != relevantSprites.end())
+            {
+                bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
+                    (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
+
+                bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
+                    (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
+
+
+                if (CollisionX && CollisionY)
+                {
+                    collidingSprites.push_back(key);
+                }
+            }
+        }
+
+        // Determine which sprite to return based on priority
+        for (const auto& relevantKey : relevantSprites)
+        {
+            auto it = std::find(collidingSprites.begin(), collidingSprites.end(), relevantKey);
+            if (it != collidingSprites.end())
+            {
+                return mSpriteRenderer.mBarBuffer[mCurrentGameState][relevantKey];
             }
         }
     }
-
-    // Determine which sprite to return based on priority
-    for (const auto& relevantKey : relevantSprites)
+    else
     {
-        auto it = std::find(collidingSprites.begin(), collidingSprites.end(), relevantKey);
-        if (it != collidingSprites.end())
+        // Collect colliding sprites
+        std::vector<std::string> collidingSprites;
+
+        for (auto& [key, sprite] : mSpriteRenderer.mCurrentlyRenderedSprites[gameState])
         {
-            return GetSprite(mCurrentGameState,relevantKey);
+            if (std::find(relevantSprites.begin(), relevantSprites.end(), key) != relevantSprites.end())
+            {
+                bool CollisionX = (mMouse->GetMouseCoordinate().x + mMouse->GetMouseSize().x >= sprite->GetPosition().x) &&
+                    (sprite->GetPosition().x + sprite->GetSize().x >= mMouse->GetMouseCoordinate().x);
+
+                bool CollisionY = (mMouse->GetMouseCoordinate().y + mMouse->GetMouseSize().y >= sprite->GetPosition().y) &&
+                    (sprite->GetPosition().y + sprite->GetSize().y >= mMouse->GetMouseCoordinate().y);
+
+
+                if (CollisionX && CollisionY)
+                {
+                    collidingSprites.push_back(key);
+                }
+            }
+        }
+
+        // Determine which sprite to return based on priority
+        for (const auto& relevantKey : relevantSprites)
+        {
+            auto it = std::find(collidingSprites.begin(), collidingSprites.end(), relevantKey);
+            if (it != collidingSprites.end())
+            {
+                return GetSprite(mCurrentGameState, relevantKey);
+            }
         }
     }
 

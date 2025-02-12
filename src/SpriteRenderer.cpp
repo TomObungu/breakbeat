@@ -105,7 +105,21 @@ void SpriteRenderer::CreateNote(GameState gameState, string name, Texture& textu
     sprite->mVertexArrayObject = perspective ? this->mVertexArrayObject3D : this->mVertexArrayObject;
     sprite->mIsMoving = true;
     // Store the sprite in the appropriate hash table
-    mNoteBuffer[gameState][name] = sprite;
+    if(gameState == GameState::MAIN_GAMEPLAY || gameState == GameState::CHART_EDITOR)
+        mNoteBuffer[gameState][name] = sprite;
+}
+
+void SpriteRenderer::CreateBar(GameState gameState, string name, Texture& texture, vec2 position, vec2 size, float rotate, vec3 color, Shader& shader, bool perspective, vec2 texturePosition, float textureScale)
+{
+    // Create a new Sprite instance
+    auto sprite = new Sprite(texture, position, size, rotate, color, shader, perspective, texturePosition, textureScale);
+
+    // Determine whether the VAO is going to used 3D or 2D based on the mPersepctive parameter
+    sprite->mVertexArrayObject = perspective ? this->mVertexArrayObject3D : this->mVertexArrayObject;
+    sprite->mIsMoving = false;
+    // Store the sprite in the appropriate hash table
+    if(gameState == GameState::MAIN_GAMEPLAY || gameState == GameState::CHART_EDITOR)
+        mBarBuffer[gameState][name] = sprite;
 }
 
 void SpriteRenderer::DrawSprites(GameState gameState)
@@ -130,6 +144,11 @@ void SpriteRenderer::DrawSprites(GameState gameState)
         {
             if (note != nullptr)
                 note->Draw();
+        }        
+        for (const auto& [key, bar] : mBarBuffer[gameState])
+        {
+            if (bar != nullptr)
+                bar->Draw();
         }
     }
 }
