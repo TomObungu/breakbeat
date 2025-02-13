@@ -922,6 +922,70 @@ void Game::InitializeSprites()
         vec3(1.0f),
         ResourceManager::GetShader("default"),
         false
+    );    
+    
+    /* GRADE SCREEN */
+
+    mSpriteRenderer.CreateSprite(
+        GameState::GRADE_SCREEN,
+        "background",
+        ResourceManager::GetTexture("background"),
+        vec2(0, 0),
+        glm::vec2(1960.178, 1033.901),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false,
+        vec2(0, 0),
+        2
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::GRADE_SCREEN,
+        "background-dots",
+        ResourceManager::GetTexture("background-dots"),
+        vec2(0, 0),
+        vec2(1920, 994.167),
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );
+
+    mSpriteRenderer.CreateSprite(
+        GameState::GRADE_SCREEN,
+        "main-gameplay-grade-screen-ua",
+        ResourceManager::GetTexture("main-gameplay-grade-screen-ua"),
+        vec2(-12.240, 997.735), // Position to be filled out manually
+        vec2(1944.480, 92.011), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );    
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::GRADE_SCREEN,
+        "main-gameplay-grade-screen-box",
+        ResourceManager::GetTexture("main-gameplay-grade-screen-box"),
+        vec2(375.186, 217.189), // Position to be filled out manually
+        vec2(1138.454, 652.671), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
+    );    
+    
+    mSpriteRenderer.CreateSprite(
+        GameState::GRADE_SCREEN,
+        "main-gameplay-grade-screen-grade",
+        ResourceManager::GetTexture("main-gameplay-grade-screen-S"),
+        vec2(968.554, 367.963), // Position to be filled out manually
+        vec2(325.359, 438.447), // Size to be filled out manually
+        0.0f,
+        vec3(1.0f),
+        ResourceManager::GetShader("default"),
+        false
     );
 }
 

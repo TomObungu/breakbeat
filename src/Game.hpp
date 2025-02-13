@@ -170,11 +170,11 @@ public:
 
     void RefreshChartEditorNoteBuffer();
 
-    void HandleNoteClick();
-
     void StartSongWithAdjustedTiming();
     
     void UpdateGameplayState();
+
+    void CheckEndOfSongAndSaveScore();
 
     void UpdateHealthBar();
 
@@ -285,8 +285,10 @@ private:
     string mCurrentSongName = "";
     string mCurrentSongDifficulty = "";
     string mCurrentSongBPM = "";
-    unsigned mCurrentSongDuration;
-    int mAudioDuration;
+
+    string mCurrentScoreFilePath = "";
+    unsigned mCurrentSongDuration = 0;
+    int mAudioDuration = 0;
 
     float mSongStartTime = 0;
     float mTimeElapsed = 0;

@@ -423,7 +423,8 @@ void Game::InitializeTexts()
         vec2(239.282, 559.974),
         vec3(0.0f),
         "default-18", 
-        1.0f
+        1.0f,
+        36
     );
 
     mTextRenderer.CreateText
@@ -434,7 +435,8 @@ void Game::InitializeTexts()
         vec2(239.282, 631.911),
         vec3(0.0f),
         "default-18", 
-        1.0f
+        1.0f,
+        36
     );
 
     mTextRenderer.CreateText
@@ -445,7 +447,8 @@ void Game::InitializeTexts()
         vec2(239.282, 709.260),
         vec3(0.0f),
         "default-18", 
-        1.0f
+        1.0f,
+        36
     );
 
     mTextRenderer.CreateText
@@ -456,7 +459,8 @@ void Game::InitializeTexts()
         vec2(239.282, 789.195),
         vec3(0.0f),
         "default-18", 
-        1.0f
+        1.0f,
+        36
     );    
 
     /* CHART SELECTION*/
@@ -823,6 +827,107 @@ void Game::InitializeTexts()
         vec2(83.828, 774.264),
         vec3(1.0f),
         "default-48", 
+        1.0f
+    );
+
+    /* GRADE SCREEN */
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-score",
+        "Score : 0000000 ",
+        vec2(450.656, 304.533),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-accuracy",
+        "Accuracy : 0.00%",
+        vec2(449.262, 357.242),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-flawless-count",
+        "Flawless : 0",
+        vec2(452.221, 428.119),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-perfect-count",
+        "Perfect : 0",
+        vec2(452.221, 489.783),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-great-count",
+        "Great : 0",
+        vec2(451.219, 553.412),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-good-count",
+        "Good : 0",
+        vec2(452.221, 613.369),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-bad-count",
+        "Bad : 0",
+        vec2(454.435, 675.034),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );
+
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-miss-count",
+        "Miss : 0",
+        vec2(452.221, 731.848),
+        vec3(1.0f),
+        "default-48",
+        1.0f
+    );    
+    
+    mTextRenderer.CreateText
+    (
+        GameState::GRADE_SCREEN,
+        "gameplay-miss-count",
+        "Final Grade : ",
+        vec2(970.333, 308.246),
+        vec3(1.0f),
+        "default-48",
         1.0f
     );
 }

@@ -464,14 +464,6 @@ void Game::HandleMouseInput(SDL_Event& event)
                 UpdateNotePreviewBuffer();
 
                 UpdateNotePositions();
-
-                if (EditDifficultyFile()) {
-                    std::cout << "Chart successfully updated and saved." << std::endl;
-                }
-                else {
-                    std::cerr << "Failed to update the chart file." << std::endl;
-                }
-
             }
         }
     }

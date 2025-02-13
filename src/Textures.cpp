@@ -76,7 +76,7 @@ void Game::InitializeTextures()
 
     /* GRADE SCREEN */
     ResourceManager::LoadTexture("\\assets\\png\\grade screen\\breakbeat-main-gameplay-grade-screen-box.png", true, "main-gameplay-grade-screen-box");
-    ResourceManager::LoadTexture("\\assets\\png\\grade screen\\breakbeat-main-gameplay-grade-screen-user-navigation-assist.png", true, "main-gameplay-grade-screen-ua");
+    ResourceManager::LoadTexture("\\assets\\png\\grade screen\\breakbeat-main-gameplay-grade-screen-user-navigation-assist-new.png", true, "main-gameplay-grade-screen-ua");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-grade-screen-A.png", true, "main-gameplay-grade-screen-A");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-grade-screen-B.png", true, "main-gameplay-grade-screen-B");
     ResourceManager::LoadTexture("\\assets\\png\\gameplay design\\breakbeat-main-gameplay-grade-screen-C.png", true, "main-gameplay-grade-screen-C");

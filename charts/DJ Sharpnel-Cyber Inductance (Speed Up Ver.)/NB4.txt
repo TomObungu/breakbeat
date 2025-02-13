@@ -7,7 +7,6 @@ Audio : charts\DJ Sharpnel-Cyber Inductance (Speed Up Ver.)\09 - CYBER INDUCTION
 
 1 Column Hit Times:
 1728,
-1963,
 2356,
 2591,
 2984,
@@ -1187,6 +1186,7 @@ Audio : charts\DJ Sharpnel-Cyber Inductance (Speed Up Ver.)\09 - CYBER INDUCTION
 294512,
 
 2 Column Hit Times:
+1708,
 1728,
 2042,
 2277,
@@ -2487,7 +2487,6 @@ Audio : charts\DJ Sharpnel-Cyber Inductance (Speed Up Ver.)\09 - CYBER INDUCTION
 225242,
 
 3 Column Hit Times:
-1806,
 2042,
 2199,
 2434,
@@ -3779,7 +3778,6 @@ Audio : charts\DJ Sharpnel-Cyber Inductance (Speed Up Ver.)\09 - CYBER INDUCTION
 215190,
 
 4 Column Hit Times:
-1885,
 2120,
 2356,
 2670,

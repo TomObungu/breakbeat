@@ -222,6 +222,7 @@ void Game::UpdateGameplayState()
     {
         UpdateLongNoteState(noteColumn);
     }
+    CheckEndOfSongAndSaveScore();
 }
 
 void Game::HandleMainGameplay()
@@ -652,3 +653,87 @@ void Game::UpdateHealthBar()
 }
 
 
+void Game::CheckEndOfSongAndSaveScore() 
+{
+    // Check if the elapsed time has reached the song duration + 5000ms
+    if (mTimeElapsed >= mCurrentSongDuration + 5000) {
+
+        std::ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
+        // Regular expressions for parsing
+        std::string line;
+        std::regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
+
+        // Store metadata
+        std::vector<std::string> metadataLines;
+
+        int currentColumn = -1; // Tracks which column is being processed
+        std::string currentType; // Tracks the type: "Hit", "Long Note", "Release"
+
+        // Read and parse the difficulty file
+        while (std::getline(difficultyFile, line)) {
+            std::smatch match;
+
+            // Check if the line starts a new note type (Hit, Long Note, Release) for a column
+            if (std::regex_search(line, match, columnRegex)) {
+                currentColumn = std::stoi(match[1]) - 1; // Convert column to 0-based index
+                currentType = match[2]; // "Hit", "Long Note", "Release"
+                continue;
+            }
+
+            // Check for metadata lines before column definitions
+            if (currentColumn == -1) {
+                metadataLines.push_back(line); // Store metadata line
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // Get gameplay statistics
+        std::string grade = GetText(GameState::MAIN_GAMEPLAY, "gameplay-current-grade")->GetText();
+        std::string score = GetText(GameState::MAIN_GAMEPLAY, "gameplay-score")->GetText();
+        std::string accuracy = GetText(GameState::MAIN_GAMEPLAY, "gameplay-accuracy")->GetText();
+        std::string flawlessCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-flawless-count")->GetText();
+        std::string perfectCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-perfect-count")->GetText();
+        std::string greatCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-great-count")->GetText();
+        std::string goodCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-good-count")->GetText();
+        std::string badCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-bad-count")->GetText();
+        std::string missCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-miss-count")->GetText();
+
+        // Build the file content
+        std::ostringstream scoreData;
+        // Write metadata back to the file
+        for (const auto& metadataLine : metadataLines) {
+            scoreData << metadataLine << "\n";
+        }
+        scoreData << "Grade: " << grade << "\n";
+        scoreData << "Score: " << score << "\n";
+        scoreData << "Accuracy: " << accuracy << "\n";
+        scoreData << "Flawless: " << flawlessCount << "\n";
+        scoreData << "Perfect: " << perfectCount << "\n";
+        scoreData << "Great: " << greatCount << "\n";
+        scoreData << "Good: " << goodCount << "\n";
+        scoreData << "Bad: " << badCount << "\n";
+        scoreData << "Miss: " << missCount << "\n";
+
+        // Save the file
+        std::string scoreFilePath = fs::current_path().string() + "\\scores\\" + songName + "_score.txt";
+        std::ofstream scoreFile(scoreFilePath);
+        if (scoreFile.is_open()) {
+            scoreFile << scoreData.str();
+            scoreFile.close();
+            std::cout << "Score saved to: " << scoreFilePath << std::endl;
+
+            // Update the current score file path
+            mCurrentScoreFilePath = scoreFilePath;
+        }
+        else {
+            std::cerr << "Error: Unable to save score file!" << std::endl;
+        }
+
+        // Transition to the grade screen
+        TransitionToGameState(GameState::GRADE_SCREEN);
+    }
+}

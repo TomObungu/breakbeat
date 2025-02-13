@@ -177,7 +177,7 @@ void Game::UpdateBeatSnapBars()
     }
 }
 
-bool Game::EditDifficultyFile() 
+bool Game::EditDifficultyFile()
 {
     // Open the difficulty file
     std::ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
@@ -200,6 +200,9 @@ bool Game::EditDifficultyFile()
     std::regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
     std::regex numberRegex(R"(\d+)");
 
+    // Store metadata
+    std::vector<std::string> metadataLines;
+
     int currentColumn = -1; // Tracks which column is being processed
     std::string currentType; // Tracks the type: "Hit", "Long Note", "Release"
 
@@ -211,6 +214,12 @@ bool Game::EditDifficultyFile()
         if (std::regex_search(line, match, columnRegex)) {
             currentColumn = std::stoi(match[1]) - 1; // Convert column to 0-based index
             currentType = match[2]; // "Hit", "Long Note", "Release"
+            continue;
+        }
+
+        // Check for metadata lines before column definitions
+        if (currentColumn == -1) {
+            metadataLines.push_back(line); // Store metadata line
             continue;
         }
 
@@ -253,10 +262,16 @@ bool Game::EditDifficultyFile()
         return false;
     }
 
+    // Write metadata back to the file
+    for (const auto& metadataLine : metadataLines) {
+        outputDifficultyFile << metadataLine << "\n";
+    }
+
+    // Write updated chart data
     for (int col = 0; col < 4; ++col) {
         // Write Hit Times
         if (!columnData[col].hitTimes.empty()) {
-            outputDifficultyFile << (col + 1) << " Column Hit Times: ";
+            outputDifficultyFile << (col + 1) << " Column Hit Times:\n";
             for (float time : columnData[col].hitTimes) {
                 outputDifficultyFile << static_cast<int>(time) << ",\n";
             }
@@ -265,7 +280,7 @@ bool Game::EditDifficultyFile()
 
         // Write Long Note Hit Times
         if (!columnData[col].longNoteHitTimes.empty()) {
-            outputDifficultyFile << (col + 1) << " Column Long Note Times: ";
+            outputDifficultyFile << (col + 1) << " Column Long Note Times:\n";
             for (float time : columnData[col].longNoteHitTimes) {
                 outputDifficultyFile << static_cast<int>(time) << ",\n";
             }
@@ -274,7 +289,7 @@ bool Game::EditDifficultyFile()
 
         // Write Release Times
         if (!columnData[col].releaseTimes.empty()) {
-            outputDifficultyFile << (col + 1) << " Column Release Times: ";
+            outputDifficultyFile << (col + 1) << " Column Release Times:\n";
             for (float time : columnData[col].releaseTimes) {
                 outputDifficultyFile << static_cast<int>(time) << ",\n";
             }
@@ -283,10 +298,11 @@ bool Game::EditDifficultyFile()
     }
 
     outputDifficultyFile.close();
-    std::cout << "Successfully updated the difficulty file!" << std::endl;
+    std::cout << "Successfully updated the difficulty file while preserving metadata!" << std::endl;
 
     return true;
 }
+
 
 
 

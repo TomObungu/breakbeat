@@ -68,6 +68,21 @@ void Game::ProcessEvents()
                     TransitionToGameState(GameState::CHART_SELECTION_MENU);
                 }
             }
+            if (mCurrentGameState == GameState::CHART_EDITOR)
+            {
+                if (event.key.keysym.sym == SDLK_ESCAPE)
+                {
+                    // Transition back to Chart Selection
+                    if (EditDifficultyFile()) {
+                        std::cout << "Chart successfully updated and saved." << '\n';
+                        TransitionToGameState(GameState::CHART_EDITOR_SELECTION_MENU);
+                    }
+                    else {
+                        std::cerr << "Failed to update the chart file." << '\n';
+                        TransitionToGameState(GameState::CHART_EDITOR_SELECTION_MENU);
+                    }
+                }
+            }
         }
         if (event.type == SDL_KEYUP)
         {
@@ -455,7 +470,7 @@ void Game::Transition(GameState newGameState)
         mTransitioningGameState = GameState::NOT_TRANSITIONING;
         mHasTransitioned = true;
         mFirstTransitionFrame = true;
-        if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+        if (mCurrentGameState == GameState::CHART_SELECTION_MENU || mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
         {
             mGameActive = false;
             mSongPlaying = false;
