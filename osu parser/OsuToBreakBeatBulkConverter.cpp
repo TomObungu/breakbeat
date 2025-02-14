@@ -142,7 +142,7 @@ void ProcessOsuFiles(const string& directory) {
 }
 
 int main() {
-    string directory = "C:\\Users\\deeza\\AppData\\Local\\osu!\\Songs\\828129 Sharkey & Arkitech - Quadraphinix"; // Change this to your osu! directory
+    string directory = "C:\\Users\\deeza\\AppData\\Local\\osu!\\Songs\\576426 BaconAkin - Yeah Boy - Shooting Stars [no video]";
     ProcessOsuFiles(directory);
     return 0;
 }
