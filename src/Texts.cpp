@@ -923,7 +923,7 @@ void Game::InitializeTexts()
     mTextRenderer.CreateText
     (
         GameState::GRADE_SCREEN,
-        "gameplay-miss-count",
+        "gameplay-final-grade",
         "Final Grade : ",
         vec2(970.333, 308.246),
         vec3(1.0f),

@@ -344,9 +344,9 @@ void Game::RegisterHit(NoteColumn& noteColumn)
     if (noteColumn.longNoteTimeIndex < noteColumn.longNoteHitTimes.size())
     {
         noteColumn.hitTime= mTimeElapsed;
-        noteColumn.hitDifference = noteColumn.hitTime- noteColumn.longNoteHitTimes[noteColumn.longNoteTimeIndex];
+        noteColumn.hitDifference = abs(noteColumn.hitTime- noteColumn.longNoteHitTimes[noteColumn.longNoteTimeIndex]);
 
-        if (noteColumn.hitDifference <= 180 && noteColumn.hitDifference > -45) { // Within hit window
+        if (noteColumn.hitDifference <= 180) { // Within hit window
             
             // Stop the long note movement
             mSpriteRenderer.mNoteBuffer[mCurrentGameState].erase(
@@ -653,29 +653,33 @@ void Game::UpdateHealthBar()
 }
 
 
-void Game::CheckEndOfSongAndSaveScore() 
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+
+void Game::CheckEndOfSongAndSaveScore()
 {
     // Check if the elapsed time has reached the song duration + 5000ms
-    if (mTimeElapsed >= mCurrentSongDuration + 5000) {
+    if (mTimeElapsed >= mCurrentSongDuration + 5000 && !mEndOfSong) {
 
-        std::ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
+        ifstream difficultyFile(fs::current_path().string() + "\\" + mCurrentChartFile);
         // Regular expressions for parsing
-        std::string line;
-        std::regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
+        string line;
+        regex columnRegex(R"(^(\d+)\s+Column\s+(Hit|Long Note|Release)\s+Times:)");
 
         // Store metadata
-        std::vector<std::string> metadataLines;
+        vector<string> metadataLines;
 
         int currentColumn = -1; // Tracks which column is being processed
-        std::string currentType; // Tracks the type: "Hit", "Long Note", "Release"
+        string currentType; // Tracks the type: "Hit", "Long Note", "Release"
 
         // Read and parse the difficulty file
-        while (std::getline(difficultyFile, line)) {
-            std::smatch match;
+        while (getline(difficultyFile, line)) {
+            smatch match;
 
             // Check if the line starts a new note type (Hit, Long Note, Release) for a column
-            if (std::regex_search(line, match, columnRegex)) {
-                currentColumn = std::stoi(match[1]) - 1; // Convert column to 0-based index
+            if (regex_search(line, match, columnRegex)) {
+                currentColumn = stoi(match[1]) - 1; // Convert column to 0-based index
                 currentType = match[2]; // "Hit", "Long Note", "Release"
                 continue;
             }
@@ -685,22 +689,21 @@ void Game::CheckEndOfSongAndSaveScore()
                 metadataLines.push_back(line); // Store metadata line
                 continue;
             }
-            else
-            {
+            else {
                 break;
             }
         }
 
         // Get gameplay statistics
-        std::string grade = GetText(GameState::MAIN_GAMEPLAY, "gameplay-current-grade")->GetText();
-        std::string score = GetText(GameState::MAIN_GAMEPLAY, "gameplay-score")->GetText();
-        std::string accuracy = GetText(GameState::MAIN_GAMEPLAY, "gameplay-accuracy")->GetText();
-        std::string flawlessCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-flawless-count")->GetText();
-        std::string perfectCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-perfect-count")->GetText();
-        std::string greatCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-great-count")->GetText();
-        std::string goodCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-good-count")->GetText();
-        std::string badCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-bad-count")->GetText();
-        std::string missCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-miss-count")->GetText();
+        string grade = GetText(GameState::MAIN_GAMEPLAY, "gameplay-current-grade")->GetText();
+        string score = GetText(GameState::MAIN_GAMEPLAY, "gameplay-score")->GetText();
+        string accuracy = GetText(GameState::MAIN_GAMEPLAY, "gameplay-accuracy")->GetText();
+        string flawlessCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-flawless-count")->GetText();
+        string perfectCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-perfect-count")->GetText();
+        string greatCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-great-count")->GetText();
+        string goodCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-good-count")->GetText();
+        string badCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-bad-count")->GetText();
+        string missCount = GetText(GameState::MAIN_GAMEPLAY, "gameplay-miss-count")->GetText();
 
         // Build the file content
         std::ostringstream scoreData;
@@ -708,32 +711,48 @@ void Game::CheckEndOfSongAndSaveScore()
         for (const auto& metadataLine : metadataLines) {
             scoreData << metadataLine << "\n";
         }
-        scoreData << "Grade: " << grade << "\n";
-        scoreData << "Score: " << score << "\n";
-        scoreData << "Accuracy: " << accuracy << "\n";
-        scoreData << "Flawless: " << flawlessCount << "\n";
-        scoreData << "Perfect: " << perfectCount << "\n";
-        scoreData << "Great: " << greatCount << "\n";
-        scoreData << "Good: " << goodCount << "\n";
-        scoreData << "Bad: " << badCount << "\n";
-        scoreData << "Miss: " << missCount << "\n";
+        scoreData << grade << "\n";
+        scoreData << score << "\n";
+        scoreData << accuracy << "\n";
+        scoreData << flawlessCount << "\n";
+        scoreData << perfectCount << "\n";
+        scoreData << greatCount << "\n";
+        scoreData << goodCount << "\n";
+        scoreData << badCount << "\n";
+        scoreData << missCount << "\n";
 
-        // Save the file
-        std::string scoreFilePath = fs::current_path().string() + "\\scores\\" + songName + "_score.txt";
-        std::ofstream scoreFile(scoreFilePath);
+        // Get the current date and time
+        auto now = std::chrono::system_clock::now();
+        auto nowTimeT = std::chrono::system_clock::to_time_t(now);
+        std::tm nowTm;
+#ifdef _WIN32
+        localtime_s(&nowTm, &nowTimeT);
+#else
+        localtime_r(&nowTimeT, &nowTm);
+#endif
+
+        // Format the timestamp into the file name
+        std::ostringstream timestamp;
+        timestamp << std::put_time(&nowTm, "%Y-%m-%d_%H-%M-%S");
+
+        // Save the file with the timestamp in the name
+        string scoreFilePath = fs::current_path().string() + "\\scores\\" + mCurrentSongName + "_" + mCurrentSongDifficulty + "_" + timestamp.str() + "_score.txt";
+        ofstream scoreFile(scoreFilePath);
         if (scoreFile.is_open()) {
             scoreFile << scoreData.str();
             scoreFile.close();
-            std::cout << "Score saved to: " << scoreFilePath << std::endl;
+            std::cout << "Score saved to: " << scoreFilePath << '\n';
 
             // Update the current score file path
             mCurrentScoreFilePath = scoreFilePath;
         }
         else {
-            std::cerr << "Error: Unable to save score file!" << std::endl;
+            std::cerr << "Error: Unable to save score file!" << '\n';
         }
 
         // Transition to the grade screen
         TransitionToGameState(GameState::GRADE_SCREEN);
+        mEndOfSong = true;
     }
 }
+

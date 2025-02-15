@@ -1,0 +1,16 @@
+Artist : BaconAkin
+Song Name : Yeah Boy - Shooting Stars
+Difficulty : 0
+BPM : 190
+Background Image : charts\BaconAkin-Yeah Boy Shooting Stars\mania.jpg
+Audio : charts\BaconAkin-Yeah Boy Shooting Stars\Yeah Boy - Shooting Stars.mp3
+
+Current Grade : B
+Score : 58000
+Accuracy : 80.56
+Flawless : 125
+Perfect  : 33
+Great : 30
+Good : 16
+Bad : 10
+Miss : 11

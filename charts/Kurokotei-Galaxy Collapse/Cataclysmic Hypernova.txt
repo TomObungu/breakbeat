@@ -6,6 +6,8 @@ Background Image : charts\Kurokotei-Galaxy Collapse\gallaxy collapse.jpg
 Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 
 1 Column Hit Times:
+568,
+1304,
 1457,
 1790,
 2346,
@@ -1637,6 +1639,8 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 398630,
 
 2 Column Hit Times:
+498,
+651,
 1054,
 1235,
 1568,
@@ -3177,9 +3181,12 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 398349,
 
 3 Column Hit Times:
+457,
+623,
 998,
 1123,
 1124,
+1304,
 1679,
 2012,
 2901,
@@ -4734,6 +4741,7 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 
 4 Column Hit Times:
 346,
+415,
 1346,
 1901,
 2235,

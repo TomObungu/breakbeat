@@ -820,6 +820,7 @@ Audio : charts\saikoro-far in the blue sky\audio.mp3
 187297,
 
 2 Column Hit Times:
+1318,
 16215,
 16621,
 16824,

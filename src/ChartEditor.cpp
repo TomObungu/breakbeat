@@ -160,6 +160,7 @@ void Game::UpdateNotePositions()
 
 void Game::UpdateBeatSnapBars()
 {
+    mSpriteRenderer.mBarBuffer.clear();
     int barCount = std::ceil(mPreviewWindowSize / mBeatInterval);
     for (unsigned i = 1; i < barCount + 1; i++)
     {

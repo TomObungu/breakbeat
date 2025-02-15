@@ -513,6 +513,11 @@ Sprite* Game::CheckCollidingSprite(GameState gameState)
     }
     else if (gameState == GameState::CHART_EDITOR)
     {
+        if (mFirstFrame)
+        {
+            relevantSprites.clear();
+            mFirstFrame = false;
+        }
         // Collect all keys (note IDs) from mNotePreviewBuffer for the current game state
         for (const auto& [key, sprite] : mSpriteRenderer.mNotePreviewBuffer[mCurrentGameState])
         {

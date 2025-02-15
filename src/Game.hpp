@@ -28,6 +28,7 @@ integrated in
 #include <regex>
 #include <string>
 #include <array>
+#include <chrono>
 #include <iomanip>
 
 #include <algorithm>
@@ -163,6 +164,8 @@ public:
     void HandleLongNoteRelease(NoteColumn& event);
 
     void UpdateGameplayStatisticsText();
+
+    void LoadScoreAndUpdateGradeScreen();
 
     void UpdateScore(NoteColumn& noteColumn);
 
@@ -369,6 +372,7 @@ private:
     bool mPlayHoverAnimation = false;
 
     bool mIsPlayingChart = true;
+    bool mEndOfSong = false;
     
 };
     

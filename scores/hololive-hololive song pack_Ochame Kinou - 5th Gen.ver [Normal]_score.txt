@@ -1,0 +1,16 @@
+Artist : hololive
+Song Name : hololive song pack
+Difficulty : 0
+BPM : 190
+Background Image : charts\hololive-hololive song pack\Ochame Kinou - 5th Gen.ver.png
+Audio : charts\hololive-hololive song pack\Ochame Kinou - 5th Gen.ver.ogg
+
+Current Grade : C
+Score : 257620
+Accuracy : 78.77
+Flawless : 501
+Perfect  : 181
+Great : 177
+Good : 60
+Bad : 32
+Miss : 73

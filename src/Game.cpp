@@ -83,6 +83,14 @@ void Game::ProcessEvents()
                     }
                 }
             }
+            if (mCurrentGameState == GameState::GRADE_SCREEN)
+            {
+                if (event.key.keysym.sym == SDLK_RETURN)
+                {
+                    TransitionToGameState(GameState::CHART_SELECTION_MENU);
+                }
+            }
+
         }
         if (event.type == SDL_KEYUP)
         {
@@ -293,6 +301,15 @@ void Game::Update()
         if (mFirstFrame)
         {
             InitializeChartEditor();
+            mFirstFrame = false;
+        }
+    }
+
+    if (mCurrentGameState == GameState::GRADE_SCREEN)
+    {
+        if (mFirstFrame)
+        {
+            LoadScoreAndUpdateGradeScreen();
             mFirstFrame = false;
         }
     }
