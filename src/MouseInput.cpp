@@ -466,7 +466,47 @@ void Game::HandleMouseInput(SDL_Event& event)
                 UpdateNotePositions();
             }
         }
-    }
+        else if (collidingText)
+        {
+            if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+            {
+                // Check if the user clicked on "song-scores-text"
+                if (collidingText == GetText(mCurrentGameState, "song-scores-text"))
+                {
+                    // Path to the scores folder
+                    std::string scoresFolderPath = fs::current_path().string() + "\\scores";
+
+                    // Check if the folder exists
+                    if (!fs::exists(scoresFolderPath))
+                    {
+                        std::cerr << "Scores folder does not exist: " << scoresFolderPath << std::endl;
+                        tinyfd_messageBox(
+                            "Error",
+                            "The scores folder does not exist. Please ensure scores are saved correctly.",
+                            "ok",
+                            "error",
+                            1
+                        );
+                    }
+                    else
+                    {
+                        // Use Tiny File Dialog to open the folder
+                        tinyfd_messageBox(
+                            "Open Scores Folder",
+                            "Opening the scores folder in your file explorer...",
+                            "ok",
+                            "info",
+                            1
+                        );
+
+                        // Open the folder in the default file explorer
+                        std::string command = "explorer \"" + scoresFolderPath + "\"";
+                        system(command.c_str()); // Execute the system command to open the folder
+                    }
+                }
+            }
+        }
+    } 
 }
 
 Sprite* Game::CheckCollidingSprite(GameState gameState)
@@ -640,6 +680,13 @@ Text* Game::CheckCollidingText(GameState gameState)
             "new-chart-screen-song-bpm-text",
             "new-chart-screen-difficulty-name-text",
             "new-difficulty-screen-difficulty-name-text"
+        };
+    }
+    else if (gameState == GameState::CHART_SELECTION_MENU)
+    {
+        relevantTexts =
+        {
+            "song-scores-text"
         };
     }
 
