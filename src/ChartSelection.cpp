@@ -381,7 +381,12 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 else
                     GetChartMetadata();
 
-                // Play the corresponding chart audio
+
+                ParseDifficultyFile();
+
+                std::cout << CalculateDifficulty() << '\n';
+
+                ClearGameplayBuffers();
                 
                 break;
             }
@@ -411,7 +416,12 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 else
                     GetChartMetadata();
 
-                // Play the corresponding chart audio
+				ParseDifficultyFile();
+
+				std::cout << CalculateDifficulty() << '\n';
+
+                ClearGameplayBuffers();
+
                 break;
             }
         case SDLK_RETURN:
@@ -427,6 +437,7 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 TransitionToGameState(GameState::CHART_EDITOR);
                 mSoundEngine->stopAllSounds();
             }
+
                
             break;
         default:
@@ -465,8 +476,6 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             PlayCurrentlySelectedChartAudio();
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
                 UpdateChartSelectionImage();
-            else
-                GetChartMetadata();
             GetChartMetadata();
             break;
         }
@@ -487,8 +496,6 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             PlayCurrentlySelectedChartAudio();
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
                 UpdateChartSelectionImage();
-            else
-                GetChartMetadata();
             GetChartMetadata();
             break;
         }
@@ -588,6 +595,12 @@ void Game::InitializeChartSelection()
 
     if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
         UpdateChartSelectionImage();
+
+    ClearGameplayBuffers();
+
+    ParseDifficultyFile();
+
+    std::cout << CalculateDifficulty() << '\n';
 
     GetChartMetadata();
 }

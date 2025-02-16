@@ -77,6 +77,7 @@ bool Game::ParseDifficultyFile()
             }
         }
     }
+
     mNoteColumns = { firstColumn,secondColumn,thirdColumn,fourthColumn };
     difficultyFile.close();
     return true;

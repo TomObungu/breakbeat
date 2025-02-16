@@ -491,68 +491,71 @@ void Game::Transition(GameState newGameState)
         {
             mGameActive = false;
             mSongPlaying = false;
-            
-            firstColumn = {
-             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             "main-gameplay-left-note",
-             581.936, 0,
-             {},
-             {},
-             {},
-             {}, {}, {}, false, false, false, 0, 0 };
-            secondColumn = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            "main-gameplay-down-note",
-            765.423, 0,
-            {},
-            {},
-            {},
-            {}, {}, {}, false, false, false, 0, 0 };
-            thirdColumn = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            "main-gameplay-up-note",
-            949.361, 0,
-            {},
-            {},
-            {},
-            {}, {}, {},false, false, false, 0, 0 };
-            fourthColumn = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            "main-gameplay-right-note",
-            1138.061, 0,
-            {},
-            {},
-            {},
-            {}, {}, {},false, false, false, 0, 0 };
-
-            // Clear note columns
-            for (auto& noteColumn : mNoteColumns)
-            {
-                noteColumn = {};
-            }
-
-            mSongStartTime = 0;
-            mTimeElapsed = 0;
-            mDelayStartTime = 0;
-            mNegativeOffset = 0;
-            mTimeTakenToFall = 0;
-
-            mAccuracy = 0;
-            mScore = 0;
-            mMaximumPossibleScore = 0;
-            mHealth = 100;
-
-            mFlawlessCount = 0;
-            mPerfectCount = 0;
-            mGreatCount = 0;
-            mGoodCount = 0;
-            mBadCount = 0;
-            mMissCount = 0;
-
+            ClearGameplayBuffers();
             mWaitingForGameplayStart = true;
             mGameplayStartTime = SDL_GetTicks();
         }
     }
+}
+
+void Game::ClearGameplayBuffers()
+{
+    firstColumn = {
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     "main-gameplay-left-note",
+     581.936, 0,
+     {},
+     {},
+     {},
+     {}, {}, {}, false, false, false, 0, 0 };
+    secondColumn = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    "main-gameplay-down-note",
+    765.423, 0,
+    {},
+    {},
+    {},
+    {}, {}, {}, false, false, false, 0, 0 };
+    thirdColumn = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    "main-gameplay-up-note",
+    949.361, 0,
+    {},
+    {},
+    {},
+    {}, {}, {},false, false, false, 0, 0 };
+    fourthColumn = {
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    "main-gameplay-right-note",
+    1138.061, 0,
+    {},
+    {},
+    {},
+    {}, {}, {},false, false, false, 0, 0 };
+
+    // Clear note columns
+    for (auto& noteColumn : mNoteColumns)
+    {
+        noteColumn = {};
+    }
+
+    mSongStartTime = 0;
+    mTimeElapsed = 0;
+    mDelayStartTime = 0;
+    mNegativeOffset = 0;
+    mTimeTakenToFall = 0;
+
+    mAccuracy = 0;
+    mScore = 0;
+    mMaximumPossibleScore = 0;
+    mHealth = 100;
+
+    mFlawlessCount = 0;
+    mPerfectCount = 0;
+    mGreatCount = 0;
+    mGoodCount = 0;
+    mBadCount = 0;
+    mMissCount = 0;
 }
 
 void Game::CheckForTransitionState()

@@ -30,7 +30,9 @@ integrated in
 #include <array>
 #include <chrono>
 #include <iomanip>
-
+#include <cmath>
+#include <set>
+#include <numeric>
 #include <algorithm>
 #include <iterator>
 
@@ -50,6 +52,7 @@ using std::array;
 using std::setprecision;
 using std::regex;
 using std::smatch;
+using std::set;
 
 using namespace irrklang;
 
@@ -215,9 +218,17 @@ public:
 
     void InitializeTexts();
 
+    void ClearGameplayBuffers();
+
     void InitializeFonts();
 
     void UpdateBeatSnapBars();
+
+    double CalculateDifficulty();
+
+    double DetectChordjacks(const vector<vector<float>>&, float);
+
+    double DetectInterval(const vector<float>&, int);
 
     Game();
 private:

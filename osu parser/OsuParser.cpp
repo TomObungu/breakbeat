@@ -63,7 +63,7 @@ void processLine(const string& line,
 
 int main() {
     // File path to the .osu file
-    string filePath = "DETRO - hurricanic -short size- (stupud man) [Challenge].osu";
+    string filePath = "Various Artists - Jumpstream Practice Pack (JPP) (Ventilo le vrai) [Exile].osu";
 
     // Vectors for hit times, release times, and long note hit times for each column
     vector<float> firstColumnNoteHitTimes, secondColumnNoteHitTimes, thirdColumnNoteHitTimes, fourthColumnNoteHitTimes;
