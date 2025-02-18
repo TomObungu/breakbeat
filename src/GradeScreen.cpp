@@ -92,7 +92,7 @@ void Game::LoadScoreAndUpdateGradeScreen()
                 gradeSprite->SetTexture(ResourceManager::GetTexture(textureName));
             }
             else {
-                std::cerr << "Error: Failed to retrieve sprite for 'main-gameplay-grade-screen-grade'" << std::endl;
+                std::cerr << "Error: Failed to retrieve sprite for 'main-gameplay-grade-screen-grade'" << '\n';
             }
         }
     }

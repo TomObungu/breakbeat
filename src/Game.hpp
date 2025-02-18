@@ -224,12 +224,16 @@ public:
 
     void UpdateBeatSnapBars();
 
+    double DetectInterval(const vector<float>& note_times);
+
+    double CalculateDensity(const vector<float>& note_times, float window_size);
+
+    double CalculateJumpstreamDifficulty(const vector<vector<float>>& columns);
+    double CalculateHandstreamDifficulty(const vector<vector<float>>& columns);
+    double CalculateChordjackDifficulty(const vector<vector<float>>& columns);
+    double CalculateStrain(const std::vector<float>& note_timings);
+
     double CalculateDifficulty();
-
-    double DetectChordjacks(const vector<vector<float>>&, float);
-
-    double DetectInterval(const vector<float>&, int);
-
     Game();
 private:
     // Declare mWindow as a member variable

@@ -1,0 +1,16 @@
+Artist : Various Artists
+Song Name : Jumpstream Practice Pack (JPP)
+Difficulty : 0
+BPM : 190
+Background Image : charts\Various Artists-Jumpstream Practice Pack (JPP)\Exile.jpg
+Audio : charts\Various Artists-Jumpstream Practice Pack (JPP)\Exile.mp3
+
+Current Grade : A
+Score : 492640
+Accuracy : 94.22
+Flawless : 1012
+Perfect  : 456
+Great : 156
+Good : 8
+Bad : 0
+Miss : 2
