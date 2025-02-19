@@ -1,6 +1,7 @@
 
 # Breakbeat
 A VSRG written in C++ using the OpenGL specificiation
+Contains charts converted from osu!mania 
 # Gameplay
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 # Instructions
