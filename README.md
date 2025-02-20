@@ -6,9 +6,8 @@ Contains charts converted from osu!mania
 # Gameplay
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 # Instructions
-1. Go to releases and download the source code.zip
-3. Extract the zip the download breakbeat.exe
-4. Drag the breakbeat.exe into the extracted source.zip folder and run breakbeat.exe
+1. Go to releases and download the source code.zip. A .zip "breakbeat-dev" should start downloading.
+2. Extract the folder and run breakbeat.exe
 
 # Dependencies 
 If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. You can fix them by installing them here:
