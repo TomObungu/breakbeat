@@ -1,6 +1,6 @@
 
 # Breakbeat
-A VSRG written in C++ using the OpenGL specificiation.
+A Vertical Scrolling Rhythm Game (VSRG) similar to osu!mania, written in C++ using the OpenGL specificiation.
 
 Contains charts converted from osu!mania 
 # Gameplay
