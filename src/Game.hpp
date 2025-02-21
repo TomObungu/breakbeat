@@ -251,8 +251,8 @@ private:
     float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
     Uint32 mLastSelectionTime = 0; 
 
-    float mReceptorSize;
-    float mScrollSpeed;
+    int mReceptorSize;
+    int mScrollSpeed;
 
     string mScrollDirection;
 
@@ -306,7 +306,6 @@ private:
 
     string mCurrentScoreFilePath = "";
     unsigned mCurrentSongDuration = 0;
-    int mAudioDuration = 0;
 
     float mSongStartTime = 0;
     float mTimeElapsed = 0;

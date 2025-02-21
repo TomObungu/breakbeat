@@ -1,6 +1,6 @@
 Artist : hololive
 Song Name : hololive song pack
-Difficulty : 0
+Difficulty : 1.2332
 BPM : 190
 Background Image : charts\hololive-hololive song pack\Aqua Cat - Minato Aqua.png
 Audio : charts\hololive-hololive song pack\Aqua Cat - Minato Aqua.ogg

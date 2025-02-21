@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 210
 Background Image : charts\hololive-hololive song pack\Ghost Rule - Amane Kanata.png
 Audio : charts\hololive-hololive song pack\Ghost Rule - Amane Kanata.ogg
 

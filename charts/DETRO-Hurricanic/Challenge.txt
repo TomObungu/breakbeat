@@ -1,6 +1,6 @@
 Artist : DETRO
 Song Name : Hurricanic
-Difficulty : 0
+Difficulty : 5.38421
 BPM : 190
 Background Image : charts\DETRO-Hurricanic\bg.jpg
 Audio : charts\DETRO-Hurricanic\hurricanic -short size-.mp3

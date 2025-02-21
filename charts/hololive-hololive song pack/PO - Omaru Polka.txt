@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 333
 Background Image : charts\hololive-hololive song pack\PO - Omaru Polka.png
 Audio : charts\hololive-hololive song pack\PO - Omaru Polka.ogg
 

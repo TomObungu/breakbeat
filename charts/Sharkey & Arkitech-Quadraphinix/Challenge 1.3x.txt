@@ -1,7 +1,7 @@
 Artist : Sharkey & Arkitech
 Song Name : Quadraphinix
 Difficulty : 0
-BPM : 190
+BPM : 232
 Background Image : charts\Sharkey & Arkitech-Quadraphinix\quad-BG.jpg
 Audio : charts\Sharkey & Arkitech-Quadraphinix\Quadraphinix_3.mp3
 

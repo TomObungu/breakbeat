@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 183
 Background Image : charts\hololive-hololive song pack\Mage of Violet - Murasaki Shion.png
 Audio : charts\hololive-hololive song pack\Mage of Violet - Murasaki Shion.ogg
 

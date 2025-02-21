@@ -1,7 +1,7 @@
 Artist : Akiyama Uni
 Song Name : Odoru Mizushibuki
-Difficulty : 0
-BPM : 190
+Difficulty : 3.35999
+BPM : 166
 Background Image : charts\Akiyama Uni-Odoru Mizushibuki\fairydancinginswamp.png
 Audio : charts\Akiyama Uni-Odoru Mizushibuki\Odoru Mizushibuki 1.200x.mp3
 

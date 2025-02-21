@@ -475,7 +475,12 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             UpdateCurrentChartDifficulties();
             PlayCurrentlySelectedChartAudio();
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+            {
+                ParseDifficultyFile();
+                std::cout << CalculateDifficulty() << '\n';
                 UpdateChartSelectionImage();
+            }
+
             GetChartMetadata();
             break;
         }
@@ -495,7 +500,11 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             UpdateCurrentChartDifficulties();
             PlayCurrentlySelectedChartAudio();
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
-                UpdateChartSelectionImage();
+            {
+                ParseDifficultyFile();
+				std::cout << CalculateDifficulty() << '\n';
+				UpdateChartSelectionImage();
+            }
             GetChartMetadata();
             break;
         }
@@ -600,7 +609,8 @@ void Game::InitializeChartSelection()
 
     ParseDifficultyFile();
 
-    std::cout << CalculateDifficulty() << '\n';
+    if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+        std::cout << CalculateDifficulty() << '\n';
 
     GetChartMetadata();
 }

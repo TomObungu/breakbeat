@@ -176,6 +176,7 @@ void Game::InitializeMainGameplay()
             }
         }
     }
+    mEndOfSong = false;
     mDelayStartTime = SDL_GetTicks();
 }
 
@@ -750,6 +751,8 @@ void Game::CheckEndOfSongAndSaveScore()
         else {
             std::cerr << "Error: Unable to save score file!" << '\n';
         }
+
+        mCurrentSongDuration = 0;
 
         // Transition to the grade screen
         TransitionToGameState(GameState::GRADE_SCREEN);

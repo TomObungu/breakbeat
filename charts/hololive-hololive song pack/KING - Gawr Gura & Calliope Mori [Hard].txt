@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 166
 Background Image : charts\hololive-hololive song pack\KING - Gawr Gura x Calliope Mori.png
 Audio : charts\hololive-hololive song pack\KING - Gawr Gura x Calliope Mori.ogg
 

@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 168
 Background Image : charts\hololive-hololive song pack\Sakurakaze - Sakura Miko.png
 Audio : charts\hololive-hololive song pack\Sakurakaze - Sakura Miko.ogg
 

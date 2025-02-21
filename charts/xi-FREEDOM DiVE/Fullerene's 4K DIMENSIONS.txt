@@ -1,7 +1,7 @@
 Artist : xi
 Song Name : FREEDOM DiVE
 Difficulty : 0
-BPM : 190
+BPM : 222
 Background Image : charts\xi-FREEDOM DiVE\background desuuu.jpg
 Audio : charts\xi-FREEDOM DiVE\Freedom Dive.mp3
 

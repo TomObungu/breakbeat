@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 160
 Background Image : charts\hololive-hololive song pack\Kimagure Mercy - Nakiri Ayame x Nana Kagura.png
 Audio : charts\hololive-hololive song pack\Kimagure Mercy - Nakiri Ayame x Nana Kagura.ogg
 

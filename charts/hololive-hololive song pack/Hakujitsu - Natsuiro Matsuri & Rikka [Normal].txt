@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 93
 Background Image : charts\hololive-hololive song pack\Hakujitsu - Natsuiro Matsuri & Rikka.png
 Audio : charts\hololive-hololive song pack\Hakujitsu - Natsuiro Matsuri & Rikka.ogg
 

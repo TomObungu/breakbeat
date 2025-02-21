@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
-Difficulty : 0
-BPM : 190
+Difficulty : 0.387427
+BPM : 174
 Background Image : charts\hololive-hololive song pack\Bitter Choco Decoration - Shirakami Fubuki.png
 Audio : charts\hololive-hololive song pack\Bitter Choco Decoration - Shirakami Fubuki.ogg
 

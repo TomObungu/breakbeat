@@ -18,19 +18,6 @@ double Game::DetectInterval(const vector<float>& note_times) {
     return accumulate(intervals.begin(), intervals.end(), 0.0) / intervals.size();
 }
 
-// Function to calculate the average notes per second
-double Game::CalculateDensity(const std::vector<float>& note_times, float window_size) {
-    if (note_times.empty()) return 0.0;
-
-    double total_notes = static_cast<double>(note_times.size());
-    float total_duration = note_times.back() - note_times.front();
-
-    if (total_duration <= 0.0) return 0.0;
-
-    // Calculate the average notes per second
-    return total_notes / (total_duration / 1000.0f); // Convert total duration to seconds
-}
-
 // Function to calculate jumpstream difficulty
 double Game::CalculateJumpstreamDifficulty(const std::vector<std::vector<float>>& columns) {
     if (columns.size() < 2) return 0.0;
@@ -79,7 +66,7 @@ double Game::CalculateJumpstreamDifficulty(const std::vector<std::vector<float>>
         }
 
         // Calculate the density of the notes between the two jumps
-        double density = CalculateDensity(notes_between_jumps, end_jump - start_jump);
+        double density = DetectInterval(notes_between_jumps);
         jumpstream_densities.push_back(density);
    
     }
@@ -150,7 +137,7 @@ double Game::CalculateHandstreamDifficulty(const std::vector<std::vector<float>>
         }
 
         // Calculate the density of the notes between the two hands
-        double density = CalculateDensity(notes_between_hands, end_hand - start_hand);
+        double density = DetectInterval(notes_between_hands);
         handstream_densities.push_back(density);
     }
 
@@ -230,8 +217,8 @@ double Game::CalculateChordjackDifficulty(const std::vector<std::vector<float>>&
     std::sort(chordjack_timings.begin(), chordjack_timings.end());
     chordjack_timings.erase(std::unique(chordjack_timings.begin(), chordjack_timings.end()), chordjack_timings.end());
 
-    // Step 4: Calculate the density of chordjacks using CalculateDensity
-    return CalculateDensity(chordjack_timings, 1000.0f); // Window size of 1000ms
+    // Step 4: Calculate the density of chordjacks using DetectInterval
+    return DetectInterval(chordjack_timings);
 }
 
 // Function to calculate the strain of a chart
@@ -284,7 +271,12 @@ double Game::CalculateDifficulty() {
 
     double jumpstream_difficulty = CalculateJumpstreamDifficulty(note_columns);
     double handstream_difficulty = CalculateHandstreamDifficulty(note_columns);
-    double chordjack_difficulty = CalculateChordjackDifficulty(note_columns);;
+    double chordjack_difficulty = CalculateChordjackDifficulty(note_columns);
+
+    jumpstream_difficulty = jumpstream_difficulty != 0 ? 1 / jumpstream_difficulty : 0;
+    handstream_difficulty = handstream_difficulty != 0 ? 1 / handstream_difficulty : 0;
+    chordjack_difficulty = chordjack_difficulty != 0 ? 1 / chordjack_difficulty : 0;
+
     double speed_difficulty = (1.0 / interval) / 4.0 * 10000;
     double strain_difficulty = mCurrentSongDuration / (strain / 4.0);
     

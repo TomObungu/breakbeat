@@ -251,16 +251,14 @@ void Game::Update()
     }
     if(mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
     {
-        
-        CheckNewChartButton();
-
-        if(mFirstFrame)
+        if (mFirstFrame)
         {
             InitializeChartSelection();
             mFirstFrame = false;
             removingSprites = true;
         }
-            
+
+        CheckNewChartButton();  
     }
     
     if(mCurrentGameState == GameState::CHART_SELECTION_MENU)

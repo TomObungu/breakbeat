@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
-Difficulty : 0
-BPM : 190
+Difficulty : 0.584286
+BPM : 100
 Background Image : charts\hololive-hololive song pack\Cry Baby - Hoshimachi Suisei.png
 Audio : charts\hololive-hololive song pack\Cry Baby - Hoshimachi Suisei.ogg
 

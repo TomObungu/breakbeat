@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 165
 Background Image : charts\hololive-hololive song pack\Remote Control - Tokino Sora & ConRoboco-san.png
 Audio : charts\hololive-hololive song pack\Remote Control - Tokino Sora & ConRoboco-san.ogg
 

@@ -1,7 +1,7 @@
 Artist : hololive
 Song Name : hololive song pack
 Difficulty : 0
-BPM : 190
+BPM : 170
 Background Image : charts\hololive-hololive song pack\Goodbye Sengen - Uruha Rushia.png
 Audio : charts\hololive-hololive song pack\Goodbye Sengen - Uruha Rushia.ogg
 
