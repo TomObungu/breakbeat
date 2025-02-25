@@ -251,8 +251,8 @@ private:
     float mSelectionDelay = 200;     // Minimum delay between inputs in milliseconds
     Uint32 mLastSelectionTime = 0; 
 
-    int mReceptorSize;
-    int mScrollSpeed;
+    float mReceptorSize=0;
+    float mScrollSpeed=0;
 
     string mScrollDirection;
 

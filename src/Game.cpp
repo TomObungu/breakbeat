@@ -554,6 +554,10 @@ void Game::ClearGameplayBuffers()
     mGoodCount = 0;
     mBadCount = 0;
     mMissCount = 0;
+
+	mSpriteRenderer.mNoteBuffer[mCurrentGameState].clear();
+	mSpriteRenderer.mNotePreviewBuffer[mCurrentGameState].clear();
+	mSpriteRenderer.mBarBuffer[mCurrentGameState].clear();
 }
 
 void Game::CheckForTransitionState()

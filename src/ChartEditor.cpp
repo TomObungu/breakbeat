@@ -3,6 +3,7 @@
 void Game::InitializeChartEditor()
 {
 	LoadBackgroundImage();
+    ClearGameplayBuffers();
 	ParseDifficultyFile();
 	PreloadAudio();
 	for (unsigned i = 0; i < 4; i++)
@@ -303,7 +304,3 @@ bool Game::EditDifficultyFile()
 
     return true;
 }
-
-
-
-

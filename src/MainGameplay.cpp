@@ -128,7 +128,7 @@ void Game::InitializeMainGameplay()
     
     PreloadAudio();
 
-    mTimeTakenToFall = (1080 / mScrollSpeed) * 1000; // Time taken to fall in milliseconds
+    mTimeTakenToFall = (1080.0f / mScrollSpeed) * 1000; // Time taken to fall in milliseconds
 
     for (unsigned i = 0; i < 4; i++)
     {
@@ -136,17 +136,17 @@ void Game::InitializeMainGameplay()
     } 
     for (unsigned i = 0; i < 4; i++)
     {
-        for (auto& time : mNoteColumns[i].hitTimes)
+        for (float& time : mNoteColumns[i].hitTimes)
         {
-            time += (mReceptorSize / 100) * 180 / (mScrollSpeed * 1000);
+            time += 2*(((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
         }
         for (auto& time : mNoteColumns[i].longNoteHitTimes)
         {
-            time += (mReceptorSize / 100) * 180 / (mScrollSpeed * 1000);
+            time += 2*(((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
         }
         for (auto& time : mNoteColumns[i].releaseTimes)
         {
-            time += (mReceptorSize / 100) * 180 / (mScrollSpeed * 1000);
+            time += 2*(((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
         }
     }
     for (unsigned i = 0; i < 4; i++)

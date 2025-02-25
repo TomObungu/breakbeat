@@ -1,13 +1,14 @@
 Artist : Kurokotei
 Song Name : Galaxy Collapse
-Difficulty : 0
+Difficulty : 6.775
 BPM : 270
 Background Image : charts\Kurokotei-Galaxy Collapse\gallaxy collapse.jpg
 Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 
 1 Column Hit Times:
-568,
-1304,
+124,
+457,
+790,
 1457,
 1790,
 2346,
@@ -1639,9 +1640,8 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 398630,
 
 2 Column Hit Times:
-498,
-651,
-1054,
+235,
+1012,
 1235,
 1568,
 2124,
@@ -3181,12 +3181,8 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 398349,
 
 3 Column Hit Times:
-457,
-623,
-998,
-1123,
+679,
 1124,
-1304,
 1679,
 2012,
 2901,
@@ -4740,8 +4736,10 @@ Audio : charts\Kurokotei-Galaxy Collapse\Galaxy Collapse.mp3
 400130,
 
 4 Column Hit Times:
+13,
 346,
-415,
+568,
+901,
 1346,
 1901,
 2235,

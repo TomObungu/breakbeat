@@ -381,10 +381,12 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 else
                     GetChartMetadata();
 
-
-                ParseDifficultyFile();
-
-                std::cout << CalculateDifficulty() << '\n';
+                if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+                {
+                    ClearGameplayBuffers();
+                    ParseDifficultyFile();
+                    std::cout << CalculateDifficulty() << '\n';
+                }
 
                 ClearGameplayBuffers();
                 
@@ -416,9 +418,13 @@ void Game::HandleChartScrolling(SDL_Event& event)
                 else
                     GetChartMetadata();
 
-				ParseDifficultyFile();
-
-				std::cout << CalculateDifficulty() << '\n';
+		
+                if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
+                {
+                    ClearGameplayBuffers();
+                    ParseDifficultyFile();
+                    std::cout << CalculateDifficulty() << '\n';
+                }
 
                 ClearGameplayBuffers();
 
@@ -434,6 +440,7 @@ void Game::HandleChartScrolling(SDL_Event& event)
             else if (mCurrentGameState == GameState::CHART_EDITOR_SELECTION_MENU)
             {
                 GetChartMetadata();
+                ClearGameplayBuffers();
                 TransitionToGameState(GameState::CHART_EDITOR);
                 mSoundEngine->stopAllSounds();
             }
@@ -476,6 +483,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             PlayCurrentlySelectedChartAudio();
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
             {
+                ClearGameplayBuffers();
                 ParseDifficultyFile();
                 std::cout << CalculateDifficulty() << '\n';
                 UpdateChartSelectionImage();
@@ -501,6 +509,7 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
             PlayCurrentlySelectedChartAudio();
             if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
             {
+                ClearGameplayBuffers();
                 ParseDifficultyFile();
 				std::cout << CalculateDifficulty() << '\n';
 				UpdateChartSelectionImage();

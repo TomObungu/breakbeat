@@ -549,10 +549,6 @@ Audio : charts\ueotan-Mario Paint (Time Regression Mix for BMS)\#0D_D-ANOTHER.mp
 88156,
 88253,
 
-1 Column Long Note Times:
-
-1 Column Release Times:
-
 2 Column Hit Times:
 1736,
 2124,
@@ -1096,10 +1092,6 @@ Audio : charts\ueotan-Mario Paint (Time Regression Mix for BMS)\#0D_D-ANOTHER.mp
 88059,
 88156,
 88253,
-
-2 Column Long Note Times:
-
-2 Column Release Times:
 
 3 Column Hit Times:
 1543,
@@ -1659,10 +1651,6 @@ Audio : charts\ueotan-Mario Paint (Time Regression Mix for BMS)\#0D_D-ANOTHER.mp
 88107,
 88204,
 
-3 Column Long Note Times:
-
-3 Column Release Times:
-
 4 Column Hit Times:
 1543,
 2317,
@@ -2218,8 +2206,4 @@ Audio : charts\ueotan-Mario Paint (Time Regression Mix for BMS)\#0D_D-ANOTHER.mp
 87866,
 88107,
 88204,
-
-4 Column Long Note Times:
-
-4 Column Release Times:
 
