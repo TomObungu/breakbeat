@@ -138,15 +138,15 @@ void Game::InitializeMainGameplay()
     {
         for (float& time : mNoteColumns[i].hitTimes)
         {
-            time += 2*(((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
+            time += (((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
         }
         for (auto& time : mNoteColumns[i].longNoteHitTimes)
         {
-            time += 2*(((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
+            time += (((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
         }
         for (auto& time : mNoteColumns[i].releaseTimes)
         {
-            time += 2*(((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
+            time += (((mReceptorSize / 100.0f) * 180.0f) / mScrollSpeed) * 1000;
         }
     }
     for (unsigned i = 0; i < 4; i++)

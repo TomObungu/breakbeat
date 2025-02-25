@@ -277,7 +277,7 @@ double Game::CalculateDifficulty() {
     handstream_difficulty = handstream_difficulty != 0 ? 1 / handstream_difficulty : 0;
     chordjack_difficulty = chordjack_difficulty != 0 ? 1 / chordjack_difficulty : 0;
 
-    double speed_difficulty = (1.0 / interval) / 4.0 * 10000;
+    double speed_difficulty = (1.0 / (interval / 1000)) / 4.0 * 1000;
     double strain_difficulty = mCurrentSongDuration / (strain / 4.0);
     
     // Calculate final difficulty as the average of all pattern difficulties
