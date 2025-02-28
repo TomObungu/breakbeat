@@ -1,5 +1,13 @@
+/*
+    Text.cpp
+    This class is used to render text on the screen.
+*/
+
+// Include libraries
 #include "Text.hpp"
 #include <iostream>
+
+// Constructor
 Text::Text(const string& text, vec2 position, vec3 color, float scale, unsigned windowSize, bool scrollableText)
     : mText(text), 
     mPosition(position), 
@@ -11,6 +19,7 @@ Text::Text(const string& text, vec2 position, vec3 color, float scale, unsigned 
     mOriginalColor = color;
 }
 
+// Draw the text
 void Text::Draw() 
 {
     mShader.Use();
@@ -50,28 +59,29 @@ void Text::Draw()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+// Getter for the current text
 const string& Text::GetText()
 {
     return mText;
 }
-
+// Setter for the current position
 void Text::SetPosition(vec2 position)
 {
     this->mPosition = position;
 }
-
+// Update the text
 void Text::UpdateText(const std::string& newText) {
     mText = newText;
 }
-
+// Set the color of the text
 void Text::SetColor(const glm::vec3& color) {
     mColor = color;
 }
-
+// Set the scale of the text
 void Text::SetScale(float scale) {
     mScale = scale;
 }
-
+// Set the scale of the text
 void Text::SetScale(bool enable, float targetScale, float scaleTime, bool looping)
 {
     if (!mIsScaling && enable)
@@ -84,7 +94,7 @@ void Text::SetScale(bool enable, float targetScale, float scaleTime, bool loopin
         mIsLoopScaling = looping;
     }
 }
-
+// Set the darken state of the text
 void Text::SetDarken(bool enable, float darkenTime)
 {
     if(!mDarkened || mBrightened && !mDarkening)
@@ -95,7 +105,7 @@ void Text::SetDarken(bool enable, float darkenTime)
         mDarkenStartTime = SDL_GetTicks();
     }
 }
-
+// Darken the text
 void Text::Darken()
 {
     float timeElapsed = SDL_GetTicks() - mDarkenStartTime;
@@ -109,7 +119,7 @@ void Text::Darken()
         mBrightened = false;
     }
 }
-
+// Set the brighten state of the text
 void Text::SetBrighten(bool enable, float brightenTime)
 {
     if(!mBrightened || mDarkened && !mBrightening)
@@ -120,7 +130,7 @@ void Text::SetBrighten(bool enable, float brightenTime)
         mBrightenStartTime = SDL_GetTicks();
     }
 }
-
+// Brighten the text
 void Text::Brighten()
 {
     float timeElapsed = SDL_GetTicks() - mBrightenStartTime;
@@ -136,7 +146,7 @@ void Text::Brighten()
         mDarkened = false;
     }
 }
-
+// Update the text
 void Text::Update(float deltaTime) 
 {
     // If the sprite is in the darkening state it will call the darken function
@@ -178,7 +188,7 @@ void Text::Update(float deltaTime)
     UpdateVisibleText();
 
 }
-
+// Update the visible text
 void Text::UpdateVisibleText()
 {
     // Ensure the startIndex is within valid bounds
@@ -212,17 +222,17 @@ void Text::UpdateVisibleText()
     mVisibleText = mText.substr(mStartIndex, mWindowSize);
 }
 
-
+// Getter for the current position
 vec2 Text::GetPosition()
 {
     return mPosition;
 }
-
+// Getter for the current size
 vec2 Text::GetSize()
 {
     return mSize;
 }
-
+// Setter for the current start index
 void Text::SetStartIndex(unsigned startIndex) 
 { 
     mStartIndex = startIndex; 
@@ -233,7 +243,7 @@ unsigned Text::GetStartIndex()
 {
     return mStartIndex;
 }
-
+// Setter for the current window size
 void Text::SetWindowSize(unsigned size)
 {
     mWindowSize = size;

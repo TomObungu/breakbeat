@@ -1,9 +1,9 @@
 /*  
 
-Window.cpp
+    Window.cpp
 
-The source file for Window.cpp for initalising a window,
-OpenGL states and the OpenGL context for rendering
+    The source file for Window.cpp for initalising a window,
+    OpenGL states and the OpenGL context for rendering
 
 */
 
@@ -11,6 +11,7 @@ OpenGL states and the OpenGL context for rendering
 #include "Window.hpp"
 #include <iostream>
 
+// The function to handle OpenGL debug messages
 void OnOpenGLDebugMessage(
 [[maybe_unused]] uint32_t source,
 uint32_t type,
@@ -37,6 +38,7 @@ Window::Window() :
 {
 }
 
+// Function to initialize the window and the OpenGL context
 void Window::Initialize()
 {
     // Initialize SDL
@@ -50,13 +52,15 @@ void Window::Initialize()
 
     // Query the display's usable display bounds
     SDL_DisplayMode displayMode;
-
+    
+    // If the display mode is not able to be queried then log an error to the console
     if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0) 
     {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Could not get display mode: %s", SDL_GetError());
     }
     else 
     {
+        // Set the window width and height to the display mode width and height
         mWindowWidth = displayMode.w;
         mWindowHeight = displayMode.h;
     }
@@ -90,15 +94,18 @@ void Window::Initialize()
     {
         SDL_LogCritical(SDL_LOG_CATEGORY_APPLICATION, "Failed to initialize glad! %s\n", glGetError());
     }
-
+    
+    // Enable debug callback
     glDebugMessageCallback(OnOpenGLDebugMessage, nullptr);
-
+    
+    // Show the cursor
     SDL_ShowCursor(SDL_DISABLE);
     
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 }
 
+// Getters and setters for the window properties
 SDL_Window*& Window::GetWindow()
 {
 	return mWindow;
@@ -141,14 +148,6 @@ bool& Window::GetWindowClosedBoolean()
 	return this->mWindowClosedBoolean;
 }
 
-// Function to handle viewport adjustment on window resize
-void Window::UpdateViewport(int width, int height)
-{
-    mWindowWidth = width;
-    mWindowHeight = height;
-    glViewport(0, 0, width, height);
-}
-
 void Window::SetLastWindowedSize(int width, int height)
 {
     this->mLastWindowedWidth = width;
@@ -160,6 +159,15 @@ pair<int, int> Window::GetLastWindowedSize() const
     return { mLastWindowedWidth, mLastWindowedHeight };
 }
 
+// Function to handle viewport adjustment on window resize
+void Window::UpdateViewport(int width, int height)
+{
+    mWindowWidth = width;
+    mWindowHeight = height;
+    glViewport(0, 0, width, height);
+}
+
+// Function to toggle fullscreen mode
 void Window::ToggleFullscreen()
 {
     mIsFullscreen = !mIsFullscreen;
@@ -198,6 +206,7 @@ void Window::ToggleFullscreen()
     }
 }
 
+// Function to handle window resize
 void Window::HandleWindowResize(SDL_Event& event)
 {
     int newWidth = event.window.data1;
@@ -221,6 +230,7 @@ void Window::HandleWindowResize(SDL_Event& event)
     }
 }
 
+// Window destructor function to delete the window and the OpenGL context
 Window::~Window()
 {
 	SDL_GL_DeleteContext(mOpenGLContext);

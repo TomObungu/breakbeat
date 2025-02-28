@@ -1,3 +1,9 @@
+/*
+    SpriteRenderer.hpp
+    This class is used to render sprites on the screen.
+*/
+
+
 #ifndef SPRITERENDERER_HPP
 #define SPRITERENDERER_HPP
 

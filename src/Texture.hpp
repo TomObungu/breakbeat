@@ -1,3 +1,13 @@
+/* 
+
+    Texture.hpp
+
+    Texture is able to store and configure a texture in OpenGL.
+    It also hosts utility functions for easy management.
+
+*/
+
+
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 

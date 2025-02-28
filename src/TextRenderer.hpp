@@ -1,3 +1,10 @@
+/*
+
+    TextRenderer.hpp
+    This class is used to render text on the screen.
+
+*/
+
 #ifndef TEXT_RENDERER_HPP
 #define TEXT_RENDERER_HPP
 

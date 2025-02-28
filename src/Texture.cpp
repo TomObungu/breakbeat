@@ -1,8 +1,19 @@
+/*
+
+    Texture class
+
+    This class is used to create a texture object that will be used in the rendering of the scene.
+
+    The texture is created using OpenGL and the handle is converted to a 64 bit integer reference to be used in the shader.
+
+*/
+
+// Include libraries
 #include <iostream>
 
 #include "texture.hpp"
 
-
+// Constructor
 Texture::Texture()
     : width(0), 
     height(0), 
@@ -16,6 +27,7 @@ Texture::Texture()
 {
 }
 
+// Generate the texture
 void Texture::Generate(unsigned int width, unsigned int height, unsigned char* data)
 {
     this->width = width;
@@ -35,6 +47,7 @@ void Texture::Generate(unsigned int width, unsigned int height, unsigned char* d
     glMakeTextureHandleResidentARB(this->handle); // Make the texture reference resident
 }
 
+// Get the handle of the texture
 GLuint64 Texture::GetHandle()
 {
     return this->handle;

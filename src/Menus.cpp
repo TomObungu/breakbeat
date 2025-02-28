@@ -1,5 +1,6 @@
 #include "Game.hpp"
 
+// Initialize the menus
 void Game::InitializeMenus()
 {
 

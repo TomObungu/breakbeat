@@ -1,3 +1,10 @@
+/*
+
+    This file contains the implementation of the Texts class which is responsible for rendering text on the screen.
+    The Texts class is a part of the Game class and is responsible for rendering text on the screen.
+
+*/
+
 #include "Game.hpp"
 #include <format>
 
@@ -31,6 +38,9 @@ void Game::InitializeTexts()
         1.0f
     );
 
+
+    // This part of code only show the first instantions of the text class
+    // Rhe rest of the text class instantiations follow the same pattern
     mTextRenderer.CreateText
     (
         GameState::SETTINGS,

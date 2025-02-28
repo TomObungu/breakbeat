@@ -1,3 +1,11 @@
+/* 
+
+    Textures.cpp
+
+    The source file for the InitializeTextures function in the Game class to load textures. 
+
+*/
+
 #include "Game.hpp"
 
 void Game::InitializeTextures()

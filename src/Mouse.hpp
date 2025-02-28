@@ -1,3 +1,8 @@
+/*
+    Mouse.hpp
+    This class is used to render the mouse on the screen.
+*/
+
 #ifndef MOUSE_HPP
 #define MOUSE_HPP
 

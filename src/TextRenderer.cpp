@@ -1,3 +1,13 @@
+
+/*
+    TextRenderer.cpp
+    This class is responsible for rendering text to the screen. 
+    It uses the FreeType library to load fonts and render text to the screen. 
+    The class uses a hash table to store the text objects and their properties. The class also uses a hash table to store the fonts and their properties. 
+    The class uses a shader to render the text to the screen. The class uses a vertex array object and a vertex buffer object to render the text to the screen. 
+
+*/
+
 #include <iostream>
 
 #include <glm/gtc/matrix_transform.hpp>

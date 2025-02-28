@@ -1,5 +1,5 @@
 #include "Game.hpp"
-
+// Load the settings from the settings.txt file
 void Game::LoadSettings()
 {
     std::ifstream settingsFile(std::filesystem::current_path().string() + "\\settings.txt");
@@ -36,7 +36,7 @@ void Game::LoadSettings()
 
     settingsFile.close();
 }
-
+// Update the settings in the settings.txt file
 void Game::UpdateSettings()
 {
     std::ostringstream updatedSettings;
