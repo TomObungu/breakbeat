@@ -6,11 +6,24 @@ Contains charts converted from osu!mania.
 
 # Gameplay
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
-# Instructions
-1. Go to releases and download the source code.zip. A .zip "breakbeat-dev" should start downloading.
-2. Make sure your resolution is at 1080p and the scaling is at 100%
-3. Extract the folder and run breakbeat.exe
 
-# Dependencies 
-If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. You can fix them by installing them here:
-https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+# Dependencies
+Microsoft Visual C++ Redistributable 2015-2022: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+# Instructions
+1. Install the **Microsoft C++ Redistributable 2015–2022** if not already installed.
+3. Clone the repo:
+```bash
+git clone https://github.com/TomObungu/breakbeat.git
+cd breakbeat
+```
+4. Open a terminal in repo folder and run:
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+4. Make sure your resolution is at 1080p and the display scaling is at 100%
+5. The executable breakbeat.exe will appear in the project root alongside the `.dll` files. Run it directly.
+
+# Issues
+If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. 
