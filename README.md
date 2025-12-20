@@ -19,7 +19,7 @@ https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 3. The `charts.zip` in the release contains independent chart files. Extacting `breakbeat.zip` alone will render the  `breakbeat.exe` without ready charts.
 - This is what the game chart selection screen will look life you have no charts:
  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/acae87e4-78e0-4b4c-8cca-25d706952297" />
-4. Download `charts.zip`, extract them and place them in the game folder. 
+4. To have ready to play charts, Download `charts.zip`, extract them and place them in the game folder. 
 
 # Instructions (Build)
 
