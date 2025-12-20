@@ -1,8 +1,11 @@
 # Compiled Static libraries
 *.lib
 
-# Executables
+# Binaries
 *.exe
+*.dll
+*.pdb
+*.ilk
 
 # VScode
 .vscode
@@ -43,6 +46,10 @@ Debug
 # Visual studio code analysis
 *.lastcodeanalysissucceeded
 
+# Documents
+*.docx
+*.pdf
+
 # Hidden docx files
 ~$ntentof NEA Programing Project (Component 03).docx
 
@@ -51,3 +58,19 @@ cmake_install.cmake
 
 #Makefile
 Makefile
+
+# Build output
+/build/
+/bin/
+/out/
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj*
+CMakeSettings.json
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
