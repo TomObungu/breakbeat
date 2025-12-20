@@ -20,7 +20,9 @@ https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 - This is what the game chart selection screen will look life you have no charts:
  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/acae87e4-78e0-4b4c-8cca-25d706952297" />
  
-4. To have ready to play charts, Download `charts.zip`, extract them and place them in the game folder. 
+4. To have ready to play charts, download `charts.zip`, extract them and place them in the game folder. 
+- With ready made charts in the game folder, the chart selection screen should now look like this:
+- <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/5a484ebe-54c3-4c6e-b308-d4a84a82399f" />
 
 # Instructions (Build)
 
