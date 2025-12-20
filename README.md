@@ -27,7 +27,7 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
 4. Make sure your resolution is at 1080p and the display scaling is at 100%
-5. The executable breakbeat.exe will appear in the project root alongside the `.dll` files. Run it directly.
+5. The executable `breakbeat.exe` will appear in the project root alongside the `.dll` files. Run it directly.
 
 # Issues
 - The game does not scale properly with different resolutions. Ensure your display resolution is 1080p and the display scaling is set to 100%.
