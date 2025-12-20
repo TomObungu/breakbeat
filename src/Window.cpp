@@ -67,7 +67,7 @@ void Window::Initialize()
     
     // Create the window and define its position, width and height properties and the type of window it is
     mWindow = SDL_CreateWindow("breakbeat", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+        mWindowWidth, mWindowHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_FULLSCREEN);
 
     // If the value return to the mWindow vairable is null then the window failed to be inictiazlaied
     if (mWindow == nullptr)
@@ -138,6 +138,37 @@ void Window::SetWindowHeight(int height)
 	this->mWindowHeight = height;
 }
 
+int Window::GetDrawableWidth() const 
+{ 
+    return mDrawableWidth; 
+}
+
+int Window::GetDrawableHeight() const 
+{ 
+    return mDrawableHeight; 
+}
+
+int Window::GetViewportX() const 
+{ 
+    return mViewportX; 
+}
+
+int Window::GetViewportY() const
+{ 
+    return mViewportY; 
+}
+
+int Window::GetViewportW() const
+{ 
+    return mViewportW; 
+}
+
+int Window::GetViewportH() const
+{ 
+    return mViewportH; 
+}
+
+
 void Window::SetWindowClosedBoolean(bool boolean)
 {
 	this->mWindowClosedBoolean = boolean;
@@ -160,11 +191,24 @@ pair<int, int> Window::GetLastWindowedSize() const
 }
 
 // Function to handle viewport adjustment on window resize
-void Window::UpdateViewport(int width, int height)
+void Window::UpdateViewport(int drawableW, int drawableH)
 {
-    mWindowWidth = width;
-    mWindowHeight = height;
-    glViewport(0, 0, width, height);
+    float scaleX = (float)drawableW / VIRTUAL_WIDTH;
+    float scaleY = (float)drawableH / VIRTUAL_HEIGHT;
+    float scale = std::min(scaleX, scaleY);
+
+    int vpW = (int)(VIRTUAL_WIDTH * scale);
+    int vpH = (int)(VIRTUAL_HEIGHT * scale);
+
+    int vpX = (drawableW - vpW) / 2;
+    int vpY = (drawableH - vpH) / 2;
+
+    mViewportX = vpX;
+    mViewportY = vpY;
+    mViewportW = vpW;
+    mViewportH = vpH;
+
+    glViewport(vpX, vpY, vpW, vpH);
 }
 
 // Function to toggle fullscreen mode
@@ -180,12 +224,12 @@ void Window::ToggleFullscreen()
 
         // Set fullscreen with native display resolution
         SDL_DisplayMode displayMode;
-        if (SDL_GetCurrentDisplayMode(0, &displayMode) == 0)
-        {
-            SDL_SetWindowSize(mWindow, displayMode.w, displayMode.h);
-            SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN);
-            UpdateViewport(displayMode.w, displayMode.h);
-        }
+        SDL_GetCurrentDisplayMode(0, &displayMode);
+
+        SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+        SDL_GL_GetDrawableSize(mWindow, &mDrawableWidth, &mDrawableHeight);
+        UpdateViewport(mDrawableWidth, mDrawableHeight);
     }
     else
     {
@@ -195,7 +239,8 @@ void Window::ToggleFullscreen()
         // Retrieve last windowed size
         auto [width, height] = GetLastWindowedSize();
         SDL_SetWindowSize(mWindow, width, height);
-        UpdateViewport(width, height);
+        SDL_GL_GetDrawableSize(mWindow, &mDrawableWidth, &mDrawableHeight);
+        UpdateViewport(mDrawableWidth, mDrawableHeight);
 
         // Center the window only the first time it exits fullscreen mode
         if (mFirstTimeWindowed)
@@ -221,6 +266,11 @@ void Window::HandleWindowResize(SDL_Event& event)
         // Resize the window to the maximum allowed size if too small
         SDL_SetWindowSize(mWindow, newWidth, newHeight);
     }
+
+    // Physical size (OpenGL framebuffer)
+    SDL_GL_GetDrawableSize(mWindow, &mDrawableWidth, &mDrawableHeight);
+
+    UpdateViewport(mDrawableWidth, mDrawableHeight);
 
     // If not in fullscreen, update the last windowed size and viewport
     if (!mIsFullscreen)

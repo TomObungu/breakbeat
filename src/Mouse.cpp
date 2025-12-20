@@ -1,4 +1,5 @@
 #include "Mouse.hpp"
+#include "Game.hpp"
 
 Mouse::Mouse()
 {
@@ -65,43 +66,63 @@ void Mouse::InitializeMouse()
     }
 }
 
-void Mouse::Update(SDL_Event& event)
+void Mouse::Update(SDL_Event& event, const Window& window)
 {
-    const float& xpos{ static_cast<float>(event.motion.x) };
-    const float& ypos{ static_cast<float>(event.motion.y) };
-    mPosition = vec2(xpos,ypos);
+    float mouseX = static_cast<float>(event.motion.x);
+    float mouseY = static_cast<float>(event.motion.y);
+
+    float vpX = static_cast<float>(window.GetViewportX());
+    float vpY = static_cast<float>(window.GetViewportY());
+    float vpW = static_cast<float>(window.GetViewportW());
+    float vpH = static_cast<float>(window.GetViewportH());
+
+    // Convert to normalized viewport space
+    float normalizedX = (mouseX - vpX) / vpW;
+    float normalizedY = (mouseY - vpY) / vpH;
+
+    normalizedX = glm::clamp(normalizedX, 0.0f, 1.0f);
+    normalizedY = glm::clamp(normalizedY, 0.0f, 1.0f);
+
+    // Convert to virtual resolution (1920x1080)
+    float virtualX = normalizedX * ::VIRTUAL_WIDTH;
+    float virtualY = normalizedY * ::VIRTUAL_HEIGHT;
+
+    mPosition = vec2(virtualX, virtualY);
 }
 
 void Mouse::DrawMouse()
 {
-    this->mShader.Use();
-    mat4 model = mat4(1.0f);
+    mShader.Use();
 
-    model = translate(model, vec3(mPosition, 0.0f));
-    model = glm::translate(model, vec3((mSize* mCurrentScale / 2.0f, 0.0f))); // Center sprite
-    model = glm::scale(model, vec3(mSize * mCurrentScale, 1.0f)); // Scale to match size
-    model = glm::translate(model, vec3((-mSize* mCurrentScale / 2.0f, 0.0f)));
+    glm::mat4 model(1.0f);
 
-    this->mShader.SetMatrix4("model", model);
-    this->mShader.SetVector3f("color", mColor);
-    
-    GLint uniformLocation = glGetUniformLocation(this->mShader.ID, "image");
+    // Move to mouse position
+    model = glm::translate(model, glm::vec3(mPosition, 0.0f));
 
+    // Scale around center
+    model = glm::scale(
+        model,
+        glm::vec3(mSize * mCurrentScale, 1.0f)
+    );
+
+    mShader.SetMatrix4("model", model);
+    mShader.SetVector3f("color", mColor);
+
+    GLint uniformLocation = glGetUniformLocation(mShader.ID, "image");
     if (uniformLocation == -1) {
-        std::cerr << "Uniform 'image' not found in shader" << std::endl;
+        std::cerr << "Uniform 'image' not found in shader\n";
         return;
     }
 
-    // Pass the sprite's texture handle to the shader
     glUniformHandleui64ARB(uniformLocation, mTexture.handle);
-    
-    // Draw the sprite
-    glBindVertexArray(this->mVertexArrayObject);
+
+    glBindVertexArray(mVertexArrayObject);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
     glBindVertexArray(0);
 }
 
-vec2 Mouse::GetMouseCoordinate()
+
+vec2 Mouse::GetMouseCoordinate() const
 {
     return mPosition;
 }

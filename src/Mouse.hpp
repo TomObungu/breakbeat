@@ -10,6 +10,7 @@
 #include "Shader.hpp"
 #include "ResourceManager.hpp"
 #include "SDL.h"
+#include "Window.hpp"
 
 class Mouse
 {
@@ -22,10 +23,10 @@ private:
     vec2 mPosition = vec2(0,0);
     float mCurrentScale = 1;
 public:
-    void Update(SDL_Event&);
+    void Update(SDL_Event& event, const Window& window);
+    vec2 GetMouseCoordinate() const;
     void InitializeMouse();
     void DrawMouse();
-    vec2 GetMouseCoordinate();
     vec2 GetMouseSize();
     Mouse();
     ~Mouse();

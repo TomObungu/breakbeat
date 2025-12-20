@@ -168,7 +168,7 @@ void Text::Update(float deltaTime)
     // If the sprite is not in any update state it has been fully updated
     if(mDarkened || mBrightened)
     {
-        mHasUpdated == true;
+        mHasUpdated = true;
     }
 
     if (mIsScaling)

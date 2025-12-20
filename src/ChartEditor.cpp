@@ -1,4 +1,4 @@
-#include "Game.hpp"#
+#include "Game.hpp"
 
 void Game::InitializeChartEditor()
 {

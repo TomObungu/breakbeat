@@ -331,7 +331,7 @@ void Sprite::Update(float deltaTime)
     if( (mDarkened || mBrightened) &&
         mIsMovingTo == false && mIsRotating == false) 
     {
-        mHasUpdated == true;
+        mHasUpdated = true;
     }
 
   /*  if (mIsMoving)

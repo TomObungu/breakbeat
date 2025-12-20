@@ -22,6 +22,8 @@ namespace
 {
     inline constexpr int MinWindowWidth  { 640 };
     inline constexpr int MinWindowHeight { 480 };
+	static constexpr int VIRTUAL_WIDTH = 1920;
+	static constexpr int VIRTUAL_HEIGHT = 1080;
 }
 
 using std::pair;
@@ -44,6 +46,12 @@ public:
 	void SetWindowWidth(int);
 	int& GetWindowHeight();
 	void SetWindowHeight(int);
+	int GetDrawableWidth() const;
+	int GetDrawableHeight() const;
+	int GetViewportX() const;
+	int GetViewportY() const;
+	int GetViewportW() const;
+	int GetViewportH() const;
 	void HandleWindowResize(SDL_Event&);
 	void UpdateViewport(int width, int height);
 	void ToggleFullscreen();
@@ -60,6 +68,12 @@ private:
 	int mWindowHeight;
 	int mLastWindowedWidth;
 	int mLastWindowedHeight;
+	int mDrawableWidth = 0;
+	int mDrawableHeight = 0;
+	int mViewportX = 0;
+	int mViewportY = 0;
+	int mViewportW = 0;
+	int mViewportH = 0;
 	SDL_Window* mWindow;
 	SDL_Event mWindowEvent;
 	bool mWindowClosedBoolean;

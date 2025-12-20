@@ -102,7 +102,7 @@ void Game::ProcessEvents()
         }
         if (event.type == SDL_MOUSEMOTION)
         {
-            mMouse->Update(event);
+            mMouse->Update(event, mWindow);
         }
         if(mHasTransitioned)
             HandleMouseInput(event);
@@ -135,8 +135,8 @@ void Game::Initialize()
     // Set up orthgraphic projection matrix
     mat4 orthographicProjection = glm::ortho(
         0.0f, 
-        static_cast<float>(mWindow.GetWindowWidth()),
-        static_cast<float>(mWindow.GetWindowHeight()), 
+        static_cast<float>(::VIRTUAL_WIDTH),
+        static_cast<float>(::VIRTUAL_HEIGHT), 
         0.0f, 
         -1.0f, 
         1.0f
