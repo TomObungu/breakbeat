@@ -130,6 +130,14 @@ void Game::ProcessEvents()
 
 void Game::Initialize()
 {
+    // Set fullscreen
+    mWindow.ToggleFullscreen();
+
+    // Force SDL to update window size & call viewport update
+    int w, h;
+    SDL_GetWindowSize(mWindow.GetWindow(), &w, &h);
+    mWindow.UpdateViewport(w, h);
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // Set up orthgraphic projection matrix

@@ -27,12 +27,11 @@ const char* message,
     }
 }
 
-
 // Window constructor function to initialize window and its properties
 Window::Window() : 
     mLastWindowedHeight { ::MinWindowHeight },
     mLastWindowedWidth { ::MinWindowWidth },
-	mIsFullscreen { true },
+	mIsFullscreen { false },
     mResizeMode { false },
     mFirstTimeWindowed { true }
 {
