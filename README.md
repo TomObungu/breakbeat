@@ -8,11 +8,21 @@ Contains charts converted from osu!mania.
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 
 # Dependencies
-**Microsoft Visual C++ Redistributable 2015-2022**: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+- **CMake** (version 3.30+) 
+  [Download CMake](https://cmake.org/download/)  
+
+- **Microsoft Visual C++ Redistributable 2015–2022**
+  [Download Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)  
+
+- **Precompiled Libraries** (included in `lib/`)  
+  - SDL2 (`SDL2.lib`, `SDL2main.lib`)  
+  - FreeType (`freetype.lib`)  
+  - irrKlang (`irrKlang.lib`)  
+  - tinyfiledialogs (`tinyfiledialogs64.lib`)  
 
 # Instructions
-1. Install the **Microsoft C++ Redistributable 2015–2022** if not already installed.
-3. In your desired folder clone the repo, by opening a terminal and running:
+1. Install the **Microsoft C++ Redistributable 2015–2022** and **CMake** if not already installed.
+3. In your desired folder, clone the repo by opening a terminal and running:
 ```bash
 git clone https://github.com/TomObungu/breakbeat.git
 cd breakbeat
