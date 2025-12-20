@@ -8,6 +8,11 @@ Contains charts converted from osu!mania.
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 
 # Instructions (Releases)
+
+## Dependencies (Releases)
+- **Microsoft Visual C++ Redistributable 2015–2022**  
+  [Download Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)  
+
 - The `.exe` is available in the **Releases** section.  
 - The `breakbeat.zip` in the release contains the binary `.exe`.  
 - The `charts.zip` in the release contains independent chart files. Extacting `breakbeat.zip` alone will render the  `breakbeat.exe` without ready charts. Users can download these and place them in the game folder. 
