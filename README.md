@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 - **Microsoft Visual C++ Redistributable 2015–2022**
   [Download Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)  
 
-# Instructions
+# Instructions (Build)
 1. Install the **Microsoft C++ Redistributable 2015–2022** and **CMake** if not already installed.
 3. In your desired folder, clone the repo by opening a terminal and running:
 ```bash
@@ -27,7 +27,7 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
 4. Make sure your resolution is at 1080p and the display scaling is at 100%
-5. The executable breakbeat.exe will appear in the project root alongside the `.dll` files. Run it directly.
+5. The executable `breakbeat.exe` will appear in the project root alongside the `.dll` files. Run it directly.
 
 # Issues
 - The game does not scale properly with different resolutions. Ensure your display resolution is 1080p and the display scaling is set to 100%.
