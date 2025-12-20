@@ -288,7 +288,7 @@ private:
     string mNewChartDifficultyName;
     string mNewChartBPM;
 
-    vector<string> mAllCharts;
+    vector<string> mAllCharts{};
     vector<string> mAllCurrentChartDifficulties;
     array<string, 7> mCurrentlyPreviewedCharts;
     array<string, 4> mCurrentlyPreviewedDifficulties;

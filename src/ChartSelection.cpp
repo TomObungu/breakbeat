@@ -523,66 +523,77 @@ void Game::HandleDifficultyScrolling(SDL_Event& event)
 
 void Game::PlayCurrentlySelectedChartAudio()
 {
-    // Ensure there are charts and difficulties available
-    if (mCurrentlyPreviewedCharts.empty() || mCurrentlyPreviewedDifficulties.empty())
+    // Check that there are charts and difficulties available
+    if (mCurrentlyPreviewedCharts.size() < 4 || mCurrentlyPreviewedCharts[3].empty() ||
+        mCurrentlyPreviewedDifficulties.empty() || mCurrentlyPreviewedDifficulties[2].empty())
     {
         cerr << "No charts or difficulties available to preview audio." << '\n';
+        mCurrentChartAudioFile.clear();
         return;
     }
 
-    // Get the chart folder name for the 4th index (0-based, index 3)
-    string chartFolderName = mCurrentlyPreviewedCharts[3]; // 4th chart in preview
+    // Get the chart folder and selected difficulty
+    const std::string& chartFolderName = mCurrentlyPreviewedCharts[3];
+    const std::string& selectedDifficulty = mCurrentlyPreviewedDifficulties[2];
+    std::filesystem::path difficultyFilePath = std::filesystem::path("charts") / chartFolderName / (selectedDifficulty + ".txt");
 
-    // Get the selected difficulty file path
-    string selectedDifficulty = mCurrentlyPreviewedDifficulties[2]; 
-    string difficultyFilePath = "charts/" + chartFolderName + "/" + selectedDifficulty + ".txt";
+    // Ensure the difficulty file exists
+    if (!std::filesystem::exists(difficultyFilePath))
+    {
+        cerr << "Difficulty file does not exist: " << difficultyFilePath << '\n';
+        mCurrentChartAudioFile.clear();
+        return;
+    }
 
     // Open the difficulty file
-    ifstream difficultyFile(difficultyFilePath);
+    std::ifstream difficultyFile(difficultyFilePath);
     if (!difficultyFile.is_open())
     {
         cerr << "Failed to open difficulty file: " << difficultyFilePath << '\n';
+        mCurrentChartAudioFile.clear();
         return;
     }
 
-    // Read the file line by line to find the "Audio : " line
-    string line;
-    string audioPath;
-    regex audioRegex(R"(Audio\s*:\s*(.+))");
+    // Read the "Audio : " line
+    std::string line;
+    std::string audioPath;
+    std::regex audioRegex(R"(Audio\s*:\s*(.+))");
 
-    while (getline(difficultyFile, line))
+    while (std::getline(difficultyFile, line))
     {
-        smatch match;
-        if (regex_match(line, match, audioRegex))
+        std::smatch match;
+        if (std::regex_match(line, match, audioRegex) && match.size() == 2)
         {
-            if (match.size() == 2) // Ensure the match captures the path
-            {
-                audioPath = match[1].str();
-                break;
-            }
+            audioPath = match[1].str();
+            break;
         }
+    }
+    difficultyFile.close();
+
+    if (audioPath.empty())
+    {
+        std::cerr << "No audio path found in difficulty file: " << difficultyFilePath << '\n';
+        mCurrentChartAudioFile.clear();
+        return;
     }
 
     mCurrentChartAudioFile = audioPath;
 
-    difficultyFile.close();
-
-    // Ensure an audio path was found
-    if (audioPath.empty())
-    {
-        std::cerr << "No audio path found in difficulty file: " << difficultyFilePath << '\n';
-        return;
-    }
-
-    // Stop currently playing audio (if any) and play the new audio
+    // Play audio if the sound engine exists
     if (mSoundEngine)
     {
-        // Resolve the full path to the audio file
         std::filesystem::path fullAudioPath = std::filesystem::current_path() / audioPath;
+        if (!std::filesystem::exists(fullAudioPath))
+        {
+            std::cerr << "Audio file does not exist: " << fullAudioPath << '\n';
+            return;
+        }
 
         mSoundEngine->stopAllSounds();
-        mSoundEngine->play2D(fullAudioPath.string().c_str(), true);// Play the new audio
-        mCurrentSongDuration = mSoundEngine->getSoundSource(fullAudioPath.string().c_str())->getPlayLength();
+        mSoundEngine->play2D(fullAudioPath.string().c_str(), true); // Loop playback
+
+        auto* soundSource = mSoundEngine->getSoundSource(fullAudioPath.string().c_str());
+        mCurrentSongDuration = soundSource ? soundSource->getPlayLength() : 0.0f;
     }
     else
     {
@@ -597,16 +608,33 @@ void Game::InitializeChartSelection()
 
     GetCurrentChartDirectories();
 
-    // Ensure mCurrentlyPreviewedCharts is updated
+    if (mAllCharts.empty())
+    {
+        // Nothing to initialize, safely update UI placeholders
+        mCurrentlyPreviewedCharts.fill("");
+        mCurrentlyPreviewedDifficulties.fill("");
 
+        for (unsigned i = 0; i < 7; ++i)
+        {
+            GetText(mCurrentGameState, "artist-text-" + to_string(i + 1))->UpdateText("NO SONG");
+            GetText(mCurrentGameState, "song-text-" + to_string(i + 1))->UpdateText("NO ARTIST");
+        }
+
+        for (unsigned i = 0; i < 4; ++i)
+        {
+            GetText(mCurrentGameState, "difficulty-select-box-text-" + to_string(i + 1))->UpdateText("NO DIFFICULTIES");
+        }
+
+        // Early exit: skip all chart/difficulty/audio loading
+        return;
+    }
+
+    // There are charts, proceed safely
     mChartPreviewStartIndex = 0;
-    
+
     UpdateChartSelection();
-
     GetCurrentChartDifficulties();
-
     UpdateCurrentChartDifficulties();
-
     PlayCurrentlySelectedChartAudio();
 
     if (mCurrentGameState == GameState::CHART_SELECTION_MENU)
@@ -623,8 +651,12 @@ void Game::InitializeChartSelection()
 }
 
 
+
 void Game::GetChartMetadata()
 {
+	if (mAllCharts.empty() || mCurrentlyPreviewedCharts[3].empty() || mCurrentlyPreviewedDifficulties[2].empty())
+        return;
+
     mCurrentChartFile = "charts/" + mCurrentlyPreviewedCharts[3] + "/" + mCurrentlyPreviewedDifficulties[2] + ".txt";
     mCurrentSongName = mCurrentlyPreviewedCharts[3];
     std::ifstream difficultyFile(mCurrentChartFile);
@@ -656,24 +688,43 @@ void Game::GetChartMetadata()
 
 void Game::UpdateChartSelectionImage()
 {
+    // Get chart metadata (fills mCurrentChartImageFile, mCurrentSongBPM, etc.)
     GetChartMetadata();
 
-    GetText(mCurrentGameState, "song-bpm-text")->UpdateText("BPM : "+mCurrentSongBPM);
-    int minutes = static_cast<int>(mCurrentSongDuration / 60000); // Convert ms to minutes
-    int seconds = (static_cast<int>(mCurrentSongDuration / 1000)) % 60; // Convert ms to seconds (mod 60)
+    // Update BPM text
+    GetText(mCurrentGameState, "song-bpm-text")->UpdateText("BPM : " + mCurrentSongBPM);
+
+    // Update song length text
+    int minutes = static_cast<int>(mCurrentSongDuration / 60000);
+    int seconds = (static_cast<int>(mCurrentSongDuration / 1000)) % 60;
     GetText(mCurrentGameState, "song-length-text")
         ->UpdateText("Length : " + to_string(minutes) + ":" + (seconds < 10 ? "0" : "") + to_string(seconds));
 
-    // Convert file extension to lowercase for case-insensitive comparison
+    // Check if there is a valid chart image file
+    if (mCurrentChartImageFile.empty() || !fs::exists(mCurrentChartImageFile))
+    {
+        // If no valid image, clear or set default placeholder texture
+        Texture placeholderTexture = ResourceManager::loadTextureFromFile("assets/png/transparent-texture.png", true);
+        GetSprite(mCurrentGameState, "song-cover")->SetTexture(placeholderTexture);
+        return;
+    }
+
+    // Convert file extension to lowercase
     std::string extension = fs::path(mCurrentChartImageFile).extension().string();
     std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
 
-    // Check if the file is PNG or JPG and enable alpha accordingly
-    bool useAlpha = extension == ".png";
+    // Enable alpha only for PNGs
+    bool useAlpha = (extension == ".png");
 
-    Texture bgImage = ResourceManager::loadTextureFromFile((fs::current_path().string() + "\\" + mCurrentChartImageFile).c_str(), useAlpha);
+    // Load the chart image safely
+    Texture bgImage = ResourceManager::loadTextureFromFile(
+        (fs::current_path() / mCurrentChartImageFile).string().c_str(),
+        useAlpha
+    );
+
     GetSprite(mCurrentGameState, "song-cover")->SetTexture(bgImage);
 }
+
 
 
 void Game::CreateNewChart()
