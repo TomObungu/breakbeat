@@ -14,12 +14,6 @@ https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 - **Microsoft Visual C++ Redistributable 2015–2022**
   [Download Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)  
 
-- **Precompiled Libraries** (included in `lib/`)  
-  - SDL2 (`SDL2.lib`, `SDL2main.lib`)  
-  - FreeType (`freetype.lib`)  
-  - irrKlang (`irrKlang.lib`)  
-  - tinyfiledialogs (`tinyfiledialogs64.lib`)  
-
 # Instructions
 1. Install the **Microsoft C++ Redistributable 2015–2022** and **CMake** if not already installed.
 3. In your desired folder, clone the repo by opening a terminal and running:
@@ -36,4 +30,5 @@ cmake --build build --config Release
 5. The executable breakbeat.exe will appear in the project root alongside the `.dll` files. Run it directly.
 
 # Issues
-If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. 
+- The game does not scale properly with different resolutions. Ensure your display resolution is 1080p and the display scaling is set to 100%.
+- If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. 
