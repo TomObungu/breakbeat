@@ -52,5 +52,12 @@ cmake --build build --config Release
 5. The executable `breakbeat.exe` will appear in the project root alongside the `.dll` files. Run it directly.
 6. If you have `Visudal Studio` installed, the `.sln` file will be in the `build` folder. Opening it will allow viewing of source code.
 
-# Issues
-- If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. 
+# Installation Issues
+- If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022.
+
+# Bugs
+- The text in the settings menu will show trailing zeros after the decimal point whilst editing scroll speed
+- Creating a new chart in the chart editor may not always let you place notes in the chart
+- Sometimes pressing enter twice whilst editing settings crashes the game
+- Playing another chart after finishing a chart entirely will cause the chart to never advance to the scores page
+- Trying to load into another chart after finishing a chart may cause the chart to text to be black and the song to not load
