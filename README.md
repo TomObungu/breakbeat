@@ -7,28 +7,38 @@ Contains charts converted from osu!mania.
 # Gameplay
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 
-# Dependencies
-- **CMake** (version 3.30+) 
-  [Download CMake](https://cmake.org/download/)  
-
-- **Microsoft Visual C++ Redistributable 2015–2022**
-  [Download Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)  
+# Instructions (Releases)
+- The `.exe` is available in the **Releases** section.  
+- The `breakbeat.zip` in the release contains the binary `.exe`.  
+- The `charts.zip` in the release contains independent chart files. Extacting `breakbeat.zip` alone will render the  `breakbeat.exe` without ready charts. Users can download these and place them in the game folder. 
 
 # Instructions (Build)
-1. Install the **Microsoft C++ Redistributable 2015–2022** and **CMake** if not already installed.
-3. In your desired folder, clone the repo by opening a terminal and running:
+
+## Dependencies (Build)
+- **CMake** (version 3.30+)  
+  [Download CMake](https://cmake.org/download/)  
+
+- **Microsoft Visual C++ Redistributable 2015–2022**  
+  [Download Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170)  
+
+- **MSVC Build Tools** (needed to compile with CMake)  
+  [Download Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/)  
+
+## Build Steps
+1. Install the **Microsoft C++ Redistributable 2015–2022**, **CMake**, and **MSVC Build Tools** if not already installed.  
+
+2. In your desired folder, clone the repo by opening a terminal and run:
 ```bash
 git clone https://github.com/TomObungu/breakbeat.git
 cd breakbeat
 ```
-4. Open a terminal in repo folder and run:
+3. In the terminal in the repo folder, run:
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
-4. Make sure your resolution is at 1080p and the display scaling is at 100%
 5. The executable `breakbeat.exe` will appear in the project root alongside the `.dll` files. Run it directly.
+6. If you have `Visudal Studio` installed, the `.sln` file will be in the `build` folder. Opening it will allow viewing of source code.
 
 # Issues
-- The game does not scale properly with different resolutions. Ensure your display resolution is 1080p and the display scaling is set to 100%.
 - If you recieve an error such as MSVCP140.dll is missing then it means you do not have Microsoft Visual C++ Redistributable 2015-2022. 
