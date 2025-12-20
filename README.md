@@ -8,11 +8,11 @@ Contains charts converted from osu!mania.
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 
 # Dependencies
-Microsoft Visual C++ Redistributable 2015-2022: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+**Microsoft Visual C++ Redistributable 2015-2022**: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
 
 # Instructions
 1. Install the **Microsoft C++ Redistributable 2015–2022** if not already installed.
-3. Clone the repo:
+3. In your desired folder clone the repo, by opening a terminal and running:
 ```bash
 git clone https://github.com/TomObungu/breakbeat.git
 cd breakbeat
