@@ -1,6 +1,3 @@
-# Compiled Static libraries
-*.lib
-
 # Binaries
 *.exe
 *.dll
