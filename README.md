@@ -7,6 +7,11 @@ Contains charts converted from osu!mania.
 # Gameplay
 https://github.com/user-attachments/assets/7368f1c7-18f9-49bd-b388-94187896f5ad
 
+# Support 
+- Only works for Windows 64bit and 32bit
+- Need a graphics card that supports opengl 3.3+
+- Might not work for some integrated graphics card due to bindless textures in use
+
 # Instructions (Releases)
 
 ## Dependencies (Releases)
